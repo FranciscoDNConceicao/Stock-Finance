@@ -10,7 +10,8 @@ export default {
         "background-color": "var(--background-color)",
         "secondary-background-color": "var(--secondary-background-color)",
         "primary-color": "var(--primary-color)",
-        "secondary-color": "var(--secondary-color)"
+        "secondary-color": "var(--secondary-color)",
+        "font-family": "var(--font-family)"
       }
     },
   },

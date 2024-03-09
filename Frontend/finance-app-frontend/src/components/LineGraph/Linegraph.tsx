@@ -4,7 +4,7 @@ import TimeChangedGraph from "./TimeChangedGraph";
 import "../../style/index.css"
 
 const datetime_action = [
-    new Date(2023,3,8,9,47,45),
+    new Date(2023,3,8,9,0,0),
     new Date(2023,3,8,10,14,53),
     new Date(2023,3,8,11,47,45),
     new Date(2023,3,8,12,47,45),
@@ -43,7 +43,6 @@ const valueFormatter = (date: Date) =>
 
 
 export default function LineGraph(){
-
     
     return (
        <Box className="h-full w-full bg-secondary-background-color border-[1px] border-[white]">
@@ -69,10 +68,10 @@ export default function LineGraph(){
                         fill: "white !important",
                     },
                     "& .MuiAreaElement-root": {
-                        fill: "url('#gradient-graph')"
+                        fill: "rgb(87, 100, 213) !important"
                     },
                     "& .MuiLineElement-root": {
-                        stroke:"rgb(49, 70, 255) !important"
+                        stroke:"white !important"
                     }
                 }}
                 xAxis={[{

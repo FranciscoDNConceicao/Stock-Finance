@@ -1,35 +1,23 @@
 import { LineChart } from "@mui/x-charts";
 import Box from '@mui/material/Box';
-import TimeChangedGraph from "./TimeChangedGraph";
+import TimeChangedGraph from "./Components/TimeChangedGraph";
 import "../../style/index.css"
+import React, { useState, useEffect  } from 'react';
+import ChoosingCategory from "./Components/ChoosingCategory";
 
-const datetime_action = [
-    new Date(2023,3,8,9,0,0),
-    new Date(2023,3,8,10,14,53),
-    new Date(2023,3,8,11,47,45),
-    new Date(2023,3,8,12,47,45),
-    new Date(2023,3,8,13,47,45),
-    new Date(2023,3,8,14,47,45),
-    new Date(2023,3,8,15,47,45),
-    new Date(2023,3,8,16,47,45),
-    new Date(2023,3,8,17,47,45),
-    new Date(2023,3,8,18,47,45),
-    new Date(2023,3,8,19,47,45),
-    new Date(2023,3,8,20,47,45),
-    new Date(2023,3,8,21,47,45),
-    new Date(2023,3,8,22,47,45),
-    new Date(2023,3,8,23,47,45),
-    new Date(2023,3,9,0,47,45),
-    new Date(2023,3,9,1,47,45),
-    new Date(2023,3,9,2,47,45),
-    new Date(2023,3,9,3,47,45),
-    new Date(2023,3,9,4,47,45),
-    new Date(2023,3,9,5,47,45)
-]
-const y = [
-    "20.45", "23.45", "22.45", "21.45", "17.45", "18.45", "15.45", "16.45", "13.45", "14.45",
-    "13.45", "12.45", "11.45", "10.45", "13.45", "10.45", "24.45", "26.45", "5.45", "4.45", "3.45"
-];
+interface CompanyData {
+    [timestamp: string]: string;
+}
+interface GraphData {
+    [symbol: string]: {
+        image: string;
+        company_data: CompanyData;
+    };
+}
+interface LineGraphProps {
+    data: GraphData;
+}
+
 const valueFormatter = (date: Date) =>
   date.getHours() === 0
     ? date.toLocaleDateString('pt-PT', {
@@ -42,10 +30,53 @@ const valueFormatter = (date: Date) =>
       });
 
 
-export default function LineGraph(){
+export default function LineGraph(props:LineGraphProps){
+    const lenghtData = Object.keys(props.data).length
+
+    const [width, setWidth] = useState(window.innerWidth);
+    const [height, setHeight] = useState(window.innerHeight);
+    useEffect(() => {
+        const handleResize = () => {setWidth(window.innerWidth);};
+        const handleResizeHeight = () => {setHeight(window.innerHeight);};
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('resize', handleResizeHeight);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
     
+    const [index, setIndex] = useState(0)
+
+    const changeStockGraph = (side:string) => {
+        if (side === 'left') {
+            if ((index - 1) == -1){
+                setIndex(lenghtData - 1);
+            }else{
+                setIndex(prevIndex => prevIndex - 1);
+            }
+        } else if (side === 'right') {
+            if ((index + 1) == lenghtData){
+                setIndex(0);
+            }else{
+                setIndex(prevIndex => prevIndex + 1);
+            }
+        }
+    }
+    const symbol:string = Object.keys(props.data)[index];
+    console.log(symbol)
+    const timestamps = Object.keys(props.data[symbol].company_data);
+    const values = Object.values(props.data[symbol].company_data);
+
+    // Formatting timestamps into Date objects
+    const xAxisData = timestamps.map(timestamp => new Date(timestamp));
+    // Parsing values to numbers
+    const series = values.map(value => parseFloat(value));
+
     return (
        <Box className="h-full w-full bg-secondary-background-color border-[1px] border-[white]">
+            <TimeChangedGraph />
             <LineChart
                 sx={{
                     "& .MuiChartsAxis-bottom": {
@@ -75,7 +106,7 @@ export default function LineGraph(){
                     }
                 }}
                 xAxis={[{
-                    data: datetime_action,
+                    data: xAxisData,
                     scaleType: 'time',
                     valueFormatter,
                     tickMinStep: 3600 * 1000 * 3
@@ -83,16 +114,19 @@ export default function LineGraph(){
 
                 series={[
                     { 
-                        data: y.map(value => parseFloat(value)),
+                        data: series,
                         area: true,
                         showMark: false
                     }
                 ]}
-                width={800}
-                height={500}
-                
+                width={width * 0.42}
+                height={height * 0.57}
             />
-            <TimeChangedGraph />
+            <ChoosingCategory 
+                changeStock={changeStockGraph}
+                company={symbol}
+                image={props.data[symbol].image}
+            />
        </Box> 
     )
 }

@@ -9,6 +9,7 @@ import "../style/index.css"
 import WalletComponent from "../components/WalletComponent/WalletComponent"
 import {news_data} from "../../data/DataInitPage"
 import SeparatorInfo from "../components/SeparatorInfo/SeparatorInfo"
+import TableStocks from "../components/TableStocks/Tablestocks"
 
 function getRandomArbitrary(min:number, max:number) {
     return Math.random() * (max - min) + min;
@@ -72,9 +73,6 @@ export default function InitPage(){
                 </div>
                 <div className="grid w-full grid-template-rows-6 grid-cols-6 gap-4 ml-[20px] mr-[20px] mt-[60px]">
                     <div className="h-full w-full row-start-1 col-start-1 row-end-4 col-end-4 bg-secondary-background-color border-[1px] border-[white]">
-                        <div className="w-fit bg-secondary-background-color text-[white] text-bolder text-[30px] border-[1px] border-[white] relative z-20 p-[5px] top-[-20px] left-[20px]">
-                            Stocks Trending
-                        </div>
                         <LineGraph 
                             data={data_graph} 
                         />
@@ -86,7 +84,7 @@ export default function InitPage(){
                        <SeparatorInfo Data={newsDataForComponent}/>
                     </div>
                     <div className="h-full w-full row-start-4 col-start-1 row-end-7 col-end-7 bg-secondary-background-color" >
-
+                        <TableStocks />
                     </div>
                 </div>
             </div>

@@ -75,7 +75,7 @@ export default function LineGraph(props:LineGraphProps){
     const series = values.map(value => parseFloat(value));
 
     return (
-       <Box className="h-full w-full bg-secondary-background-color ">
+       <div className=" bg-secondary-background-color ">
             <TimeChangedGraph />
             <LineChart
                 sx={{
@@ -127,6 +127,6 @@ export default function LineGraph(props:LineGraphProps){
                 company={symbol}
                 image={props.data[symbol].image}
             />
-       </Box> 
+       </div> 
     )
 }

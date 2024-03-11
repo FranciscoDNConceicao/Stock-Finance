@@ -75,7 +75,7 @@ export default function LineGraph(props:LineGraphProps){
     const series = values.map(value => parseFloat(value));
 
     return (
-       <Box className="h-full w-full bg-secondary-background-color border-[1px] border-[white]">
+       <Box className="h-full w-full bg-secondary-background-color ">
             <TimeChangedGraph />
             <LineChart
                 sx={{

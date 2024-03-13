@@ -60,33 +60,31 @@ export default function InitPage(){
     }
     console.log(newsDataForComponent)
     return (
-        <div className="bg-background-color flex flex-col h-full">
+        <div className="bg-background-color h-full">
             <div className="h-16 shadow-[rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;]">
                 <Header />
             </div>
-            <div className="flex flex-1 flex-row">
+            <div className="h-full w-full flex flex-1 flex-row">
                 <div className="h-full w-fit">
                     <Sidebar />
                 </div>
-                <div>
-                    <TickerAction />
+                    <div className="grid w-full grid-template-rows-6 grid-cols-6 gap-4 ml-[20px] mr-[20px] mt-[60px]">
+                        <div className="h-full w-full row-start-1 col-start-1 row-end-4 col-end-4 bg-secondary-background-color border-[1px] border-[white]">
+                            <LineGraph 
+                                data={data_graph} 
+                            />
+                        </div>
+                        <div className="h-full w-full row-start-1 col-start-4 row-end-2 col-end-7 bg-secondary-background-color">
+                            <WalletComponent WalletData={wallet} />
+                        </div>
+                        <div className="h-full w-full row-start-2 col-start-4 row-end-3 col-end-7 bg-secondary-background-color" >
+                        <SeparatorInfo Data={newsDataForComponent}/>
+                        </div>
+                        <div className="h-full w-full row-start-4 col-start-1 row-end-7 col-end-7 bg-secondary-background-color" >
+                            <TableStocks />
+                        </div>
                 </div>
-                <div className="grid w-full grid-template-rows-6 grid-cols-6 gap-4 ml-[20px] mr-[20px] mt-[60px]">
-                    <div className="h-full w-full row-start-1 col-start-1 row-end-4 col-end-4 bg-secondary-background-color border-[1px] border-[white]">
-                        <LineGraph 
-                            data={data_graph} 
-                        />
-                    </div>
-                    <div className="h-full w-full row-start-1 col-start-4 row-end-2 col-end-7 bg-secondary-background-color">
-                        <WalletComponent WalletData={wallet} />
-                    </div>
-                    <div className="h-full w-full row-start-2 col-start-4 row-end-3 col-end-7 bg-secondary-background-color" >
-                       <SeparatorInfo Data={newsDataForComponent}/>
-                    </div>
-                    <div className="h-full w-full row-start-4 col-start-1 row-end-7 col-end-7 bg-secondary-background-color" >
-                        <TableStocks />
-                    </div>
-                </div>
+                    
             </div>
             
         </div>

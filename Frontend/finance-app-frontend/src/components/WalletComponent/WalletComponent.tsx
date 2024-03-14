@@ -21,7 +21,7 @@ export default function WalletComponent (props:WalletComponentprops){
     }
 
     return( 
-        <div className="h-full flex justify-between w-full bg-secondary-background-color border-[1px] border-[white] px-[40px]">
+        <div className="h-full flex justify-between w-full bg-secondary-background-color border-[1px] border-[white] px-[40px] p-[30px]">
             <button>
                 <FontAwesomeIcon onClick={hiddenBalance} icon={eyeClosed ? faEye : faEyeSlash} className='text-primary-color text-[22px]'/>
             </button>

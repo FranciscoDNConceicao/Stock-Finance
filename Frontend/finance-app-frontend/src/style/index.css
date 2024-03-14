@@ -9,7 +9,7 @@
     --primary-color: #ffffff;
     --secondary-color: rgb(49, 70, 255);
 }
-html, body, #root{
+ #root{
     height: 100%;
     margin: 0;
 }

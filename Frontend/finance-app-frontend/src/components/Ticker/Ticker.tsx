@@ -29,10 +29,14 @@ const dictExamples = [
     { 'code': "JPM", 'discount': -1.2 },
     { 'code': "HD", 'discount': 3.6 }
 ]
-export default function TickerAction(){
+
+interface propsTicker {
+    isFixed:Boolean
+}
+export default function TickerAction(props:propsTicker){
     
     return (
-            <div className="fixed overflow-hidden h-8 bg-black pl-[100%] box-content">
+                <div className={`fixed w-full overflow-hidden h-8 bg-black pl-[100%] z-[100] ${props.isFixed? `fixedElement fixed top-0` : `fixedElement`}`}>
                 <div className="inline-block h-8 leading-[2rem] whitespace-nowrap pr-[100%] box-content text-[white] ticker">
                     {dictExamples.map((item, index) => (
                         <div key={index} className="inline-block px-4 text-[1rem] text-[white]">

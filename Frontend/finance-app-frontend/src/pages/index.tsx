@@ -10,46 +10,66 @@ import WalletComponent from "../components/WalletComponent/WalletComponent"
 import {news_data} from "../../data/DataInitPage"
 import SeparatorInfo from "../components/SeparatorInfo/SeparatorInfo"
 import TableStocks from "../components/TableStocks/Tablestocks"
+import { useEffect, useState } from "react"
 
 function getRandomArbitrary(min:number, max:number) {
     return Math.random() * (max - min) + min;
   }
   
   // Populate company_data with random values
-  function generateRandomData() {
+function generateRandomData() {
     const startDate = new Date(2024, 2, 8, 9, 0, 0); // March 8th, 2024 09:00:00
     const endDate = new Date(2024, 2, 9, 5, 47, 45); // March 9th, 2024 05:47:45
     const timestamps = [];
     let currentDate = startDate;
-  
+
     // Generate timestamps
     while (currentDate <= endDate) {
-      timestamps.push(currentDate.toISOString());
-      currentDate.setHours(currentDate.getHours() + 1); // Increment by 1 hour
+        timestamps.push(currentDate.toISOString());
+        currentDate.setHours(currentDate.getHours() + 1); // Increment by 1 hour
     }
     const company_data:{ [key: string]: string } = {};
     for (const timestamp of timestamps) {
         company_data[timestamp] = getRandomArbitrary(10, 30).toFixed(2); // Random value between 10 and 30, rounded to 2 decimal places
     }
-  
     return company_data;
-  }
-export default function InitPage(){
-    const data_graph = {
-        'TSLA':{
-            'image': logoTSLA,
-            'company_data': generateRandomData()
-        },
-        'GOOGL':{
-            'image': logoGOOGL,
-            'company_data':  generateRandomData()
-            
-        },
-        'APPL':{
-            'image': logoAPPL,
-            'company_data': generateRandomData()
-        }
+}
+const data_graph = {
+    'TSLA':{
+        'image': logoTSLA,
+        'company_data': generateRandomData()
+    },
+    'GOOGL':{
+        'image': logoGOOGL,
+        'company_data':  generateRandomData()
+        
+    },
+    'APPL':{
+        'image': logoAPPL,
+        'company_data': generateRandomData()
     }
+}
+export default function InitPage(){
+    const [isFixed, setIsFixed] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+
+            if (window.scrollY > 100 && !isFixed) {
+                setIsFixed(true);
+            } else if (window.scrollY <= 200 && isFixed) {
+                setIsFixed(false);
+            }
+        };
+
+            window.addEventListener('scroll', handleScroll);
+            return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+        }, [isFixed]);
+
+
+    
     const newsDataForComponent = news_data
 
     const wallet = {
@@ -63,12 +83,14 @@ export default function InitPage(){
         <div className="bg-background-color h-full">
             <div className="h-16 shadow-[rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;]">
                 <Header />
+                <TickerAction isFixed={isFixed}/>
             </div>
             <div className="h-full w-full flex">
                 <div className="">
                     <Sidebar />
                 </div>
                     <div>
+
                         <div className="grid w-full grid-template-rows-6 grid-cols-6 gap-4 ml-[20px] mr-[20px] mt-[60px]">
                             <div className="h-full w-full row-start-1 col-start-1 row-end-4 col-end-4 bg-secondary-background-color border-[1px] border-[white]">
                                 <LineGraph 

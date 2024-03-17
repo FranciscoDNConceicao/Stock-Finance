@@ -10,6 +10,14 @@ import pfizerImages from '../src/assets/images/NewsImages/pfizer-news.png'
 import warreBuffetImages from '../src/assets/images/NewsImages/warrenBuffet-news.png'
 import bankceoImages from '../src/assets/images/NewsImages/bank-ceo-Image.png'
 import japanGlobalMarketsImage from '../src/assets/images/NewsImages/japan_global-markets.png'
+import { GridRowsProp } from '@mui/x-data-grid'
+import logoTSLA from "../src/assets/images/tesla-logo.svg"
+import logoGOOGL from "../src/assets/images/Google-logo.svg"
+import logoAPPL from "../src/assets/images/apple-logo.svg"
+import logoAmazon from "../src/assets/images/amazonIcon.png"
+import logoBCP from "../src/assets/images/BCPlogo.png"
+import logoCisco from "../src/assets/images/ciscoLogo.png"
+import logoDatadog from "../src/assets/images/dataDogInc.png"
 
 
 export const news_data = {
@@ -68,3 +76,85 @@ export const news_data = {
         },
     ]
 }
+
+export const dataRowsTable:GridRowsProp = [
+    {
+        id: 1,
+        icon:logoTSLA,
+        stockName:"Tesla",
+        code:"TSLA",
+        unit: "USD",
+        priceLast:"299.29",
+        percentage:"0.39",
+        priceHigh:"1503.62",
+        lastUpdate: new Date(2024, 3, 17),
+        
+    },
+    {
+        id: 2,
+        icon:logoGOOGL,
+        stockName:"Alphabet Inc",
+        code: "GOOGL",
+        unit: "USD",
+        priceLast: "141.24",
+        percentage: "0.04",
+        priceHigh: "153.78",
+        lastUpdate: new Date(2024, 3, 17),
+        
+    },{
+        id: 3,
+        icon:logoAPPL,
+        stockName:"Apple Inc",
+        code: "AAPL",
+        unit: "USD",
+        priceLast: "172.56",
+        percentage: "-0.06",
+        priceHigh: "199,62",
+        lastUpdate: new Date(2024, 3, 17),
+        
+    },{
+        id: 4,
+        icon:logoAmazon,
+        stockName: "Amazon.com Inc",
+        code: "AMZ",
+        unit: "USD",
+        priceLast: "160.50",
+        percentage: "0.10",
+        priceHigh: "180.14",
+        lastUpdate: new Date(2024, 3, 17)
+    },{
+        id: 5,
+        icon: logoBCP,
+        stockName: "Banco Comercial Portugues SA",
+        code: "BCP",
+        unit: "EUR",
+        priceLast: "0.2765",
+        percentage: "0.00",
+        priceHigh: "0.3343",
+        lastUpdate: new Date(2024, 3, 17),
+        
+    },{
+        id: 6,
+        icon: logoCisco,
+        stockName: "Cisco Systems",
+        code: "CSCO",
+        unit: "USD",
+        priceLast: "48.93",
+        percentage: "0.00",
+        priceHigh: "58.18",
+        lastUpdate: new Date(2024, 3, 17),
+        
+        
+    },{
+        id: 7,
+        icon: logoDatadog,
+        stockName: "Datadog Inc",
+        code:  "DDOG",
+        unit: "USD",
+        priceLast: "120.43",
+        percentage: "0.01",
+        priceHigh: "138.61",
+        lastUpdate: new Date(2024, 3, 17),
+        
+    }
+]

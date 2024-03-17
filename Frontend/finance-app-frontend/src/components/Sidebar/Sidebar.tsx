@@ -5,7 +5,7 @@ export default function Sidebar(){
 
     
     return (
-        <div className="h-full w-64 bg-secondary-background-color text-primary-color flex flex-col justify-between border-r-[1px] border-[#595959] relative z-[101]">
+        <div className="h-full w-full bg-secondary-background-color text-primary-color flex flex-col justify-between border-r-[1px] border-[#595959] relative z-[101]">
             <div className='"h-full flex flex-col mt-[20px]'>
                 <div className='w-full font-family flex text-[19px] font-medium pt-4 pb-4 hover:font-bold'>
                     <div><FontAwesomeIcon className='w-16 ml-3' icon={faHouse} /></div>

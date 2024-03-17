@@ -1,53 +1,147 @@
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowParams, GridValueGetterParams } from '@mui/x-data-grid';
+import { useState } from 'react';
+import {dataRowsTable} from '../../../data/DataInitPage'
 
+export default function TableStocks() {
+  
+  
 
-
-const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'firstName', headerName: 'First name', width: 130 },
-    { field: 'lastName', headerName: 'Last name', width: 130 },
+  let columns: GridColDef[] = [
+    { 
+      field: 'icon', 
+      headerName: '',
+      headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
+      headerAlign: 'center', 
+      width: 70,
+      renderCell: (params) => <img className="w-[40px] h-[40px]" src={params.value} />
+    },
+    { 
+      field: 'stockName', 
+      headerName: 'Stock', 
+      headerAlign: 'left',
+      headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
+      width: 400},
+    
+    { 
+      field: 'code', 
+      headerName: 'Code',
+      headerAlign: 'left',
+      headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
+      width: 100
+    },
+    { 
+      field: 'unit', 
+      headerName: 'Unit',
+      headerAlign: 'left',
+      headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
+      width: 200
+    },
     {
-      field: 'age',
-      headerName: 'Age',
+      field: 'priceLast',
+      headerName: 'Last Price',
+      headerAlign: 'left',
+      headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
       type: 'number',
-      width: 90,
+      width: 200,
     },
     {
-      field: 'fullName',
-      headerName: 'Full name',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      width: 160,
-      valueGetter: (params: GridValueGetterParams) =>
-        `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+      field: 'percentage',
+      headerName: 'Percentage',
+      headerAlign: 'left',
+      headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
+      type: 'number',
+      width: 200,
+      renderCell: (params) => params.value >= 0 ? <div className='text-green-500 font-family'>+{params.value}%</div> : <div className='text-red-500 font-family'>{params.value}%</div>
     },
+    {
+      field: 'priceHigh',
+      headerName: 'High Price',
+      headerAlign: 'left',
+      headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
+      type: 'number',
+      width: 200,
+    },
+    {
+      field: 'lastUpdate',
+      headerName: 'Last Update',
+      headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
+      headerAlign: 'left',
+      type: 'date',
+      width: 150
+    },
+    {
+      field: 'actionBuy',
+      type: 'actions',
+      getActions: (params: GridRowParams) => [
+        <div className='flex '>
+            <button className='text-green-500 p-[3px] font-family font-bolder border border-green-500 mr-[5px] hover:bg-green-500 hover:text-white'>Buy</button>
+            
+        </div>
+        
+      ],
+      width: 20
+    },
+
+    {
+      field: 'actionSelkl',
+      type: 'actions',
+      getActions: (params: GridRowParams) => [
+        <div className='flex '>
+            <button className='text-red-500 p-[3px] font-family font-bolder border border-red-500 mr-[5px] hover:bg-red-500 hover:text-white'>Sell</button>
+        </div>
+        
+      ],
+      width: 20
+    }
   ];
   
-const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-  ];
-export default function TableStocks() {
-    return (
-        <div>
+  
+
+  return (
+        <div >
             <DataGrid 
-                rows={rows}
+                rows={dataRowsTable}
                 columns={columns}
-                initialState={{
-                pagination: {
+                sx={
+                  {
+                    '.MuiDataGrid-columnSeparator': {
+                      display: 'none',
+                    },
+                    '.MuiDataGrid-cellContent': {
+                      color: "white",
+                      fontFamily:"Inter, sans-serif",
+                      
+                    },
+                    '.MuiDataGrid-cell':{
+                      justifyContent: "left"
+                    },
+                    '.MuiDataGrid-footerContainer':{
+                        color: "white",
+                        fontFamily:"Inter, sans-serif",
+                    },
+                    '.MuiTablePagination-root':{
+                        color: "white",
+                        fontFamily:"Inter, sans-serif",
+                    },
+                    '.MuiButtonBase-root':{
+                      color: "white"
+                    },
+                    '.MuiDataGrid-cell:focus': {
+                      outline: "none !important"
+                    },
+                    '.Mui-selected':{
+                      backgroundColor: 'transparent !important'
+                    },
+                  }
+                }
+                  initialState={{
+                  pagination: {
                     paginationModel: { page: 0, pageSize: 5 },
-                },
-                }}
-                pageSizeOptions={[5, 10]}
-                checkboxSelection
-                />
+                  },
+                  }}
+                  pageSizeOptions={[5, 10]}
+                >
+                </DataGrid>
 
         </div>
     )

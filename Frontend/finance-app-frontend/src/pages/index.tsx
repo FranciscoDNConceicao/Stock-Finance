@@ -54,14 +54,13 @@ export default function InitPage(){
 
     useEffect(() => {
         const handleScroll = () => {
-
-            if (window.scrollY > 100 && !isFixed) {
+            console.log(window.scrollY)
+            if (window.scrollY > 60 && !isFixed) {
                 setIsFixed(true);
-            } else if (window.scrollY <= 200 && isFixed) {
+            } else if (window.scrollY <= 60 && isFixed) {
                 setIsFixed(false);
             }
         };
-
             window.addEventListener('scroll', handleScroll);
             return () => {
             window.removeEventListener('scroll', handleScroll);
@@ -86,28 +85,28 @@ export default function InitPage(){
                 <TickerAction isFixed={isFixed}/>
             </div>
             <div className="h-full w-full flex">
-                <div className="">
+                <div className="w-[15%]">
                     <Sidebar />
                 </div>
-                    <div>
+                <div className="w-full">
 
-                        <div className="grid w-full grid-template-rows-6 grid-cols-6 gap-4 ml-[20px] mr-[20px] mt-[60px]">
-                            <div className="h-full w-full row-start-1 col-start-1 row-end-4 col-end-4 bg-secondary-background-color border-[1px] border-[white]">
-                                <LineGraph 
-                                    data={data_graph} 
-                                />
-                            </div>
-                            <div className="h-full w-full row-start-1 col-start-4 row-end-2 col-end-7 bg-secondary-background-color">
-                                <WalletComponent WalletData={wallet} />
-                            </div>
-                            <div className="h-full w-full row-start-2 col-start-4 row-end-3 col-end-7 bg-secondary-background-color" >
-                                <SeparatorInfo Data={newsDataForComponent}/>
-                            </div>
-                            <div className="h-full w-full row-start-4 col-start-1 row-end-7 col-end-7 bg-secondary-background-color" >
-                                <TableStocks />
-                            </div>
+                    <div className="grid w-full grid-template-rows-6 grid-cols-6 gap-4 mt-[60px] mb-[60px] px-[10px]">
+                        <div className="h-full w-full row-start-1 col-start-1 row-end-4 col-end-4 bg-secondary-background-color border-[1px] border-[white]">
+                            <LineGraph 
+                                data={data_graph} 
+                            />
+                        </div>
+                        <div className="h-full w-full row-start-1 col-start-4 row-end-2 col-end-7 bg-secondary-background-color">
+                            <WalletComponent WalletData={wallet} />
+                        </div>
+                        <div className="h-full w-full row-start-2 col-start-4 row-end-3 col-end-7 bg-secondary-background-color" >
+                            <SeparatorInfo Data={newsDataForComponent}/>
+                        </div>
+                        <div className="h-full w-full row-start-4 col-start-1 row-end-7 col-end-7 bg-secondary-background-color" >
+                            <TableStocks/>
                         </div>
                     </div>
+                </div>
             </div>
             
             </div>

@@ -52,6 +52,7 @@ const data_graph = {
 export default function InitPage(){
     const [isFixed, setIsFixed] = useState(false);
 
+    console.log(data_graph)
     useEffect(() => {
         const handleScroll = () => {
             console.log(window.scrollY)

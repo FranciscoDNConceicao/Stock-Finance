@@ -1,11 +1,8 @@
 from fastapi import FastAPI
 import uvicorn
-from api.services import datetimeStocksServices
+import api.services.datetimeStocksServices as datetimeStocksServices
 
 app = FastAPI()
-API_KEY_nasdaq = 'wJD7pCiR9fAspphHzKQz '
-API_KEY_alpha_vantage = 'J3CDEYC1FR0PJ9SD'
-
 app.include_router(datetimeStocksServices.RouterDatetimeStocksServices)
 
 

@@ -11,42 +11,22 @@ import {news_data} from "../../data/DataInitPage"
 import SeparatorInfo from "../components/SeparatorInfo/SeparatorInfo"
 import TableStocks from "../components/TableStocks/Tablestocks"
 import { useEffect, useState } from "react"
+import { generateDataStockTime } from "../scripts/Stocks/DataStockTime"
 
-function getRandomArbitrary(min:number, max:number) {
-    return Math.random() * (max - min) + min;
-  }
-  
-  // Populate company_data with random values
-function generateRandomData() {
-    const startDate = new Date(2024, 2, 8, 9, 0, 0); // March 8th, 2024 09:00:00
-    const endDate = new Date(2024, 2, 9, 5, 47, 45); // March 9th, 2024 05:47:45
-    const timestamps = [];
-    let currentDate = startDate;
 
-    // Generate timestamps
-    while (currentDate <= endDate) {
-        timestamps.push(currentDate.toISOString());
-        currentDate.setHours(currentDate.getHours() + 1); // Increment by 1 hour
-    }
-    const company_data:{ [key: string]: string } = {};
-    for (const timestamp of timestamps) {
-        company_data[timestamp] = getRandomArbitrary(10, 30).toFixed(2); // Random value between 10 and 30, rounded to 2 decimal places
-    }
-    return company_data;
-}
 const data_graph = {
     'TSLA':{
         'image': logoTSLA,
-        'company_data': generateRandomData()
+        'company_data': generateDataStockTime('TSLA')
     },
     'GOOGL':{
         'image': logoGOOGL,
-        'company_data':  generateRandomData()
+        'company_data':  generateDataStockTime('GOOGL')
         
     },
     'APPL':{
         'image': logoAPPL,
-        'company_data': generateRandomData()
+        'company_data': generateDataStockTime('APPL')
     }
 }
 export default function InitPage(){

@@ -13,41 +13,69 @@ import TableStocks from "../components/TableStocks/Tablestocks"
 import { useEffect, useState } from "react"
 import { generateDataStockTime } from "../scripts/Stocks/DataStockTime"
 
-
-const data_graph = {
-    'TSLA':{
-        'image': logoTSLA,
-        'company_data': generateDataStockTime('TSLA')
-    },
-    'GOOGL':{
-        'image': logoGOOGL,
-        'company_data':  generateDataStockTime('GOOGL')
-        
-    },
-    'APPL':{
-        'image': logoAPPL,
-        'company_data': generateDataStockTime('APPL')
-    }
+export interface CompanyData {
+    [timestamp: string]: string;
 }
+export interface DataGraph {
+    [key: string]: {
+      image: string;
+      company_data: CompanyData | null;
+    };
+  }
+
 export default function InitPage(){
+    
     const [isFixed, setIsFixed] = useState(false);
+    const [dataGraph, setDataGraph] = useState<DataGraph>({'TSLA': {
+        'image': logoTSLA,
+        'company_data': null
+      },
+      'GOOGL': {
+        'image': logoGOOGL,
+        'company_data': null
+      },
+      'AAPL': {
+        'image': logoAPPL,
+        'company_data': null
+      }});
 
-    console.log(data_graph)
     useEffect(() => {
-        const handleScroll = () => {
-            console.log(window.scrollY)
-            if (window.scrollY > 60 && !isFixed) {
-                setIsFixed(true);
-            } else if (window.scrollY <= 60 && isFixed) {
-                setIsFixed(false);
+        const fetchData = async () => {
+          const TSLAResponse = await generateDataStockTime('TSLA');
+          const GOOGLResponse = await generateDataStockTime('GOOGL');
+          const APPLResponse = await generateDataStockTime('PFE');
+    
+          setDataGraph({
+            'TSLA': {
+              'image': logoTSLA,
+              'company_data': TSLAResponse?.data || null
+            },
+            'GOOGL': {
+              'image': logoGOOGL,
+              'company_data': GOOGLResponse?.data || null
+            },
+            'APPL': {
+              'image': logoAPPL,
+              'company_data': APPLResponse?.data || null
             }
+          });
         };
-            window.addEventListener('scroll', handleScroll);
-            return () => {
-            window.removeEventListener('scroll', handleScroll);
+    
+        fetchData();
+    
+        const handleScroll = () => {
+          if (window.scrollY > 60 && !isFixed) {
+            setIsFixed(true);
+          } else if (window.scrollY <= 60 && isFixed) {
+            setIsFixed(false);
+          }
         };
-        }, [isFixed]);
-
+    
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+          window.removeEventListener('scroll', handleScroll);
+        };
+      }, [isFixed]);
 
     
     const newsDataForComponent = news_data
@@ -74,7 +102,7 @@ export default function InitPage(){
                     <div className="grid w-full grid-template-rows-6 grid-cols-6 gap-4 mt-[60px] mb-[60px] px-[10px]">
                         <div className="h-full w-full row-start-1 col-start-1 row-end-4 col-end-4 bg-secondary-background-color border-[1px] border-[white]">
                             <LineGraph 
-                                data={data_graph} 
+                                data={dataGraph} 
                             />
                         </div>
                         <div className="h-full w-full row-start-1 col-start-4 row-end-2 col-end-7 bg-secondary-background-color">

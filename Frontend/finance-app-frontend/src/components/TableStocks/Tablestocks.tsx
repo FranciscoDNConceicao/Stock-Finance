@@ -4,7 +4,6 @@ import {dataRowsTable} from '../../../data/DataInitPage'
 
 export default function TableStocks() {
   
-  
 
   let columns: GridColDef[] = [
     { 
@@ -98,7 +97,7 @@ export default function TableStocks() {
   
 
   return (
-        <div >
+        <div>
             <DataGrid 
                 rows={dataRowsTable}
                 columns={columns}

@@ -1,23 +1,24 @@
 import { LineChart } from "@mui/x-charts";
-import Box from '@mui/material/Box';
 import TimeChangedGraph from "./Components/TimeChangedGraph";
 import "../../style/index.css"
 import React, { useState, useEffect  } from 'react';
 import ChoosingCategory from "./Components/ChoosingCategory";
+import { CompanyData, DataGraph } from "../../pages";
 
-interface CompanyData {
-    [timestamp: string]: string;
-}
-interface GraphData {
-    [symbol: string]: {
-        image: string;
-        company_data: CompanyData;
-    };
-}
+
 interface LineGraphProps {
-    data: GraphData;
+    data: DataGraph;
 }
+function isLastGreaterThanLastFour(numbers: number[]): boolean {
+    
+    const lastNumber = numbers[numbers.length - 1];
+    console.log(lastNumber)
+    const maxArray = Math.max(...numbers);
 
+    console.log(maxArray)
+    console.log(lastNumber)
+    return lastNumber === maxArray;
+}
 const valueFormatter = (date: Date) =>
   date.getHours() === 0
     ? date.toLocaleDateString('pt-PT', {
@@ -64,16 +65,19 @@ export default function LineGraph(props:LineGraphProps){
             }
         }
     }
+    console.log(props.data)
     const symbol:string = Object.keys(props.data)[index];
     console.log(symbol)
-    const timestamps = Object.keys(props.data[symbol].company_data);
-    const values = Object.values(props.data[symbol].company_data);
+    const timestamps = Object.keys((props.data[symbol].company_data ?? {}) as CompanyData);
+    const values = Object.values((props.data[symbol].company_data ?? {}) as CompanyData);
 
-    // Formatting timestamps into Date objects
     const xAxisData = timestamps.map(timestamp => new Date(timestamp));
-    // Parsing values to numbers
     const series = values.map(value => parseFloat(value));
 
+    const minYaxis:number = Math.min(...series) - (Math.min(...series) * 0.1)
+    const maxYaxis:number = Math.max(...series) + (Math.max(...series) * 0.1)
+
+    const isDown:boolean = isLastGreaterThanLastFour(series)
     return (
        <div className=" bg-secondary-background-color ">
             <TimeChangedGraph />
@@ -99,10 +103,10 @@ export default function LineGraph(props:LineGraphProps){
                         fill: "white !important",
                     },
                     "& .MuiAreaElement-root": {
-                        fill: "rgb(87, 100, 213) !important"
+                        fill: isDown ? "#232d23 !important" : "#4a2323 !important "
                     },
                     "& .MuiLineElement-root": {
-                        stroke:"white !important"
+                        stroke: isDown ? "green !important" : "red !important "
                     }
                 }}
                 xAxis={[{
@@ -110,13 +114,18 @@ export default function LineGraph(props:LineGraphProps){
                     scaleType: 'time',
                     valueFormatter,
                     tickMinStep: 3600 * 1000 * 3
-                  }]}
-
+                    
+                }]}
+                yAxis={[{
+                    min: minYaxis,
+                    max: maxYaxis,
+                }]}
                 series={[
                     { 
                         data: series,
                         area: true,
-                        showMark: false
+                        showMark: false,
+                        
                     }
                 ]}
                 width={width * 0.42}

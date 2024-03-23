@@ -3,27 +3,23 @@ import TimeChangedGraph from "./Components/TimeChangedGraph";
 import "../../style/index.css"
 import React, { useState, useEffect  } from 'react';
 import ChoosingCategory from "./Components/ChoosingCategory";
-import { CompanyData, DataGraph } from "../../pages";
+import { CompanyData, LineGraphProps } from "./interfaces";
 
 
-interface LineGraphProps {
-    data: DataGraph;
-}
+
+
 function isLastGreaterThanLastFour(numbers: number[]): boolean {
-    
-    const lastNumber = numbers[numbers.length - 1];
-    console.log(lastNumber)
-    const maxArray = Math.max(...numbers);
+    if (numbers.length < 5) return false;
 
-    console.log(maxArray)
-    console.log(lastNumber)
-    return lastNumber === maxArray;
+    return numbers[numbers.length] > numbers[0];
 }
 const valueFormatter = (date: Date) =>
   date.getHours() === 0
     ? date.toLocaleDateString('pt-PT', {
+        year: '2-digit',
         month: '2-digit',
         day: '2-digit',
+
       })
     : date.toLocaleTimeString('pt-PT', {
         hour: '2-digit',
@@ -36,6 +32,7 @@ export default function LineGraph(props:LineGraphProps){
 
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
+
     useEffect(() => {
         const handleResize = () => {setWidth(window.innerWidth);};
         const handleResizeHeight = () => {setHeight(window.innerHeight);};
@@ -65,22 +62,25 @@ export default function LineGraph(props:LineGraphProps){
             }
         }
     }
-    console.log(props.data)
+
+
     const symbol:string = Object.keys(props.data)[index];
-    console.log(symbol)
+    
     const timestamps = Object.keys((props.data[symbol].company_data ?? {}) as CompanyData);
     const values = Object.values((props.data[symbol].company_data ?? {}) as CompanyData);
 
     const xAxisData = timestamps.map(timestamp => new Date(timestamp));
     const series = values.map(value => parseFloat(value));
 
-    const minYaxis:number = Math.min(...series) - (Math.min(...series) * 0.1)
-    const maxYaxis:number = Math.max(...series) + (Math.max(...series) * 0.1)
+    const minYaxis:number = Math.min(...series) - (Math.min(...series) * 0.01)
+    const maxYaxis:number = Math.max(...series) + (Math.max(...series) * 0.01)
 
     const isDown:boolean = isLastGreaterThanLastFour(series)
     return (
        <div className=" bg-secondary-background-color ">
-            <TimeChangedGraph />
+            {props.isLoading && <div className="loader"></div>}
+            <TimeChangedGraph changingTimeCateg={props.changingTimeCateg}/>
+            
             <LineChart
                 sx={{
                     "& .MuiChartsAxis-bottom": {
@@ -130,7 +130,9 @@ export default function LineGraph(props:LineGraphProps){
                 ]}
                 width={width * 0.42}
                 height={height * 0.57}
-            />
+            >
+               
+            </LineChart>
             <ChoosingCategory 
                 changeStock={changeStockGraph}
                 company={symbol}

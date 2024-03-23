@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { TimeChangedGraphProps } from "../interfaces";
 
-export default function TimeChangedGraph(){
+
+
+export default function TimeChangedGraph(props: TimeChangedGraphProps){
     const [selectedTimeRange, setSelectedTimeRange] = useState('1D');
 
     const handleTimeRangeClickfunction = (timeRange:string) => {
         console.log(timeRange);
         setSelectedTimeRange(timeRange);
+        props.changingTimeCateg(timeRange);
     };
     
     return(
@@ -26,9 +30,7 @@ export default function TimeChangedGraph(){
                 <div onClick={() => handleTimeRangeClickfunction('3Y')} className={`mr-[2px] text-[11px] text-[white] ${selectedTimeRange === '3Y' ? 'bg-secondary-color' : 'bg-background-color'} px-[8px] py-[2px] font-family rounded-[4px] border-[1px] border-[white]`} >
                     3Y
                 </div>
-                <div onClick={() => handleTimeRangeClickfunction('MAX')} className={`mr-[2px] text-[11px] text-[white] ${selectedTimeRange === 'MAX' ? 'bg-secondary-color' : 'bg-background-color'} px-[8px] py-[2px] font-family rounded-[4px] border-[1px] border-[white]`} >
-                    MAX
-                </div>
+                
             </div>
         </div>
     );

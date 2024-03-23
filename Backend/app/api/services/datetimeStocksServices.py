@@ -32,6 +32,9 @@ async def getStocksDataForDay(params:SearchStocksValue):
     elif time == '1Y':
         timeframe = '1M'
         date_end = date_begin - timedelta(weeks=54)
+    elif time == '3Y':
+        timeframe = '1M'
+        date_end = date_begin - timedelta(weeks=(54*3))
     try:
         #Request to Alpaca API to get all stock information
         url = f'https://data.alpaca.markets/v2/stocks/bars?symbols={code_stock}&timeframe={timeframe}&start={date_end.strftime('%Y-%m-%d')}&end={date_begin.strftime('%Y-%m-%d')}&limit=1000&adjustment=raw&feed=sip&sort=asc'

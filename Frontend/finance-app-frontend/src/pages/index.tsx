@@ -12,20 +12,13 @@ import SeparatorInfo from "../components/SeparatorInfo/SeparatorInfo"
 import TableStocks from "../components/TableStocks/Tablestocks"
 import { useEffect, useState } from "react"
 import { generateDataStockTime } from "../scripts/Stocks/DataStockTime"
+import { DataGraph } from "../components/LineGraph/interfaces"
 
-export interface CompanyData {
-    [timestamp: string]: string;
-}
-export interface DataGraph {
-    [key: string]: {
-      image: string;
-      company_data: CompanyData | null;
-    };
-  }
 
 export default function InitPage(){
     
     const [isFixed, setIsFixed] = useState(false);
+    const [isLoading, setLoading] = useState(true)
     const [dataGraph, setDataGraph] = useState<DataGraph>({'TSLA': {
         'image': logoTSLA,
         'company_data': null
@@ -38,30 +31,54 @@ export default function InitPage(){
         'image': logoAPPL,
         'company_data': null
       }});
+    
+    const StocksCode = {
+      'TSLA': logoTSLA,
+      'AAPL': logoAPPL,
+      'GOOGL': logoGOOGL
+    }
 
+    
+
+    const fetchDatatoGraph = async (timestamp:string, code:string) => {
+      setDataGraph({
+        'TSLA': {
+          'image': logoTSLA,
+          'company_data': null
+        },
+        'GOOGL': {
+          'image': logoGOOGL,
+          'company_data': null
+        },
+        'APPL': {
+          'image': logoAPPL,
+          'company_data': null
+        }
+      });
+      setLoading(true)
+      const TSLAResponse = await generateDataStockTime('TSLA', timestamp);
+      const GOOGLResponse = await generateDataStockTime('GOOGL', timestamp);
+      const APPLResponse = await generateDataStockTime('NFLX', timestamp);
+      setLoading(false)
+      setDataGraph({
+        'TSLA': {
+          'image': logoTSLA,
+          'company_data': TSLAResponse?.data || null
+        },
+        'GOOGL': {
+          'image': logoGOOGL,
+          'company_data': GOOGLResponse?.data || null
+        },
+        'APPL': {
+          'image': logoAPPL,
+          'company_data': APPLResponse?.data || null
+        }
+      });
+    };
+
+    
     useEffect(() => {
-        const fetchData = async () => {
-          const TSLAResponse = await generateDataStockTime('TSLA');
-          const GOOGLResponse = await generateDataStockTime('GOOGL');
-          const APPLResponse = await generateDataStockTime('PFE');
-    
-          setDataGraph({
-            'TSLA': {
-              'image': logoTSLA,
-              'company_data': TSLAResponse?.data || null
-            },
-            'GOOGL': {
-              'image': logoGOOGL,
-              'company_data': GOOGLResponse?.data || null
-            },
-            'APPL': {
-              'image': logoAPPL,
-              'company_data': APPLResponse?.data || null
-            }
-          });
-        };
-    
-        fetchData();
+        fetchDatatoGraph('1D');
     
         const handleScroll = () => {
           if (window.scrollY > 60 && !isFixed) {
@@ -103,6 +120,8 @@ export default function InitPage(){
                         <div className="h-full w-full row-start-1 col-start-1 row-end-4 col-end-4 bg-secondary-background-color border-[1px] border-[white]">
                             <LineGraph 
                                 data={dataGraph} 
+                                changingTimeCateg={fetchDatatoGraph}
+                                isLoading={isLoading}
                             />
                         </div>
                         <div className="h-full w-full row-start-1 col-start-4 row-end-2 col-end-7 bg-secondary-background-color">

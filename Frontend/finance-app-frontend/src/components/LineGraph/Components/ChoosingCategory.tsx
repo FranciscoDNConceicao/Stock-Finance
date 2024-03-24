@@ -1,6 +1,4 @@
-import logoTSLA from "../../../assets/images/tesla-logo.svg"
-import logoGOOGL from "../../../assets/images/Google-logo.svg"
-import logoAPPL from "../../../assets/images/apple-logo.svg"
+
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from "react";

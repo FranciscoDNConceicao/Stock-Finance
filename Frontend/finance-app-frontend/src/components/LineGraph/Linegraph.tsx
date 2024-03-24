@@ -3,7 +3,7 @@ import TimeChangedGraph from "./Components/TimeChangedGraph";
 import "../../style/index.css"
 import React, { useState, useEffect  } from 'react';
 import ChoosingCategory from "./Components/ChoosingCategory";
-import { CompanyData, LineGraphProps } from "./interfaces";
+import { CompanyData, LineGraphProps, StockImage } from "./interfaces";
 
 
 
@@ -28,10 +28,13 @@ const valueFormatter = (date: Date) =>
 
 
 export default function LineGraph(props:LineGraphProps){
-    const lenghtData = Object.keys(props.data).length
-
+    const lenghtData = props.categProp.length
+    console.log(lenghtData)
+    const [index, setIndex] = useState(1)
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
+    const [timestampSelected, setTimeStamp] = useState('1D')
+    const [selectedCateg, setSelectCateg] = useState<StockImage>(props.categProp[0])
 
     useEffect(() => {
         const handleResize = () => {setWidth(window.innerWidth);};
@@ -45,29 +48,34 @@ export default function LineGraph(props:LineGraphProps){
         };
     }, []);
     
-    const [index, setIndex] = useState(0)
 
     const changeStockGraph = (side:string) => {
         if (side === 'left') {
-            if ((index - 1) == -1){
-                setIndex(lenghtData - 1);
-            }else{
-                setIndex(prevIndex => prevIndex - 1);
+            if (index === 0) {
+              setIndex(lenghtData - 1);
+            } else {
+              setIndex(index - 1);
             }
-        } else if (side === 'right') {
-            if ((index + 1) == lenghtData){
-                setIndex(0);
-            }else{
-                setIndex(prevIndex => prevIndex + 1);
+          } else if (side === 'right') {
+            if (index === lenghtData - 1) {
+              console.log('ZEROU');
+              setIndex(0);
+            } else {
+              setIndex(index + 1);
             }
-        }
+          }
+
+        setSelectCateg(props.categProp[index])
+        props.changingTimeCateg(timestampSelected, selectedCateg.code)
+    };
+
+    const changingTime = (timestamp: string) => {
+        setTimeStamp(timestamp)
+        props.changingTimeCateg(timestamp, selectedCateg.code)
     }
-
-
-    const symbol:string = Object.keys(props.data)[index];
     
-    const timestamps = Object.keys((props.data[symbol].company_data ?? {}) as CompanyData);
-    const values = Object.values((props.data[symbol].company_data ?? {}) as CompanyData);
+    const timestamps = Object.keys((props.data.company_data ?? {}) as CompanyData);
+    const values = Object.values((props.data.company_data ?? {}) as CompanyData);
 
     const xAxisData = timestamps.map(timestamp => new Date(timestamp));
     const series = values.map(value => parseFloat(value));
@@ -79,8 +87,9 @@ export default function LineGraph(props:LineGraphProps){
     return (
        <div className=" bg-secondary-background-color ">
             {props.isLoading && <div className="loader"></div>}
-            <TimeChangedGraph changingTimeCateg={props.changingTimeCateg}/>
-            
+            <TimeChangedGraph 
+            changingTimeCateg={changingTime}/>
+
             <LineChart
                 sx={{
                     "& .MuiChartsAxis-bottom": {
@@ -135,8 +144,8 @@ export default function LineGraph(props:LineGraphProps){
             </LineChart>
             <ChoosingCategory 
                 changeStock={changeStockGraph}
-                company={symbol}
-                image={props.data[symbol].image}
+                company={selectedCateg.code}
+                image={selectedCateg.image}
             />
        </div> 
     )

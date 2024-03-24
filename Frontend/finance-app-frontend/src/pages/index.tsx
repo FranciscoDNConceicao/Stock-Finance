@@ -19,67 +19,47 @@ export default function InitPage(){
     
     const [isFixed, setIsFixed] = useState(false);
     const [isLoading, setLoading] = useState(true)
-    const [dataGraph, setDataGraph] = useState<DataGraph>({'TSLA': {
-        'image': logoTSLA,
+    const [dataGraph, setDataGraph] = useState<DataGraph>({
         'company_data': null
-      },
-      'GOOGL': {
-        'image': logoGOOGL,
-        'company_data': null
-      },
-      'AAPL': {
-        'image': logoAPPL,
-        'company_data': null
-      }});
-    
-    const StocksCode = {
-      'TSLA': logoTSLA,
-      'AAPL': logoAPPL,
-      'GOOGL': logoGOOGL
-    }
-
-    
-
-    const fetchDatatoGraph = async (timestamp:string) => {
-      setDataGraph({
-        'TSLA': {
-          'image': logoTSLA,
-          'company_data': null
-        },
-        'GOOGL': {
-          'image': logoGOOGL,
-          'company_data': null
-        },
-        'APPL': {
-          'image': logoAPPL,
-          'company_data': null
-        }
       });
+    const [isFirstTime,setIsFirstTime] = useState(true)
+
+    const StocksCode = [
+      {
+        'code': 'TSLA',
+        'image': logoTSLA
+      },
+      {
+        'code': 'AAPL',
+        'image': logoAPPL
+      },
+      {
+        'code': 'GOOGL',
+        'image': logoGOOGL
+      }
+    ]
+
+    const fetchDatatoGraph = async (timestamp:string, code:string) => {
+      console.log('Entrou')
+      setDataGraph({
+          'company_data': null,
+        });
       setLoading(true)
-      const TSLAResponse = await generateDataStockTime('TSLA', timestamp);
-      const GOOGLResponse = await generateDataStockTime('GOOGL', timestamp);
-      const APPLResponse = await generateDataStockTime('NFLX', timestamp);
+      const Response = await generateDataStockTime(code, timestamp);
       setLoading(false)
       setDataGraph({
-        'TSLA': {
-          'image': logoTSLA,
-          'company_data': TSLAResponse?.data || null
-        },
-        'GOOGL': {
-          'image': logoGOOGL,
-          'company_data': GOOGLResponse?.data || null
-        },
-        'APPL': {
-          'image': logoAPPL,
-          'company_data': APPLResponse?.data || null
-        }
+          'company_data': Response?.data || null
       });
     };
 
-    
     useEffect(() => {
-        fetchDatatoGraph('1D');
-    
+      if (isFirstTime) {        
+        fetchDatatoGraph('1D',  StocksCode[0].code)
+        setIsFirstTime(false);
+      }
+    }, [isFirstTime]);
+
+    useEffect(() => {
         const handleScroll = () => {
           if (window.scrollY > 60 && !isFixed) {
             setIsFixed(true);
@@ -103,7 +83,6 @@ export default function InitPage(){
         'day_balance': 34.42,
         'total_balance': 593.13
     }
-    console.log(newsDataForComponent)
     return (
         <div className="bg-background-color h-full">
             <div className="h-16 shadow-[rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;]">
@@ -115,13 +94,14 @@ export default function InitPage(){
                     <Sidebar />
                 </div>
                 <div className="w-full">
-
                     <div className="grid w-full grid-template-rows-6 grid-cols-6 gap-4 mt-[60px] mb-[60px] px-[10px]">
                         <div className="h-full w-full row-start-1 col-start-1 row-end-4 col-end-4 bg-secondary-background-color border-[1px] border-[white]">
                             <LineGraph 
-                                data={dataGraph} 
                                 changingTimeCateg={fetchDatatoGraph}
+
                                 isLoading={isLoading}
+                                data={dataGraph} 
+                                categProp={StocksCode}
                             />
                         </div>
                         <div className="h-full w-full row-start-1 col-start-4 row-end-2 col-end-7 bg-secondary-background-color">

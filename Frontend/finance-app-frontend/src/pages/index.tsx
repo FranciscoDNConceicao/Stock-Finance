@@ -40,7 +40,7 @@ export default function InitPage(){
 
     
 
-    const fetchDatatoGraph = async (timestamp:string, code:string) => {
+    const fetchDatatoGraph = async (timestamp:string) => {
       setDataGraph({
         'TSLA': {
           'image': logoTSLA,

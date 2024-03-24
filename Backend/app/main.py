@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 import uvicorn
-import api.services.datetimeStocksServices as datetimeStocksServices
+import api.services.datetimeStocksServices as serviceStockDate
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-app.include_router(datetimeStocksServices.RouterDatetimeStocksServices)
+app.include_router(serviceStockDate.RouterDatetimeStocksServices)
 
 origins = [
     "http://localhost:5173"

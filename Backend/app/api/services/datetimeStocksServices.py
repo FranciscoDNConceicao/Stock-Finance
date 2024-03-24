@@ -1,52 +1,46 @@
 import requests
 from fastapi import APIRouter, HTTPException
 from app.api.models.SearchStocksValueTime import SearchStocksValue
-from app.const import headers
+from alpaca_trade_api import REST, TimeFrameUnit
 import asyncio
 import aiohttp
 from datetime import datetime, timedelta
+from alpaca_trade_api import TimeFrame
+from fastapi import APIRouter
 
 RouterDatetimeStocksServices = APIRouter()
-
 @RouterDatetimeStocksServices.post("/stock/get/")
 async def getStocksDataForDay(params:SearchStocksValue):
+    api_alpaca = REST(key_id="PKWD0U5VC3Z0XB7QA09E", secret_key="SDs8F7vW2b1cyKWSqDLj3TJWwa5111FzbVH8RuAg")
 
     #Stocks Code
     code_stock = params.stockCode
     time = params.time
-    date_begin = datetime.now() - timedelta(days=1)
+    date_begin = datetime.now() - timedelta(days=2)
 
     if time == '1D':
-        timeframe = '1H'
+        timeframe = TimeFrame.Hour
         date_end = date_begin - timedelta(days=1)
     elif time == '1W':
-        timeframe = '12H'
+        timeframe = TimeFrame(12, TimeFrameUnit.Hour )
         date_end = date_begin - timedelta(weeks=1)
 
     elif time == '1M':
-        timeframe = '1D'
+        timeframe = TimeFrame.Day
         date_end = date_begin - timedelta(days=30)
     elif time == '3M':
-        timeframe = '1W'
+        timeframe = TimeFrame.Week
         date_end = date_begin - timedelta(days=60)
     elif time == '1Y':
-        timeframe = '1M'
+        timeframe = TimeFrame.Month
         date_end = date_begin - timedelta(weeks=54)
     elif time == '3Y':
-        timeframe = '1M'
+        timeframe = TimeFrame.Month
         date_end = date_begin - timedelta(weeks=(54*3))
     try:
+
         #Request to Alpaca API to get all stock information
-        url = f'https://data.alpaca.markets/v2/stocks/bars?symbols={code_stock}&timeframe={timeframe}&start={date_end.strftime('%Y-%m-%d')}&end={date_begin.strftime('%Y-%m-%d')}&limit=1000&adjustment=raw&feed=sip&sort=asc'
-        r = requests.get(url, headers=headers)
-        data = r.json()
+        request = api_alpaca.get_bars(code_stock, timeframe, date_end.strftime('%Y-%m-%d'), date_begin.strftime('%Y-%m-%d'), adjustment='raw').df
+        return request['close'].to_dict()
     except ValueError:
         raise HTTPException(status_code=422, detail="Invalid stock object")
-
-    response = {}
-    # Organize the data
-    for values in data["bars"][code_stock]:
-        date = values['t'].replace('T', ' ').replace('Z', '')
-        response[date] = values['c']
-
-    return response

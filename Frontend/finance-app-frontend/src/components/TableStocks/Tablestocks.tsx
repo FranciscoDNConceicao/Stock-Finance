@@ -1,7 +1,6 @@
 import { DataGrid, GridColDef, GridRowParams, GridValueGetterParams } from '@mui/x-data-grid';
 import { useState } from 'react';
 import {dataRowsTable} from '../../../data/DataInitPage'
-
 export default function TableStocks() {
   
 
@@ -11,8 +10,8 @@ export default function TableStocks() {
       headerName: '',
       headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
       headerAlign: 'center', 
-      width: 70,
-      renderCell: (params) => <img className="w-[40px] h-[40px]" src={params.value} />
+      width: 200,
+      renderCell: (params) => <img className="min-w-[30px] max-w-[200px] min-h-[30px] max-h-[40px]" src={`images/logos/${params.value}.png`} />
     },
     { 
       field: 'stockName', 

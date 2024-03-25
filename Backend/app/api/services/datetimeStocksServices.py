@@ -7,11 +7,13 @@ import aiohttp
 from datetime import datetime, timedelta
 from alpaca_trade_api import TimeFrame
 from fastapi import APIRouter
+from app.const import headers
+
 
 RouterDatetimeStocksServices = APIRouter()
 @RouterDatetimeStocksServices.post("/stock/get/")
 async def getStocksDataForDay(params:SearchStocksValue):
-    api_alpaca = REST(key_id="PKWD0U5VC3Z0XB7QA09E", secret_key="SDs8F7vW2b1cyKWSqDLj3TJWwa5111FzbVH8RuAg")
+    api_alpaca = REST(key_id=headers["APCA-API-KEY-ID"], secret_key=headers["APCA-API-SECRET-KEY"])
 
     #Stocks Code
     code_stock = params.stockCode
@@ -38,7 +40,6 @@ async def getStocksDataForDay(params:SearchStocksValue):
         timeframe = TimeFrame.Month
         date_end = date_begin - timedelta(weeks=(54*3))
     try:
-
         #Request to Alpaca API to get all stock information
         request = api_alpaca.get_bars(code_stock, timeframe, date_end.strftime('%Y-%m-%d'), date_begin.strftime('%Y-%m-%d'), adjustment='raw').df
         return request['close'].to_dict()

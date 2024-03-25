@@ -11,7 +11,7 @@ import { CompanyData, LineGraphProps, StockImage } from "./interfaces";
 function isLastGreaterThanLastFour(numbers: number[]): boolean {
     if (numbers.length < 5) return false;
 
-    return numbers[numbers.length] > numbers[0];
+    return numbers[numbers.length - 1] > numbers[0];
 }
 const valueFormatter = (date: Date) =>
   date.getHours() === 0
@@ -87,6 +87,7 @@ export default function LineGraph(props:LineGraphProps){
     return (
        <div className=" bg-secondary-background-color ">
             {props.isLoading && <div className="loader"></div>}
+            
             <TimeChangedGraph 
             changingTimeCateg={changingTime}/>
 
@@ -138,14 +139,13 @@ export default function LineGraph(props:LineGraphProps){
                     }
                 ]}
                 width={width * 0.42}
-                height={height * 0.57}
+                height={height * 0.50}
             >
                
             </LineChart>
             <ChoosingCategory 
                 changeStock={changeStockGraph}
                 company={selectedCateg.code}
-                image={selectedCateg.image}
             />
        </div> 
     )

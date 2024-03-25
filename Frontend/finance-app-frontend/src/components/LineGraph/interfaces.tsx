@@ -1,7 +1,5 @@
 export interface StockImage {
     code: string;
-    image:string;
-
   }
 export interface LineGraphProps {
     data: DataGraph;

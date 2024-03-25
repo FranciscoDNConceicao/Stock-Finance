@@ -2,9 +2,6 @@ import Header from "../components/Header/Header"
 import LineGraph from "../components/LineGraph/Linegraph"
 import Sidebar from "../components/Sidebar/Sidebar"
 import TickerAction from "../components/Ticker/Ticker"
-import logoTSLA from "../assets/images/tesla-logo.svg"
-import logoGOOGL from "../assets/images/Google-logo.svg"
-import logoAPPL from "../assets/images/apple-logo.svg"
 import "../style/index.css"
 import WalletComponent from "../components/WalletComponent/WalletComponent"
 import {news_data} from "../../data/DataInitPage"
@@ -13,7 +10,6 @@ import TableStocks from "../components/TableStocks/Tablestocks"
 import { useEffect, useState } from "react"
 import { generateDataStockTime } from "../scripts/Stocks/DataStockTime"
 import { DataGraph } from "../components/LineGraph/interfaces"
-
 
 export default function InitPage(){
     
@@ -25,20 +21,53 @@ export default function InitPage(){
     const [isFirstTime,setIsFirstTime] = useState(true)
 
     const StocksCode = [
-      {
-        'code': 'TSLA',
-        'image': logoTSLA
+      { 
+        'code': 'TSLA' 
       },
-      {
-        'code': 'AAPL',
-        'image': logoAPPL
+      { 
+        'code': 'AAPL' 
       },
-      {
-        'code': 'GOOGL',
-        'image': logoGOOGL
-      }
-    ]
-
+      { 
+        'code': 'ETSY' 
+      },
+      { 
+        'code': 'AMZN' 
+      },
+      { 
+        'code': 'GOOGL' 
+      },
+      { 
+        'code': 'MSFT' 
+      },
+      { 
+        'code': 'NFLX' 
+      },
+      { 
+        'code': 'META' 
+      },
+      { 
+        'code': 'NVDA' 
+      },
+      { 
+        'code': 'INTC' 
+      },
+      { 
+        'code': 'AMD' 
+      },
+      { 
+        'code': 'PYPL'
+      },
+      { 
+        'code': 'SQ' 
+      },
+      { 'code': 'UBER' },
+      { 'code': 'LYFT' },
+      { 'code': 'CRM' },
+      { 'code': 'BABA' },
+      { 'code': 'JD' },
+      { 'code': 'TSM' },
+      { 'code': 'IBM' },
+    ];
     const fetchDatatoGraph = async (timestamp:string, code:string) => {
       console.log('Entrou')
       setDataGraph({
@@ -98,7 +127,6 @@ export default function InitPage(){
                         <div className="h-full w-full row-start-1 col-start-1 row-end-4 col-end-4 bg-secondary-background-color border-[1px] border-[white]">
                             <LineGraph 
                                 changingTimeCateg={fetchDatatoGraph}
-
                                 isLoading={isLoading}
                                 data={dataGraph} 
                                 categProp={StocksCode}

@@ -80,7 +80,7 @@ export const news_data = {
 export const dataRowsTable:GridRowsProp = [
     {
         id: 1,
-        icon:logoTSLA,
+        icon:"TSLA",
         stockName:"Tesla",
         code:"TSLA",
         unit: "USD",
@@ -92,7 +92,7 @@ export const dataRowsTable:GridRowsProp = [
     },
     {
         id: 2,
-        icon:logoGOOGL,
+        icon: "GOOGL",
         stockName:"Alphabet Inc",
         code: "GOOGL",
         unit: "USD",
@@ -103,7 +103,7 @@ export const dataRowsTable:GridRowsProp = [
         
     },{
         id: 3,
-        icon:logoAPPL,
+        icon:"AAPL",
         stockName:"Apple Inc",
         code: "AAPL",
         unit: "USD",
@@ -114,9 +114,9 @@ export const dataRowsTable:GridRowsProp = [
         
     },{
         id: 4,
-        icon:logoAmazon,
+        icon:"AMZN",
         stockName: "Amazon.com Inc",
-        code: "AMZ",
+        code: "AMZN",
         unit: "USD",
         priceLast: "160.50",
         percentage: "0.10",
@@ -124,9 +124,9 @@ export const dataRowsTable:GridRowsProp = [
         lastUpdate: new Date(2024, 3, 17)
     },{
         id: 5,
-        icon: logoBCP,
-        stockName: "Banco Comercial Portugues SA",
-        code: "BCP",
+        icon: "INTC",
+        stockName: "Intel Inc",
+        code: "INTC",
         unit: "EUR",
         priceLast: "0.2765",
         percentage: "0.00",
@@ -135,7 +135,7 @@ export const dataRowsTable:GridRowsProp = [
         
     },{
         id: 6,
-        icon: logoCisco,
+        icon: "CSCO",
         stockName: "Cisco Systems",
         code: "CSCO",
         unit: "USD",
@@ -147,9 +147,9 @@ export const dataRowsTable:GridRowsProp = [
         
     },{
         id: 7,
-        icon: logoDatadog,
-        stockName: "Datadog Inc",
-        code:  "DDOG",
+        icon: "ETSY",
+        stockName: "Etsy Inc",
+        code:  "ETSY",
         unit: "USD",
         priceLast: "120.43",
         percentage: "0.01",

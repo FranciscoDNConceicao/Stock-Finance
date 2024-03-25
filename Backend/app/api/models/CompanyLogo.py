@@ -1,4 +1,4 @@
 from pydantic import BaseModel
 
-class CompanyGraph(BaseModel):
-    stockCode: list = []
+class CompanyLogo(BaseModel):
+    stockCode: str

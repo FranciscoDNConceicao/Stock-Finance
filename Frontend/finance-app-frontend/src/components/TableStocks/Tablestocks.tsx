@@ -11,7 +11,7 @@ export default function TableStocks() {
       headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
       headerAlign: 'center', 
       width: 200,
-      renderCell: (params) => <img className="min-w-[30px] max-w-[200px] min-h-[30px] max-h-[40px]" src={`images/logos/${params.value}.png`} />
+      renderCell: (params) => <img className="min-w-[30px] max-w-[120px] min-h-[30px] max-h-[35px]" src={`images/logos/${params.value}.png`} />
     },
     { 
       field: 'stockName', 

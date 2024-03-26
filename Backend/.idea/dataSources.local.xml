@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="DB-233.14015.137">
+    <data-source name="FinanceApp" uuid="2b6a1b06-936a-4212-b080-f165744bb29c">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>francisco_conceicao</user-name>
+      <schema-mapping />
+    </data-source>
+  </component>
+</project>

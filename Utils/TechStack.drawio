@@ -1,0 +1,70 @@
+<mxfile host="65bd71144e">
+    <diagram id="pgka3IbQRhBKtv84xR7i" name="Page-1">
+        <mxGraphModel dx="2008" dy="667" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2339" pageHeight="3300" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="4" value="FRONT END" style="swimlane;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+                    <mxGeometry x="320" y="160" width="360" height="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://cdn0.iconfinder.com/data/icons/logos-brands-in-colors/128/react-512.png;" vertex="1" parent="4">
+                    <mxGeometry x="50.730000000000004" y="40" width="90" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/TypeScript_Logo_%28Blue%29.svg/1024px-TypeScript_Logo_%28Blue%29.svg.png;" vertex="1" parent="4">
+                    <mxGeometry x="125" y="170.27" width="154.38" height="38" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png;" vertex="1" parent="4">
+                    <mxGeometry x="75" y="168.54" width="41.46" height="41.46" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://cdn.worldvectorlogo.com/logos/tailwind-css-1.svg;" vertex="1" parent="4">
+                    <mxGeometry x="190" y="59.04000000000001" width="150" height="51.92" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="BACKEND" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+                    <mxGeometry x="820" y="150" width="210" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://1000logos.net/wp-content/uploads/2020/08/Python-Logo.png;" vertex="1" parent="5">
+                    <mxGeometry x="25" y="40" width="130" height="81.25" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://vectorseek.com/wp-content/uploads/2023/09/FastAPI-Logo-Vector.svg-.png;" vertex="1" parent="5">
+                    <mxGeometry x="23.4" y="128.13" width="128.61" height="23.75" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://www.vitoshacademy.com/wp-content/uploads/2015/05/sqlalchemy-logo1.png;" vertex="1" parent="5">
+                    <mxGeometry x="23.4" y="190" width="156.6" height="33.13" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="DATABASE" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+                    <mxGeometry x="1140" y="170" width="140" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://logonoid.com/images/postgresql-logo.png;" vertex="1" parent="6">
+                    <mxGeometry x="20" y="57.5" width="103.5" height="115" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;" edge="1" parent="1">
+                    <mxGeometry width="100" height="100" relative="1" as="geometry">
+                        <mxPoint x="680" y="300" as="sourcePoint"/>
+                        <mxPoint x="820" y="300" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="740" y="300"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="27" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;" edge="1" parent="1">
+                    <mxGeometry width="100" height="100" relative="1" as="geometry">
+                        <mxPoint x="1030" y="300" as="sourcePoint"/>
+                        <mxPoint x="1140" y="300" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="1090" y="300"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="28" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://www.mundodocker.com.br/wp-content/uploads/2015/06/docker_facebook_share.png;" vertex="1" parent="1">
+                    <mxGeometry x="740" y="477.58" width="106" height="90.54" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;rotation=-90;" vertex="1" parent="1">
+                    <mxGeometry x="840" y="-49.07" width="20" height="1015" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Git-logo.svg/1200px-Git-logo.svg.png;" vertex="1" parent="1">
+                    <mxGeometry x="870" y="502.12" width="119.81" height="50" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

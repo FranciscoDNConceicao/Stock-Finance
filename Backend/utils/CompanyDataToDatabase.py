@@ -30,6 +30,12 @@ connection = psycopg2.connect(
 cursor = connection.cursor()
 
 list_of_codes_not_found = []
+for code in all_codes:
+    if code not in result:
+        list_of_codes_not_found.append(code)
+        print(code)
+
+
 start_time = time.time()
 for code in all_codes:
 

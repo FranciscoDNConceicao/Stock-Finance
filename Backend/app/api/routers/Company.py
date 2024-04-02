@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import requests
 from alpaca_trade_api import REST, TimeFrame, TimeFrameUnit
 from fastapi import HTTPException, Depends
-from app.models.CompanyLogo import CompanyLogo
+from app.models.CompanyLogo import CompanyLogo, LimitRandom
 from app.models.Company.Company import CompanyTable as Company
 from fastapi import APIRouter
 from app.database import SessionLocal, engine
@@ -21,11 +21,11 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/random")
-async def getRandomCode(session: Session = Depends(get_db)):
-    selectCodes = session.query(Company.code).order_by(func.random()).limit(1)
-    return selectCodes[0][0]
-
+@router.post("/random")
+async def getRandomCode(limit:LimitRandom,session: Session = Depends(get_db)):
+    selectCodes = session.query(Company.code).order_by(func.random()).limit(limit.limit)
+    codes = [{'code': code[0]} for code in selectCodes]
+    return codes
 @router.post("/discount")
 async def getDiscount(params:CompanyLogo,session: Session = Depends(get_db)):
     apiAlpaca = REST(key_id=settings.APCA_API_KEY_ID, secret_key=settings.APCA_API_SECRET_KEY)

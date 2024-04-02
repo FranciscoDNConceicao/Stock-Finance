@@ -7,11 +7,14 @@ import {news_data} from "../../data/DataInitPage"
 import SeparatorInfo from "../components/SeparatorInfo/SeparatorInfo"
 import TableStocks from "../components/TableStocks/Tablestocks"
 import { useEffect, useState } from "react"
-import { generateDataStockTime } from "../scripts/Stocks/DataStockTime"
+import { generateCodesGraph, generateDataStockTime } from "../scripts/Stocks/DataStockTime"
 import { DataGraph } from "../components/LineGraph/interfaces"
 import { TickerActionInt} from "../components/Ticker/Interfaces"
 import { generateDataTicket } from "../scripts/Stocks/TickerDataStock"
 import TickerAction from "../components/Ticker/Ticker"
+
+
+const StocksCode = await generateCodesGraph()
 
 export default function InitPage(){
     
@@ -25,28 +28,8 @@ export default function InitPage(){
     const [dataTicker, setDataTicker] = useState<TickerActionInt[] | null>([])
     const [isFirstTime,setIsFirstTime] = useState(true)
 
-    const StocksCode = [
-      { 'code': 'TSLA'},
-      { 'code': 'AAPL' },
-      { 'code': 'ETSY' },
-      { 'code': 'AMZN' },
-      { 'code': 'GOOGL' },
-      { 'code': 'MSFT'},
-      { 'code': 'NFLX' },
-      { 'code': 'META'},
-      { 'code': 'NVDA' },
-      { 'code': 'INTC' },
-      { 'code': 'AMD' },
-      { 'code': 'PYPL'},
-      { 'code': 'SQ' },
-      { 'code': 'UBER' },
-      { 'code': 'LYFT' },
-      { 'code': 'CRM' },
-      { 'code': 'BABA' },
-      { 'code': 'JD' },
-      { 'code': 'TSM' },
-      { 'code': 'IBM' },
-    ];
+
+
     const fetchDatatoGraph = async (timestamp:string, code:string) => {
       console.log('Entrou')
       setDataGraph({
@@ -70,11 +53,15 @@ export default function InitPage(){
     useEffect(() => {
       if (isFirstTime) {       
         fetchTickerData() 
-        fetchDatatoGraph('1D',  StocksCode[0].code)
+        if (StocksCode?.data?.length && StocksCode.data[0].code) {       
+          fetchDatatoGraph('1D', StocksCode.data[0].code);
 
-        setIsFirstTime(false);
+        } else {
+          console.error('StocksCode data is null, undefined, or empty.');
+
       }
-    }, [isFirstTime]);
+      setIsFirstTime(false);
+    }}, [isFirstTime]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -121,7 +108,7 @@ export default function InitPage(){
                                 changingTimeCateg={fetchDatatoGraph}
                                 isLoading={isLoading}
                                 data={dataGraph} 
-                                categProp={StocksCode}
+                                categProp={StocksCode?.data || null}
                             />
                         </div>
                         <div className="h-full w-full row-start-1 col-start-4 row-end-2 col-end-7 bg-secondary-background-color">

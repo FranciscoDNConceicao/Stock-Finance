@@ -5,7 +5,7 @@ export interface LineGraphProps {
     data: DataGraph;
     changingTimeCateg: (TimeCateg: string, Stock:string) => void;
     isLoading: boolean
-    categProp: StockImage[]
+    categProp: StockImage[] | null
 }
 export interface DataGraph {
     company_data: CompanyData | null;

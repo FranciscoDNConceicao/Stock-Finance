@@ -27,5 +27,4 @@ engine = create_engine(
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 if __name__ == "__main__":
-
     uvicorn.run(app)

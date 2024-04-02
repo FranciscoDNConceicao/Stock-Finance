@@ -25,13 +25,15 @@ const valueFormatter = (date: Date) =>
 
 
 export default function LineGraph(props:LineGraphProps){
-    const lenghtData = props.categProp.length
+    
+    const [selectedCateg, setSelectCateg] = useState<StockImage>({ 'code': ' ' })
+
+    let lenghtData = props.categProp?.length 
     console.log(lenghtData)
     const [index, setIndex] = useState(1)
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
     const [timestampSelected, setTimeStamp] = useState('1D')
-    const [selectedCateg, setSelectCateg] = useState<StockImage>(props.categProp[0])
 
     useEffect(() => {
         const handleResize = () => {setWidth(window.innerWidth);};
@@ -47,6 +49,9 @@ export default function LineGraph(props:LineGraphProps){
     
 
     const changeStockGraph = (side:string) => {
+        if (!lenghtData){
+            lenghtData = 0
+        }
         if (side === 'left') {
             if (index === 0) {
               setIndex(lenghtData - 1);
@@ -61,8 +66,7 @@ export default function LineGraph(props:LineGraphProps){
               setIndex(index + 1);
             }
           }
-
-        setSelectCateg(props.categProp[index])
+        setSelectCateg(props.categProp && props.categProp[index] ? props.categProp[index] : { code: '' });
         props.changingTimeCateg(timestampSelected, selectedCateg.code)
     };
 

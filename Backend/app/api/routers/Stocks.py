@@ -9,7 +9,7 @@ from alpaca_trade_api import TimeFrame
 from fastapi import APIRouter
 
 router = APIRouter()
-@router.post("/stock/get/")
+@router.post("/get/")
 async def getStocksDataForDay(params:SearchStocksValue):
     api_alpaca = REST(key_id=settings.APCA_API_KEY_ID, secret_key=settings.APCA_API_SECRET_KEY)
 

@@ -52,15 +52,18 @@ export default function InitPage(){
 
     useEffect(() => {
       if (isFirstTime) {       
+        console.log('PRIMEIRA')
         fetchTickerData() 
         if (StocksCode?.data?.length && StocksCode.data[0].code) {       
           fetchDatatoGraph('1D', StocksCode.data[0].code);
+          setIsFirstTime(false);
 
         } else {
           console.error('StocksCode data is null, undefined, or empty.');
+          setIsFirstTime(false);
 
       }
-      setIsFirstTime(false);
+
     }}, [isFirstTime]);
 
     useEffect(() => {

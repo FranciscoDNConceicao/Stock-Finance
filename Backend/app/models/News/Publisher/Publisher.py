@@ -1,7 +1,8 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-from app.main import Base
-class News(Base):
+from app.database import Base
+
+class PublisherTable(Base):
     __tablename__ = "publisher"
 
     id = Column(Integer, primary_key=True)
@@ -9,6 +10,4 @@ class News(Base):
     url = Column(String)
     logo_url = Column(String)
     favicon_url = Column(String)
-
-    publisher_id = relationship(Integer, "")
 

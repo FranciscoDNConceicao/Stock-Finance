@@ -1,7 +1,6 @@
 import Header from "../components/Header/Header"
 import LineGraph from "../components/LineGraph/Linegraph"
 import Sidebar from "../components/Sidebar/Sidebar"
-import TickerAction from "../components/Ticker/Ticker"
 import "../style/index.css"
 import WalletComponent from "../components/WalletComponent/WalletComponent"
 import {news_data} from "../../data/DataInitPage"
@@ -10,56 +9,36 @@ import TableStocks from "../components/TableStocks/Tablestocks"
 import { useEffect, useState } from "react"
 import { generateDataStockTime } from "../scripts/Stocks/DataStockTime"
 import { DataGraph } from "../components/LineGraph/interfaces"
+import { TickerActionInt} from "../components/Ticker/Interfaces"
+import { generateDataTicket } from "../scripts/Stocks/TickerDataStock"
+import TickerAction from "../components/Ticker/Ticker"
 
 export default function InitPage(){
     
     const [isFixed, setIsFixed] = useState(false);
     const [isLoading, setLoading] = useState(true)
+    const [isLoadingTicker, setLoadingTicker] = useState(true)
     const [dataGraph, setDataGraph] = useState<DataGraph>({
         'company_data': null
       });
+
+    const [dataTicker, setDataTicker] = useState<TickerActionInt[] | null>([])
     const [isFirstTime,setIsFirstTime] = useState(true)
 
     const StocksCode = [
-      { 
-        'code': 'TSLA' 
-      },
-      { 
-        'code': 'AAPL' 
-      },
-      { 
-        'code': 'ETSY' 
-      },
-      { 
-        'code': 'AMZN' 
-      },
-      { 
-        'code': 'GOOGL' 
-      },
-      { 
-        'code': 'MSFT' 
-      },
-      { 
-        'code': 'NFLX' 
-      },
-      { 
-        'code': 'META' 
-      },
-      { 
-        'code': 'NVDA' 
-      },
-      { 
-        'code': 'INTC' 
-      },
-      { 
-        'code': 'AMD' 
-      },
-      { 
-        'code': 'PYPL'
-      },
-      { 
-        'code': 'SQ' 
-      },
+      { 'code': 'TSLA'},
+      { 'code': 'AAPL' },
+      { 'code': 'ETSY' },
+      { 'code': 'AMZN' },
+      { 'code': 'GOOGL' },
+      { 'code': 'MSFT'},
+      { 'code': 'NFLX' },
+      { 'code': 'META'},
+      { 'code': 'NVDA' },
+      { 'code': 'INTC' },
+      { 'code': 'AMD' },
+      { 'code': 'PYPL'},
+      { 'code': 'SQ' },
       { 'code': 'UBER' },
       { 'code': 'LYFT' },
       { 'code': 'CRM' },
@@ -81,9 +60,18 @@ export default function InitPage(){
       });
     };
 
+    const fetchTickerData = async () => {
+      setLoadingTicker(true)
+      const Response = await generateDataTicket();
+      setDataTicker(Response?.data || null);
+      setLoadingTicker(false)
+    }
+
     useEffect(() => {
-      if (isFirstTime) {        
+      if (isFirstTime) {       
+        fetchTickerData() 
         fetchDatatoGraph('1D',  StocksCode[0].code)
+
         setIsFirstTime(false);
       }
     }, [isFirstTime]);
@@ -116,7 +104,11 @@ export default function InitPage(){
         <div className="bg-background-color h-full">
             <div className="h-16 shadow-[rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;]">
                 <Header />
-                <TickerAction isFixed={isFixed}/>
+                <TickerAction 
+                isFixed={isFixed} 
+                data={dataTicker}
+                isLoading={isLoadingTicker}
+                />
             </div>
             <div className="h-full w-full flex">
                 <div className="w-[15%]">

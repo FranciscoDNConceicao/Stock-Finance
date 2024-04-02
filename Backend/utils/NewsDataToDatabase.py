@@ -78,7 +78,7 @@ for code in all_codes:
                 existingTickers = set(all_codes).intersection(new['tickers'])
 
                 for existingTicker in existingTickers:
-                    query_code = """SELECT id from Company where code = '""" + existingTicker + """'"""
+                    query_code = """SELECT id from Company.py where code = '""" + existingTicker + """'"""
                     cursor.execute(query_code)
                     code_id = cursor.fetchone()[0]
 

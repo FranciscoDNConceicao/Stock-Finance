@@ -5,9 +5,6 @@ import React, { useState, useEffect  } from 'react';
 import ChoosingCategory from "./Components/ChoosingCategory";
 import { CompanyData, LineGraphProps, StockImage } from "./interfaces";
 
-
-
-
 function isLastGreaterThanLastFour(numbers: number[]): boolean {
     if (numbers.length < 5) return false;
 

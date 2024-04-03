@@ -12,9 +12,11 @@ import { DataGraph } from "../components/LineGraph/interfaces"
 import { TickerActionInt} from "../components/Ticker/Interfaces"
 import { generateDataTicket } from "../scripts/Stocks/TickerDataStock"
 import TickerAction from "../components/Ticker/Ticker"
+import { generateNewsSeparateInfo } from "../scripts/News/SeparatorInfoNews"
 
 
 const StocksCode = await generateCodesGraph()
+const newsDataForComponent = await generateNewsSeparateInfo()
 
 export default function InitPage(){
     
@@ -28,10 +30,12 @@ export default function InitPage(){
     const [dataTicker, setDataTicker] = useState<TickerActionInt[] | null>([])
     const [isFirstTime,setIsFirstTime] = useState(true)
 
+    if(!newsDataForComponent){
 
+    }
 
     const fetchDatatoGraph = async (timestamp:string, code:string) => {
-      console.log('Entrou')
+
       setDataGraph({
           'company_data': null,
         });
@@ -46,24 +50,20 @@ export default function InitPage(){
     const fetchTickerData = async () => {
       setLoadingTicker(true)
       const Response = await generateDataTicket();
+      console.log(Response.data)
       setDataTicker(Response?.data || null);
       setLoadingTicker(false)
     }
 
     useEffect(() => {
       if (isFirstTime) {       
-        console.log('PRIMEIRA')
+
         fetchTickerData() 
         if (StocksCode?.data?.length && StocksCode.data[0].code) {       
-          fetchDatatoGraph('1D', StocksCode.data[0].code);
+          fetchDatatoGraph('1W', StocksCode.data[0].code);
           setIsFirstTime(false);
 
-        } else {
-          console.error('StocksCode data is null, undefined, or empty.');
-          setIsFirstTime(false);
-
-      }
-
+        } 
     }}, [isFirstTime]);
 
     useEffect(() => {
@@ -82,7 +82,7 @@ export default function InitPage(){
       }, [isFixed]);
 
     
-    const newsDataForComponent = news_data
+
 
     const wallet = {
         'balance': 3824.45,
@@ -118,7 +118,7 @@ export default function InitPage(){
                             <WalletComponent WalletData={wallet} />
                         </div>
                         <div className="h-full w-full row-start-2 col-start-4 row-end-3 col-end-7 bg-secondary-background-color" >
-                            <SeparatorInfo Data={newsDataForComponent}/>
+                            <SeparatorInfo Data={newsDataForComponent?.data || null }/>
                         </div>
                         <div className="h-full w-full row-start-4 col-start-1 row-end-7 col-end-7 bg-secondary-background-color" >
                             <TableStocks/>

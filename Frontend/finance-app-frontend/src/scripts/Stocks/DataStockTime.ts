@@ -33,7 +33,7 @@ export const generateCodesGraph = async () : Promise<AxiosResponse<StockImage[] 
     const link = 'http://127.0.0.1:8000/company/random/';
     try {
         if(link){
-            console.log('First')
+
             const data = {
                 "limit": 20,
             };

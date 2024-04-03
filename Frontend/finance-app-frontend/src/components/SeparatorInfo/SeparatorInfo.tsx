@@ -1,27 +1,27 @@
 import { useState } from "react";
 
-interface NewsItem {
-    Image: string;
-    Description: string;
-
-}
-interface NewsData{
-    [category : string] : NewsItem[]
-}
-interface SeparatorInfo{
-    Data: NewsData;
-}
-
 
 export default function SeparatorInfo (props:SeparatorInfo) {
+    if(!props.Data){
+        props.Data = {
+            'This day': [],
+            'This week': [],
+            'This year': []
+        }
+    }
     const categories = Object.keys(props.Data);
     const [categorieActive, changeCategoryActive] = useState(categories[0])
     const [NewsSelected, changeNewsSelected] = useState(props.Data[categorieActive])
     const CategoryClicked = (category:string) => {
-        changeCategoryActive(category)
-        changeNewsSelected(props.Data[category])
+        if(!props.Data){
+            changeCategoryActive(category)
+            changeNewsSelected([])
+        }else{
+            changeCategoryActive(category)
+            changeNewsSelected(props.Data[category])
+        }
+        
     }
-    
 
     return (
         <div className="w-full h-full border-[1px] border-[white] px-[50px] py-[20px]">
@@ -47,7 +47,10 @@ export default function SeparatorInfo (props:SeparatorInfo) {
                             <img src={item.Image} alt="News Image" className="h-[55px] w-[100px]" />
                         </div>
                         <div className="h-full px-[10px] w-[500px] overflow-hidden">
-                            <div className="font-family overflow-hidden text-[15px] text-[white] font-thin">{item.Description}</div>
+                            <div className="font-family overflow-hidden text-[16px] text-[white] font-thin">{item.Description}</div>
+                            <div>
+                                
+                            </div>
                         </div>
                     </div>
                 ))}

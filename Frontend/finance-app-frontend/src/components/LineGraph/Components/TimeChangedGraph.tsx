@@ -7,7 +7,7 @@ export default function TimeChangedGraph(props: TimeChangedGraphProps){
     const [selectedTimeRange, setSelectedTimeRange] = useState('1D');
 
     const handleTimeRangeClickfunction = (timeRange:string) => {
-        console.log(timeRange);
+
         setSelectedTimeRange(timeRange);
         props.changingTimeCateg(timeRange);
     };

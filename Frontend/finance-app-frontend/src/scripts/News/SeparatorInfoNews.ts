@@ -1,12 +1,14 @@
 import axios, { Axios, AxiosResponse } from "axios";
+import { CompanyData, StockImage } from "../../components/LineGraph/interfaces";
 
-export const generateCompanyLogos = async (code: string) : Promise<AxiosResponse<string>> => {
 
-    const link = 'http://127.0.0.1:8000/company/logo/get/';
+export const generateNewsSeparateInfo = async () : Promise<AxiosResponse<NewsData | null>> => {
+
+    const link = 'http://127.0.0.1:8000/news/get/essential/SeparatedDate';
     try {
         if(link){
             const data = {
-                    "stockCode": code,
+                    "limit": 6
                 };
             const response: AxiosResponse = await axios.post(link, JSON.stringify(data), {
                 headers: {
@@ -19,7 +21,7 @@ export const generateCompanyLogos = async (code: string) : Promise<AxiosResponse
             return Promise.reject('Invalid parameter');
         }
     }catch (error){
-        console.error('Error during authentication:');
+        console.error('Error');
         return Promise.reject(error);
     }
     

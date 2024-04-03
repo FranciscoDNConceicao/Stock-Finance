@@ -1,7 +1,7 @@
 import { LineChart } from "@mui/x-charts";
 import TimeChangedGraph from "./Components/TimeChangedGraph";
 import "../../style/index.css"
-import React, { useState, useEffect  } from 'react';
+import  { useState, useEffect  } from 'react';
 import ChoosingCategory from "./Components/ChoosingCategory";
 import { CompanyData, LineGraphProps, StockImage } from "./interfaces";
 
@@ -26,14 +26,14 @@ const valueFormatter = (date: Date) =>
 
 export default function LineGraph(props:LineGraphProps){
     
-    const [selectedCateg, setSelectCateg] = useState<StockImage>({ 'code': ' ' })
+    const [selectedCateg, setSelectCateg] = useState<StockImage>(props.categProp? props.categProp[0] : {'code': ''})
 
     let lenghtData = props.categProp?.length 
-    console.log(lenghtData)
+
     const [index, setIndex] = useState(1)
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
-    const [timestampSelected, setTimeStamp] = useState('1D')
+    const [timestampSelected, setTimeStamp] = useState('1W')
 
     useEffect(() => {
         const handleResize = () => {setWidth(window.innerWidth);};
@@ -60,12 +60,12 @@ export default function LineGraph(props:LineGraphProps){
             }
           } else if (side === 'right') {
             if (index === lenghtData - 1) {
-              console.log('ZEROU');
               setIndex(0);
             } else {
               setIndex(index + 1);
             }
           }
+        console.log(props.categProp)
         setSelectCateg(props.categProp && props.categProp[index] ? props.categProp[index] : { code: '' });
         props.changingTimeCateg(timestampSelected, selectedCateg.code)
     };

@@ -11,13 +11,7 @@ import warreBuffetImages from '../src/assets/images/NewsImages/warrenBuffet-news
 import bankceoImages from '../src/assets/images/NewsImages/bank-ceo-Image.png'
 import japanGlobalMarketsImage from '../src/assets/images/NewsImages/japan_global-markets.png'
 import { GridRowsProp } from '@mui/x-data-grid'
-import logoTSLA from "../src/assets/images/tesla-logo.svg"
-import logoGOOGL from "../src/assets/images/Google-logo.svg"
-import logoAPPL from "../src/assets/images/apple-logo.svg"
-import logoAmazon from "../src/assets/images/amazonIcon.png"
-import logoBCP from "../src/assets/images/BCPlogo.png"
-import logoCisco from "../src/assets/images/ciscoLogo.png"
-import logoDatadog from "../src/assets/images/dataDogInc.png"
+
 
 
 export const news_data = {

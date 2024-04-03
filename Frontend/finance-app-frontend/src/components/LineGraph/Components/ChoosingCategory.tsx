@@ -1,7 +1,7 @@
 
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+
 interface ChoosingCategoryProps {
     company:string
     changeStock: (parameter:string) => void
@@ -12,6 +12,7 @@ export default function ChoosingCategory(props:ChoosingCategoryProps) {
     const buttonclicked = (parameterleftright:string) => {
         props.changeStock(parameterleftright)
     }
+    console.log(props.company)
     return (
         <div className="w-full flex justify-center text-primary-color py-[20px] bg-background-color px-[40px]">
             <div className="flex items-center cursor-pointer" onClick={() => buttonclicked('left')}>

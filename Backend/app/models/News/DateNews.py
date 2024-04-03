@@ -1,6 +1,8 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text, Date
 from sqlalchemy.orm import relationship
 from app.database import Base
+from app.models.News.Publisher.Publisher import PublisherTable
+
 class NewsTable(Base):
     __tablename__ = "news"
 
@@ -13,5 +15,5 @@ class NewsTable(Base):
     date_published = Column(Date)
     image_url = Column(String(70))
 
-    publisher = relationship("Publisher", backref="news")
+    publisher = relationship("PublisherTable", backref="news")
 

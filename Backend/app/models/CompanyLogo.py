@@ -5,3 +5,7 @@ class CompanyLogo(BaseModel):
 
 class LimitRandom(BaseModel):
     limit : int
+
+
+class StockCode(BaseModel):
+    code: str

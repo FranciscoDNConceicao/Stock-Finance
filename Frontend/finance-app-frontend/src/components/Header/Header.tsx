@@ -1,4 +1,3 @@
-import React from "react"
 import logoimage from '../../assets/images/stock-finance-high-resolution-logo-reducted.png'
 export default function Header(){
     return (

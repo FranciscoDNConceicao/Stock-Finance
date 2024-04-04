@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export const generateCompanyLogos = async (code: string) : Promise<AxiosResponse<string>> => {
 

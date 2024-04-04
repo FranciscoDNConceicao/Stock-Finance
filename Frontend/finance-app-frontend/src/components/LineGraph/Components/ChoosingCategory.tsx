@@ -14,7 +14,7 @@ export default function ChoosingCategory(props:ChoosingCategoryProps) {
     }
     console.log(props.company)
     return (
-        <div className="w-full flex justify-center text-primary-color py-[20px] bg-background-color px-[40px]">
+        <div className="w-full flex justify-center text-primary-color py-[20px] px-[40px]">
             <div className="flex items-center cursor-pointer" onClick={() => buttonclicked('left')}>
                 <FontAwesomeIcon icon={faPlay} className="rotate-180 text-[35px] text-white"/>
             </div>

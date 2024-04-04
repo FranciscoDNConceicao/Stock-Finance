@@ -46,8 +46,8 @@ async def getEssentialSeparatedDateNews(limit: LimitRandom, session: Session = D
         data['This day'].append({
             'Image': selectedNewThisDay[1],
             'Description': selectedNewThisDay[0],
-            'Publisher': selectedNewsThisDay[2],
-            'Date': selectedNewsThisDay[3]
+            'Publisher': selectedNewThisDay[2],
+            'Date': selectedNewThisDay[3]
         })
 
     selectedNewsThisWeek = (session.query(NewsTable.title,

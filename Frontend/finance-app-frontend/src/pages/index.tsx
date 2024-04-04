@@ -3,7 +3,6 @@ import LineGraph from "../components/LineGraph/Linegraph"
 import Sidebar from "../components/Sidebar/Sidebar"
 import "../style/index.css"
 import WalletComponent from "../components/WalletComponent/WalletComponent"
-import {news_data} from "../../data/DataInitPage"
 import SeparatorInfo from "../components/SeparatorInfo/SeparatorInfo"
 import TableStocks from "../components/TableStocks/Tablestocks"
 import { useEffect, useState } from "react"
@@ -60,7 +59,7 @@ export default function InitPage(){
 
         fetchTickerData() 
         if (StocksCode?.data?.length && StocksCode.data[0].code) {       
-          fetchDatatoGraph('1W', StocksCode.data[0].code);
+          fetchDatatoGraph('1D', StocksCode.data[0].code);
           setIsFirstTime(false);
 
         } 

@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { CompanyData, StockImage } from "../../components/LineGraph/interfaces";
 
 

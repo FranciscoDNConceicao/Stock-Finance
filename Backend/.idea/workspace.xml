@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c12bfc8-0e18-470e-b87c-63b95be86938" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/routers/News.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/News.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/routers/Stocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/Stocks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/CompanyLogo.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/CompanyLogo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/LineGraph/Components/ChoosingCategory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/LineGraph/Components/ChoosingCategory.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/SeparatorInfo/SeparatorInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/SeparatorInfo/SeparatorInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableStocks/Tablestocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableStocks/Tablestocks.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/style/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/style/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +56,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/francisco_conceicao/Documents/Finance/Stock-Finance/Backend/utils/DeleteImagesNotSP500.py&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/francisco_conceicao/Documents/Finance/Stock-Finance/Backend/app&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -115,7 +122,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="FastAPI-uvicorn" type="PythonConfigurationType" factoryName="Python" activateToolWindowBeforeRun="false">
+    <configuration name="FastAPI-uvicorn" type="PythonConfigurationType" factoryName="Python">
       <module name="Backend" />
       <selectedOptions>
         <option name="environmentVariables" visible="false" />
@@ -123,17 +130,14 @@
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="SDK_NAME" value="Python 3.12" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\jorge\OneDrive\Documentos\Eu\Projetos\Stock-Finance\Backend\app" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend\app" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="uvicorn" />
-      <option name="PARAMETERS" value="main:app --reload" />
+      <option name="PARAMETERS" value="main:app" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="true" />

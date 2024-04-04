@@ -1,6 +1,4 @@
-import axios, { Axios, AxiosResponse } from "axios";
-import { CompanyData, StockImage } from "../../components/LineGraph/interfaces";
-
+import axios, { AxiosResponse } from "axios";
 
 export const generateNewsSeparateInfo = async () : Promise<AxiosResponse<NewsData | null>> => {
 

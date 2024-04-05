@@ -1,5 +1,7 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean,Float, Column, ForeignKey, Integer, String, Text
 from app.database import Base
+
+
 class CompanyTable(Base):
     __tablename__ = 'company'
 
@@ -12,3 +14,4 @@ class CompanyTable(Base):
     description = Column(Text)
     url = Column(String(70))
     number_employees = Column(Integer)
+    high_max = Column(Float)

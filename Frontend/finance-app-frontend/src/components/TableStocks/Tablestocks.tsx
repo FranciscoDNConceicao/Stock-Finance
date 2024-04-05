@@ -1,6 +1,7 @@
 import { DataGrid, GridColDef} from '@mui/x-data-grid';
 import {dataRowsTable} from '../../../data/DataInitPage'
-import React from 'react';
+import React, { useState } from 'react';
+import { TableStocksProps } from './interfaces';
 
 let columns: GridColDef[] = [
   { 
@@ -91,25 +92,22 @@ let columns: GridColDef[] = [
   }
 ];
 
-export default function TableStocks() {
-  const [paginationModel, setPaginationModel] = React.useState({
-    page: 0,
-    pageSize: 1,
-  });
-  const [rows, setRows] = React.useState(dataRowsTable);
+export default function TableStocks(props: TableStocksProps) {
+  const [page, setPage] = useState(0)
 
-  
-  React.useEffect(() => {
-      console.log('CLICOU')
-      setRows(rows)
-      setPaginationModel(paginationModel)
-  }, [paginationModel])
-  
+
+  const handlePaginationChange = (newPage : number) => {
+    const oldPage = page
+    console.log(oldPage)
+    console.log(newPage)
+    setPage(newPage)
+    props.actionNextPage(oldPage, newPage )
+  }
 
   return (
         <div>
             <DataGrid 
-                rows={rows}
+                rows={props.rows?props.rows:[]}
                 columns={columns}
                 isRowSelectable={() => {return false}}
                 sx={
@@ -141,13 +139,16 @@ export default function TableStocks() {
                     }
                   }
                 }
+                slots={{
+
+                }}
                   rowSelection={false}
                   initialState={{
                     pagination: {
                       paginationModel: { page: 0, pageSize: 20 },
                     },
-                    }}
-                    onPaginationModelChange={setPaginationModel}
+                  }}
+                    onPaginationModelChange={(params) => handlePaginationChange(params.page)}
                 >
                 </DataGrid>
         </div>

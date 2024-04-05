@@ -5,15 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c12bfc8-0e18-470e-b87c-63b95be86938" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/models/Stocks/Stocks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/models/Stocks/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/StockToCompany.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/routers/News.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/News.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/routers/Stocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/Stocks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/Company/Company.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/Company/Company.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models/CompanyLogo.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/CompanyLogo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/LineGraph/Components/ChoosingCategory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/LineGraph/Components/ChoosingCategory.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/SeparatorInfo/SeparatorInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/SeparatorInfo/SeparatorInfo.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableStocks/Tablestocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableStocks/Tablestocks.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/style/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/style/index.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,26 +43,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.CompanyDataToDatabase.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.DeleteImagesNotSP500.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.FastAPI-uvicorn.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.ListOfNoInfoStock.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.datetimeStocksServices.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenDatabaseViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/francisco_conceicao/Documents/Finance/Stock-Finance/Backend/app&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.CompanyDataToDatabase.executor": "Debug",
+    "Python.DeleteImagesNotSP500.executor": "Debug",
+    "Python.FastAPI-uvicorn.executor": "Debug",
+    "Python.ListOfNoInfoStock.executor": "Debug",
+    "Python.StockToCompany.executor": "Debug",
+    "Python.datetimeStocksServices.executor": "Debug",
+    "RunOnceActivity.OpenDatabaseViewOnStart": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/francisco_conceicao/Documents/Finance/Stock-Finance/Backend/utils/StockToCompany.py",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend\FinanceServer\api\services" />
@@ -167,10 +166,33 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="StockToCompany" type="PythonConfigurationType" factoryName="Python">
+      <module name="Backend" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/app/" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/utils/StockToCompany.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.FastAPI-uvicorn" />
       <item itemvalue="Python.DeleteImagesNotSP500" />
       <item itemvalue="Python.ListOfNoInfoStock" />
+      <item itemvalue="Python.StockToCompany" />
       <item itemvalue="Python.CompanyDataToDatabase" />
     </list>
   </component>

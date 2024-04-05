@@ -12,7 +12,8 @@ export const generateCompanyLogos = async (code: string) : Promise<AxiosResponse
                 headers: {
                   'Content-Type': 'application/json'
                 }
-              });
+            });
+            
             return response;
         }else{
             console.log('Invalid parameter')

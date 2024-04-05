@@ -1,8 +1,8 @@
 from fastapi import HTTPException
 from sqlalchemy import func
-
-from app.models.CompanyLogo import StockCode
+from app.models.CompanyLogo import StockCode, DataGridPagination
 from app.database import SessionLocal
+from app.models.Stocks.Stocks import StocksTable
 from app.settings import settings
 from app.models.SearchStocksValueTime import SearchStocksValue
 from alpaca_trade_api import REST, TimeFrameUnit
@@ -58,12 +58,43 @@ async def getStocksDataForDay(params:SearchStocksValue):
     except ValueError:
         raise HTTPException(status_code=422, detail="Invalid stock object")
 
-@router.get("/select/StocksForDataGrid")
-async def getSelectedStockForDataGrid(params:StockCode, session: Session = Depends(get_db)):
-    api_alpaca = REST(key_id=settings.APCA_API_KEY_ID, secret_key=settings.APCA_API_SECRET_KEY)
+@router.post("/select/StockForDataGrid")
+async def getSelectedStockForDataGrid(params:DataGridPagination, session: Session = Depends(get_db)):
 
-    code = params.code
-    selectCodes = session.query(Company.id, Company.name).filter(Company.code == code)
+    data = []
+
+    Initpage = params.initPage - 1
+    Endlimit = params.endPage
+
+    subquery = (session.query(StocksTable.id)
+                .filter(StocksTable.company_id == Company.id)
+                .order_by(StocksTable.date.desc())
+                .limit(1)
+                .correlate(Company).as_scalar())
+
+    selectCodes = (session.query(Company.id, Company.code, Company.name, Company.currency_name, StocksTable.value, StocksTable.date, Company.high_max)
+                            .join(StocksTable, StocksTable.id == subquery)
+                            .order_by(Company.high_max.desc(), StocksTable.date.desc())
+                            .slice(Initpage, Endlimit))
+
     for code in selectCodes:
-        date_begin = datetime.now() - timedelta(days=2)
-        request = api_alpaca.get_bars(code_stock, timeframe, date_end.strftime('%Y-%m-%d'),date_begin.strftime('%Y-%m-%d'), adjustment='raw').df
+        discount = 0
+        getLastValue = (session.query(StocksTable.value)
+                       .filter(StocksTable.date < code[5])
+                       .order_by(StocksTable.date.desc()).limit(1))[0]
+        if getLastValue and selectCodes:
+            discount = round((code[4] - getLastValue[0]) / getLastValue[0],2)
+
+        data.append({
+            'id': code[0],
+            'icon': code[1],
+            'stockName': code[2],
+            'code': code[1],
+            'unit': code[3],
+            'priceLast': code[4],
+            'percentage': discount,
+            'priceHigh': code[6],
+            'lastUpdate': code[5]
+        })
+
+    return data

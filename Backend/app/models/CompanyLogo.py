@@ -9,3 +9,7 @@ class LimitRandom(BaseModel):
 
 class StockCode(BaseModel):
     code: str
+
+class DataGridPagination(BaseModel):
+    initPage: int
+    endPage: int

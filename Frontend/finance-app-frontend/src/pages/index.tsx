@@ -12,10 +12,14 @@ import { TickerActionInt} from "../components/Ticker/Interfaces"
 import { generateDataTicket } from "../scripts/Stocks/TickerDataStock"
 import TickerAction from "../components/Ticker/Ticker"
 import { generateNewsSeparateInfo } from "../scripts/News/SeparatorInfoNews"
+import { GridRowsProp } from "@mui/x-data-grid"
+import { stockDataToDatagrid } from "../scripts/Stocks/StockDataGrid"
+import { useAsyncValue } from "react-router-dom"
 
 
 const StocksCode = await generateCodesGraph()
 const newsDataForComponent = await generateNewsSeparateInfo()
+const rowsInit = await stockDataToDatagrid(0, 20)
 
 export default function InitPage(){
     
@@ -28,10 +32,7 @@ export default function InitPage(){
 
     const [dataTicker, setDataTicker] = useState<TickerActionInt[] | null>([])
     const [isFirstTime,setIsFirstTime] = useState(true)
-
-    if(!newsDataForComponent){
-
-    }
+    const [rowsGrid, setRowsGrid] = useState<GridRowsProp | null>(rowsInit.data? rowsInit.data : [])
 
     const fetchDatatoGraph = async (timestamp:string, code:string) => {
 
@@ -54,8 +55,14 @@ export default function InitPage(){
       setLoadingTicker(false)
     }
 
+    const nextPageDataGrid = async (initPage:number, endPage:number) => {
+      const rowsStock = await stockDataToDatagrid(initPage, endPage)
+      setRowsGrid(rowsStock?.data || null)
+    }
+
     useEffect(() => {
       if (isFirstTime) {       
+
 
         fetchTickerData() 
         if (StocksCode?.data?.length && StocksCode.data[0].code) {       
@@ -120,7 +127,7 @@ export default function InitPage(){
                             <SeparatorInfo Data={newsDataForComponent?.data || null }/>
                         </div>
                         <div className="h-full w-full row-start-4 col-start-1 row-end-7 col-end-7 bg-secondary-background-color" >
-                            <TableStocks/>
+                            <TableStocks actionNextPage={nextPageDataGrid} rows={rowsGrid}/>
                         </div>
                     </div>
                 </div>

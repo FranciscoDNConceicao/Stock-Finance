@@ -48,7 +48,7 @@ async def getCompanyTicker(session: Session = Depends(get_db)):
     response = {
         "data": []
     }
-    dateToday = datetime.now() - timedelta(days=1)
+    dateToday = datetime.now() - timedelta(days=2)
     dateOneDayBefore = dateToday - timedelta(days=3)
     selectCodes = session.query(Company.code).order_by(func.random()).limit(24)
     for selectCode in selectCodes:

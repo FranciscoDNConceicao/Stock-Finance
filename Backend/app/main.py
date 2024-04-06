@@ -7,7 +7,6 @@ from sqlalchemy.orm import sessionmaker
 from settings import settings
 #Routers
 from app.api.main import api_router
-
 origins = settings.originCORS
 
 app = FastAPI()

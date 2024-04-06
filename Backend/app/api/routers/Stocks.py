@@ -63,7 +63,7 @@ async def getSelectedStockForDataGrid(params:DataGridPagination, session: Sessio
 
     data = []
 
-    Initpage = params.initPage - 1
+    Initpage = params.initPage
     Endlimit = params.endPage
 
     subquery = (session.query(StocksTable.id)

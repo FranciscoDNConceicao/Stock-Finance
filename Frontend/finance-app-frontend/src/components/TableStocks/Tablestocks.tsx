@@ -63,7 +63,7 @@ let columns: GridColDef[] = [
     headerName: 'Last Update',
     headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
     headerAlign: 'left',
-    type: 'date',
+    type: 'string',
     width: 150
   },
   {
@@ -145,7 +145,7 @@ export default function TableStocks(props: TableStocksProps) {
                   rowSelection={false}
                   initialState={{
                     pagination: {
-                      paginationModel: { page: 0, pageSize: 20 },
+                     
                     },
                   }}
                     onPaginationModelChange={(params) => handlePaginationChange(params.page)}

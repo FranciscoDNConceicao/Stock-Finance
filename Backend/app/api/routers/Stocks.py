@@ -54,6 +54,8 @@ async def getStocksDataForDay(params:SearchStocksValue):
         date_end = date_begin - timedelta(weeks=(54*3))
     try:
         request = api_alpaca.get_bars(code_stock, timeframe, date_end.strftime('%Y-%m-%d'), date_begin.strftime('%Y-%m-%d'), adjustment='raw').df
+        if 'close' not in request:
+            raise HTTPException(status_code=422, detail="Invalid stock object")
         return request['close'].to_dict()
     except ValueError:
         raise HTTPException(status_code=422, detail="Invalid stock object")
@@ -65,7 +67,6 @@ async def getSelectedStockForDataGrid(params:DataGridPagination, session: Sessio
 
     Initpage = params.initPage
     Endlimit = params.endPage
-
     subquery = (session.query(StocksTable.id)
                 .filter(StocksTable.company_id == Company.id)
                 .order_by(StocksTable.date.desc())
@@ -88,12 +89,11 @@ async def getSelectedStockForDataGrid(params:DataGridPagination, session: Sessio
         data.append({
             'id': code[0],
             'icon': code[1],
-            'stockName': code[2],
-            'code': code[1],
+            'stockName': [code[2], code[1]],
             'unit': code[3],
-            'priceLast': code[4],
+            'priceLast': str(round(code[4], 2) if code[4] >= 0 else '-') + '  ' + code[3].upper(),
             'percentage': discount,
-            'priceHigh': code[6],
+            'priceHigh': str(round(code[6], 2) if code[6] >= 0 else '-') + '  ' + code[3].upper(),
             'lastUpdate': code[5]
         })
 

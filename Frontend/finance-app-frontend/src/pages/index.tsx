@@ -19,7 +19,6 @@ import { useAsyncValue } from "react-router-dom"
 
 const StocksCode = await generateCodesGraph()
 const newsDataForComponent = await generateNewsSeparateInfo()
-const rowsInit = await stockDataToDatagrid(0, 20)
 
 export default function InitPage(){
     
@@ -32,10 +31,9 @@ export default function InitPage(){
 
     const [dataTicker, setDataTicker] = useState<TickerActionInt[] | null>([])
     const [isFirstTime,setIsFirstTime] = useState(true)
-    const [rowsGrid, setRowsGrid] = useState<GridRowsProp | null>(rowsInit.data? rowsInit.data : [])
-
+    const [rowsGrid, setRowsGrid] = useState<GridRowsProp | null>([])
+      
     const fetchDatatoGraph = async (timestamp:string, code:string) => {
-
       setDataGraph({
           'company_data': null,
         });

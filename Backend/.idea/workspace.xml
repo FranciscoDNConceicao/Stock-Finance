@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c12bfc8-0e18-470e-b87c-63b95be86938" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/models/Stocks/Stocks.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/Stocks/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/StockToCompany.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/routers/Stocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/Stocks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/Company/Company.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/Company/Company.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/CompanyLogo.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/CompanyLogo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/LineGraph/Components/ChoosingCategory.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/LineGraph/Components/ChoosingCategory.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableStocks/Tablestocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableStocks/Tablestocks.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

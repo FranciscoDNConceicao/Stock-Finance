@@ -3,35 +3,23 @@ import {dataRowsTable} from '../../../data/DataInitPage'
 import React, { useState } from 'react';
 import { TableStocksProps } from './interfaces';
 
+
 let columns: GridColDef[] = [
   { 
     field: 'icon', 
     headerName: '',
     headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
     headerAlign: 'center', 
-    width: 200,
-    renderCell: (params) => <img className="min-w-[30px] max-w-[120px] min-h-[30px] max-h-[35px]" src={`images/logos/${params.value}.png`} />
+    width: 300,
+    renderCell: (params) => <img className="min-w-[30px] max-w-[220px] min-h-[30px] max-h-[35px] rounded-md bg-[#FFFBF5] p-[5px]" src={`images/logos/${params.value}.png`} />
   },
   { 
     field: 'stockName', 
     headerName: 'Stock', 
     headerAlign: 'left',
-    headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
-    width: 400},
-  
-  { 
-    field: 'code', 
-    headerName: 'Code',
-    headerAlign: 'left',
-    headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
-    width: 100
-  },
-  { 
-    field: 'unit', 
-    headerName: 'Unit',
-    headerAlign: 'left',
-    headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
-    width: 200
+    headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px] bold',
+    width: 400,
+    renderCell: (params) => <div className='flex flex-col'><div className='text-white text-[15px] font-family font-extrabold text-[17px] bold'>{params.value[0]}</div><div className='bg-[white] mt-[5px] font-family p-[2px] w-[fit-content]'>{params.value[1]}</div></div> 
   },
   {
     field: 'priceLast',
@@ -40,6 +28,7 @@ let columns: GridColDef[] = [
     headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
     type: 'number',
     width: 200,
+    renderCell: (params) => <div className='text-white text-[15px] font-family font-extrabold'>{params.value}</div>
   },
   {
     field: 'percentage',
@@ -92,18 +81,26 @@ let columns: GridColDef[] = [
   }
 ];
 
+
+
+
 export default function TableStocks(props: TableStocksProps) {
-  const [page, setPage] = useState(0)
+
+  const [paginationModel, setPaginationModel] = React.useState({
+    page: 0,
+    pageSize: 15,
+  });
 
 
-  const handlePaginationChange = (newPage : number) => {
-    const oldPage = page
-    console.log(oldPage)
-    console.log(newPage)
-    setPage(newPage)
-    props.actionNextPage(oldPage, newPage )
-  }
 
+  React.useEffect(() => {
+    const fetchActionNextPage = async () => {
+      props.actionNextPage(paginationModel.page * paginationModel.pageSize, paginationModel.page * paginationModel.pageSize + paginationModel.pageSize)
+
+    }
+    fetchActionNextPage()
+
+  },[paginationModel]);
   return (
         <div>
             <DataGrid 
@@ -139,16 +136,20 @@ export default function TableStocks(props: TableStocksProps) {
                     }
                   }
                 }
-                slots={{
-
+                initialState={{
+                  
                 }}
-                  rowSelection={false}
-                  initialState={{
-                    pagination: {
-                     
-                    },
-                  }}
-                    onPaginationModelChange={(params) => handlePaginationChange(params.page)}
+                rowSelection={false}
+                paginationMode='server'
+                pagination
+                autoPageSize
+                rowCount={400}
+                pageSizeOptions={[paginationModel.pageSize]}
+                paginationModel={paginationModel}
+                disableColumnFilter={true}
+                disableColumnMenu={true}
+
+                onPaginationModelChange={setPaginationModel}
                 >
                 </DataGrid>
         </div>

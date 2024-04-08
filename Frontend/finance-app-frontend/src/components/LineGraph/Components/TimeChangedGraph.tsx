@@ -4,7 +4,7 @@ import { TimeChangedGraphProps } from "../interfaces";
 
 
 export default function TimeChangedGraph(props: TimeChangedGraphProps){
-    const [selectedTimeRange, setSelectedTimeRange] = useState('1D');
+    const [selectedTimeRange, setSelectedTimeRange] = useState(props.initialTimeStamp);
 
     const handleTimeRangeClickfunction = (timeRange:string) => {
 

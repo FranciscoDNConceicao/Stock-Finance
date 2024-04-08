@@ -20,6 +20,7 @@ import { useAsyncValue } from "react-router-dom"
 const StocksCode = await generateCodesGraph()
 const newsDataForComponent = await generateNewsSeparateInfo()
 
+
 export default function InitPage(){
     
     const [isFixed, setIsFixed] = useState(false);
@@ -55,6 +56,7 @@ export default function InitPage(){
 
     const nextPageDataGrid = async (initPage:number, endPage:number) => {
       const rowsStock = await stockDataToDatagrid(initPage, endPage)
+
       setRowsGrid(rowsStock?.data || null)
     }
 
@@ -116,6 +118,9 @@ export default function InitPage(){
                                 isLoading={isLoading}
                                 data={dataGraph} 
                                 categProp={StocksCode?.data || null}
+                                hasChoosingCategory={true}
+                                extendedVersion={false}
+                                timeStampInitial={'1D'}
                             />
                         </div>
                         <div className="h-full w-full row-start-1 col-start-4 row-end-2 col-end-7 bg-secondary-background-color">

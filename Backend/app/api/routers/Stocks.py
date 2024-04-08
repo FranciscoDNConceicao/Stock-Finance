@@ -91,10 +91,9 @@ async def getSelectedStockForDataGrid(params:DataGridPagination, session: Sessio
             'icon': code[1],
             'stockName': [code[2], code[1]],
             'unit': code[3],
-            'priceLast': str(round(code[4], 2) if code[4] >= 0 else '-') + '  ' + code[3].upper(),
+            'priceLast': [str(round(code[4], 2) if code[4] >= 0 else '-') + '  ', code[3].upper()],
             'percentage': discount,
-            'priceHigh': str(round(code[6], 2) if code[6] >= 0 else '-') + '  ' + code[3].upper(),
-            'lastUpdate': code[5]
+            'priceHigh': [str(round(code[6], 2) if code[6] >= 0 else '-') + '  ', code[3].upper()],
+            'lastUpdate': code[5].strftime("%B %d, %Y")
         })
-
     return data

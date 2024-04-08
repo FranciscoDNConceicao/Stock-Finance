@@ -33,7 +33,7 @@ export default function LineGraph(props:LineGraphProps){
     const [index, setIndex] = useState(1)
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
-    const [timestampSelected, setTimeStamp] = useState('1W')
+    const [timestampSelected, setTimeStamp] = useState(props.timeStampInitial)
 
     useEffect(() => {
         const handleResize = () => {setWidth(window.innerWidth);};
@@ -52,7 +52,10 @@ export default function LineGraph(props:LineGraphProps){
         if (!lenghtData){
             lenghtData = 0
         }
-        if (side === 'left') {
+        if (lenghtData === 0){
+            setIndex(0)
+        }
+        else if (side === 'left') {
             if (index === 0) {
               setIndex(lenghtData - 1);
             } else {
@@ -90,7 +93,8 @@ export default function LineGraph(props:LineGraphProps){
             {props.isLoading && <div className="loader"></div>}
             
             <TimeChangedGraph 
-            changingTimeCateg={changingTime}/>
+            changingTimeCateg={changingTime}
+            initialTimeStamp={props.timeStampInitial}/>
 
             <LineChart
                 sx={{
@@ -139,15 +143,16 @@ export default function LineGraph(props:LineGraphProps){
                         
                     }
                 ]}
-                width={width * 0.42}
+                width={props.extendedVersion? width * 0.75 : (width * 0.42)}
                 height={height * 0.50}
             >
                
             </LineChart>
-            <ChoosingCategory 
+            {props.hasChoosingCategory && <ChoosingCategory 
                 changeStock={changeStockGraph}
                 company={selectedCateg.code}
-            />
+            />}
+            
        </div> 
     )
 }

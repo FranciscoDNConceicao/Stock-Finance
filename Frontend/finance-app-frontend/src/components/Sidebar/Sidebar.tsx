@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faFire, faWallet, faMoneyBillTransfer, faGear, faRightFromBracket, faStar } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 export default function Sidebar(){
 
@@ -7,10 +8,13 @@ export default function Sidebar(){
     return (
         <div className="h-full w-full bg-secondary-background-color text-primary-color flex flex-col justify-between border-r-[1px] border-[#595959] relative z-[101]">
             <div className='"h-full flex flex-col mt-[20px]'>
-                <div className='w-full font-family flex text-[19px] font-medium pt-4 pb-4 hover:font-bold'>
-                    <div><FontAwesomeIcon className='w-16 ml-3' icon={faHouse} /></div>
-                    <div><span>Dashboard</span></div>
-                </div>
+                <Link to={'/'}>
+                    <div className='w-full font-family flex text-[19px] font-medium pt-4 pb-4 hover:font-bold'>
+                        <div><FontAwesomeIcon className='w-16 ml-3' icon={faHouse} /></div>
+                        <div><span>Dashboard</span></div>
+                    </div>
+                </Link>
+                
                 <div className='w-full font-family flex text-[19px] font-medium pt-4 pb-4 hover:font-bold'>
                     <div><FontAwesomeIcon className='w-16 ml-3' icon={faFire} /></div>
                     <div>Trending</div>

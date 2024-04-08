@@ -6,6 +6,9 @@ export interface LineGraphProps {
     changingTimeCateg: (TimeCateg: string, Stock:string) => void;
     isLoading: boolean
     categProp: StockImage[] | null
+    hasChoosingCategory: boolean
+    extendedVersion: boolean
+    timeStampInitial: string
 }
 export interface DataGraph {
     company_data: CompanyData | null;
@@ -16,5 +19,6 @@ export interface CompanyData {
 
 export interface TimeChangedGraphProps{
     changingTimeCateg: (TimeCateg: string) => void;
+    initialTimeStamp: string
 }
 

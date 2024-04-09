@@ -1,7 +1,6 @@
 import { DataGrid, GridColDef} from '@mui/x-data-grid';
-import {dataRowsTable} from '../../../data/DataInitPage'
-import React, { useState } from 'react';
 import { TableStocksProps } from './interfaces';
+import React from 'react';
 
 
 let columns: GridColDef[] = [
@@ -97,10 +96,8 @@ export default function TableStocks(props: TableStocksProps) {
   React.useEffect(() => {
     const fetchActionNextPage = async () => {
       props.actionNextPage(paginationModel.page * paginationModel.pageSize, paginationModel.page * paginationModel.pageSize + paginationModel.pageSize)
-
     }
     fetchActionNextPage()
-
   },[paginationModel]);
   return (
         <div>
@@ -137,6 +134,7 @@ export default function TableStocks(props: TableStocksProps) {
                     }
                   }
                 }
+                disableRowSelectionOnClick
                 initialState={{
                   
                 }}

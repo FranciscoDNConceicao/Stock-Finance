@@ -14,7 +14,6 @@ import TickerAction from "../components/Ticker/Ticker"
 import { generateNewsSeparateInfo } from "../scripts/News/SeparatorInfoNews"
 import { GridRowsProp } from "@mui/x-data-grid"
 import { stockDataToDatagrid } from "../scripts/Stocks/StockDataGrid"
-import { useAsyncValue } from "react-router-dom"
 
 
 const StocksCode = await generateCodesGraph()
@@ -59,7 +58,6 @@ export default function InitPage(){
 
       setRowsGrid(rowsStock?.data || null)
     }
-
     useEffect(() => {
       if (isFirstTime) {       
 
@@ -68,7 +66,7 @@ export default function InitPage(){
         if (StocksCode?.data?.length && StocksCode.data[0].code) {       
           fetchDatatoGraph('1D', StocksCode.data[0].code);
           setIsFirstTime(false);
-
+          
         } 
     }}, [isFirstTime]);
 

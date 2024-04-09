@@ -31,31 +31,52 @@ async def getStocksDataForDay(params:SearchStocksValue):
     #Stocks Code
     code_stock = params.stockCode
     time = params.time
-    date_begin = datetime.now() - timedelta(days=2)
+    date_begin = datetime.now() - timedelta(days=3)
 
     if time == '1D':
         timeframe = TimeFrame.Hour
+        alternative_timeframe = '1/hour/'
+        calculate_timeframe = timedelta(hours=1)
         date_end = date_begin - timedelta(days=1)
     elif time == '1W':
         timeframe = TimeFrame(12, TimeFrameUnit.Hour )
+        calculate_timeframe = timedelta(hours=12)
+        alternative_timeframe = '12/hour/'
         date_end = date_begin - timedelta(weeks=1)
-
     elif time == '1M':
         timeframe = TimeFrame.Day
+        alternative_timeframe = '1/day/'
+        calculate_timeframe = timedelta(days=1)
         date_end = date_begin - timedelta(days=30)
     elif time == '3M':
         timeframe = TimeFrame.Week
+        alternative_timeframe = '1/week/'
+        calculate_timeframe = timedelta(days=7)
         date_end = date_begin - timedelta(days=60)
     elif time == '1Y':
         timeframe = TimeFrame.Month
+        alternative_timeframe = '1/month/'
+        calculate_timeframe = timedelta(weeks=4)
         date_end = date_begin - timedelta(weeks=54)
     elif time == '3Y':
         timeframe = TimeFrame.Month
+        alternative_timeframe = '1/month/'
+        calculate_timeframe = timedelta(weeks=4)
         date_end = date_begin - timedelta(weeks=(54*3))
     try:
         request = api_alpaca.get_bars(code_stock, timeframe, date_end.strftime('%Y-%m-%d'), date_begin.strftime('%Y-%m-%d'), adjustment='raw').df
         if 'close' not in request:
-            raise HTTPException(status_code=422, detail="Invalid stock object")
+            url = f'https://api.polygon.io/v2/aggs/ticker/{code_stock}/range/{alternative_timeframe}{date_end.strftime('%Y-%m-%d')}/{date_begin.strftime('%Y-%m-%d')}?apiKey=p1ZovTNZa6Flx6uSxg0J64a4oDPdTdkS'
+            requestData = request.get(url)
+            if 'results' in requestData:
+                result_dict = {}
+                date_temp = date_end
+                for dictResults in 'results':
+                    result_dict[date_temp.isoformat()] = dictResults['c']
+                    date_temp += calculate_timeframe
+
+                return
+
         return request['close'].to_dict()
     except ValueError:
         raise HTTPException(status_code=422, detail="Invalid stock object")

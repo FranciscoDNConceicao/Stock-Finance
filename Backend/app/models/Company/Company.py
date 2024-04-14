@@ -15,3 +15,4 @@ class CompanyTable(Base):
     url = Column(String(70))
     number_employees = Column(Integer)
     high_max = Column(Float)
+    color = Column(String(30))

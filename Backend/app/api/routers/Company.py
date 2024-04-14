@@ -71,6 +71,15 @@ async def getCompanyTicker(session: Session = Depends(get_db)):
 
     return response
 
+@router.get("/get/all/")
+async def CompanyAllValues(id: int = 2,session: Session = Depends(get_db)):
+    companySelect = session.query(Company.code, Company.name, Company.locate, Company.currency_name,
+                                  Company.address, Company.description, Company.number_employees, Company.url, Company.color, Company.high_max).filter(Company.id == id).limit(1)
+
+    companyDict = {
+        'code': companySelect[0],
+        ''
+    }
 
 @router.post("/logo/get/")
 async def getCompanyImage(params:CompanyLogo):

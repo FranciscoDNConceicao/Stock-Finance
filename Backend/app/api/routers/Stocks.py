@@ -65,7 +65,7 @@ async def getStocksDataForDay(params:SearchStocksValue):
         date_end = date_begin - timedelta(weeks=(54*3))
     try:
         request = api_alpaca.get_bars(code_stock, timeframe, date_end.strftime('%Y-%m-%d'), date_begin.strftime('%Y-%m-%d'), adjustment='raw').df
-        if 'close' not in request:
+        if request in (None, False) or 'close' not in request:
             url = f'https://api.polygon.io/v2/aggs/ticker/{code_stock}/range/{alternative_timeframe}{date_end.strftime('%Y-%m-%d')}/{date_begin.strftime('%Y-%m-%d')}?apiKey=p1ZovTNZa6Flx6uSxg0J64a4oDPdTdkS'
             requestData = request.get(url)
             if 'results' in requestData:
@@ -88,13 +88,15 @@ async def getSelectedStockForDataGrid(params:DataGridPagination, session: Sessio
 
     Initpage = params.initPage
     Endlimit = params.endPage
+    print(Initpage)
+    print(Endlimit)
     subquery = (session.query(StocksTable.id)
                 .filter(StocksTable.company_id == Company.id)
                 .order_by(StocksTable.date.desc())
                 .limit(1)
                 .correlate(Company).as_scalar())
 
-    selectCodes = (session.query(Company.id, Company.code, Company.name, Company.currency_name, StocksTable.value, StocksTable.date, Company.high_max)
+    selectCodes = (session.query(Company.id, Company.code, Company.name, Company.currency_name, StocksTable.value, StocksTable.date, Company.high_max, Company.color)
                             .join(StocksTable, StocksTable.id == subquery)
                             .order_by(Company.high_max.desc(), StocksTable.date.desc())
                             .slice(Initpage, Endlimit))
@@ -110,7 +112,7 @@ async def getSelectedStockForDataGrid(params:DataGridPagination, session: Sessio
         data.append({
             'id': code[0],
             'icon': code[1],
-            'stockName': [code[2], code[1]],
+            'stockName': [code[2], code[1], code[7]],
             'unit': code[3],
             'priceLast': [str(round(code[4], 2) if code[4] >= 0 else '-') + '  ', code[3].upper()],
             'percentage': discount,

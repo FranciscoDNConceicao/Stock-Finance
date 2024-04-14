@@ -10,7 +10,7 @@ let columns: GridColDef[] = [
     headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px]',
     headerAlign: 'center', 
     width: 200,
-    renderCell: (params) => <img className="min-w-[30px] max-w-[130px] min-h-[30px] max-h-[30px] rounded-md bg-[#FFFBF5] p-[5px]" src={`images/logos/${params.value}.png`} />
+    renderCell: (params) => <img className="min-w-[30px] max-w-[130px] min-h-[35px] max-h-[30px] rounded-md bg-[#FFFBF5] p-[5px]" src={`images/logos/${params.value}.png`} />
   },
   
   { 
@@ -18,8 +18,8 @@ let columns: GridColDef[] = [
     headerName: 'Stock', 
     headerAlign: 'left',
     headerClassName: 'text-white text-[15px] font-family font-extrabold text-[17px] bold ',
-    width: 700,
-    renderCell: (params) => <div className='flex flex-col'><div className='text-white text-[15px] font-family font-extrabold text-[17px] bold'>{params.value[0]}</div><div className='bg-[var(--secondary-color)] mt-[5px] font-family p-[4px] w-[fit-content] text-[white] rounded'>{params.value[1]}</div></div> 
+    width: 550,
+    renderCell: (params) => <div className='flex flex-col'><div className='text-white text-[15px] font-family font-extrabold text-[17px] bold'>{params.value[0]}</div><div style={{ backgroundColor: `#${params.value[2]}`}} className={`mt-[5px] font-family p-[4px] w-[fit-content] text-[white] rounded`}>{params.value[1]}</div></div> 
   },
 
   {
@@ -93,12 +93,20 @@ export default function TableStocks(props: TableStocksProps) {
     pageSize: 15,
   });
 
-  React.useEffect(() => {
-    const fetchActionNextPage = async () => {
-      props.actionNextPage(paginationModel.page * paginationModel.pageSize, paginationModel.page * paginationModel.pageSize + paginationModel.pageSize)
-    }
-    fetchActionNextPage()
-  },[paginationModel]);
+  
+
+  const fetchActionNextPage = async () => {
+    setPaginationModel({
+      page: paginationModel.page + 1, 
+      pageSize: paginationModel.pageSize,
+    })
+    console.log(paginationModel.page)
+    console.log(paginationModel.pageSize)
+    props.actionNextPage(paginationModel.page * paginationModel.pageSize, paginationModel.page * paginationModel.pageSize + paginationModel.pageSize)
+  }
+
+
+
   return (
         <div>
             <DataGrid 
@@ -148,7 +156,7 @@ export default function TableStocks(props: TableStocksProps) {
                 disableColumnFilter={true}
                 disableColumnMenu={true}
                 rowHeight={75}
-                onPaginationModelChange={setPaginationModel}
+                onPaginationModelChange={fetchActionNextPage}
                 >
                 </DataGrid>
         </div>

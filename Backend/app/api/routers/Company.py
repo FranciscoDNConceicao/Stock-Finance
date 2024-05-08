@@ -70,16 +70,38 @@ async def getCompanyTicker(session: Session = Depends(get_db)):
         response["data"].append(dict_temp)
 
     return response
+@router.get("/get/random")
+async def CompanyRightLeftValues(session: Session = Depends(get_db)):
+    result = {}
+    resultsQuery = session.query(Company.id, Company.code, Company.color).order_by(func.random()).limit(1)
+    for resultQuery in resultsQuery:
+        result = {
+            'id': resultQuery[0],
+            'code': resultQuery[1],
+            'color':resultQuery[2],
+        }
+    return result
 
-@router.get("/get/all/")
-async def CompanyAllValues(id: int = 2,session: Session = Depends(get_db)):
-    companySelect = session.query(Company.code, Company.name, Company.locate, Company.currency_name,
-                                  Company.address, Company.description, Company.number_employees, Company.url, Company.color, Company.high_max).filter(Company.id == id).limit(1)
-
-    companyDict = {
-        'code': companySelect[0],
-        ''
-    }
+@router.get("/get/all/{id}")
+async def CompanyAllValues(id: str,session: Session = Depends(get_db)):
+    companysSelect = session.query(Company.code, Company.name, Company.locate, Company.currency_name,
+                                  Company.address, Company.description, Company.number_employees, Company.url, Company.color, Company.high_max, Company.list_date, Company.sic_code).filter(Company.id == int(id)).limit(1)
+    for companySelect in companysSelect:
+        companyDict = {
+            'code': companySelect[0],
+            'name': companySelect[1],
+            'locate': companySelect[2],
+            'currency_name': companySelect[3],
+            'address': companySelect[4],
+            'description': companySelect[5],
+            'number_employees': companySelect[6],
+            'URL': companySelect[7],
+            'color': companySelect[8],
+            'highMax': companySelect[9],
+            'dateList': companySelect[10],
+            'sicCode': companySelect[11]
+        }
+    return companyDict
 
 @router.post("/logo/get/")
 async def getCompanyImage(params:CompanyLogo):

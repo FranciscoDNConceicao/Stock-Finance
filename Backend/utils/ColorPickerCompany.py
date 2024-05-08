@@ -17,7 +17,7 @@ def get_files_in_folder(folder_path):
 def rgb_to_hex(r, g, b):
     return '{:02x}{:02x}{:02x}'. format(r, g, b)
 
-file_to_folder = 'C:\\Users\\jorge\\OneDrive\\Documentos\\Eu\\Projetos\\Stock-Finance\\Frontend\\finance-app-frontend\\public\\images\\logos'
+file_to_folder = 'C:\\Users\\francisco_conceicao\\Documents\\Finance\\Stock-Finance\\Frontend\\finance-app-frontend\\public\\images\\logos'
 
 all_codes = get_files_in_folder(file_to_folder)
 connection = psycopg2.connect(
@@ -25,7 +25,7 @@ connection = psycopg2.connect(
     user="postgres",
     password="1234567",
     host="localhost",
-    port="5431"
+    port="5428"
 )
 cursor = connection.cursor()
 for code in all_codes:

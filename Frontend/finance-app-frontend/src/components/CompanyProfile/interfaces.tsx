@@ -2,7 +2,7 @@ import { DataGraph } from "../LineGraph/interfaces";
 
 export interface CompanyInfo{
     name: string;
-    company: string;
+    code: string;
     description: string;
     locate: string;
     address: string;
@@ -12,11 +12,16 @@ export interface CompanyInfo{
     sicCode:string;
     highMax: string;
     currency_name: string;
-
+    color: string;
 }
 export interface CompanyProfileProps{
-    dataCompany: CompanyInfo;
+    dataCompany: CompanyInfo|null;
     changingTimeCateg: (TimeCateg: string, Stock:string) => void;
     dataGraph: DataGraph;
     isLoading: boolean;
+}
+export interface LeftOrRightCompany {
+    id:string,
+    code:string,
+    color:string
 }

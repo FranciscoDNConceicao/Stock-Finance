@@ -1,6 +1,7 @@
-import { DataGrid, GridColDef} from '@mui/x-data-grid';
+import { DataGrid, GridCallbackDetails, GridColDef, GridPaginationModel, GridRowParams} from '@mui/x-data-grid';
 import { TableStocksProps } from './interfaces';
-import React from 'react';
+import React, { useState } from 'react';
+import { redirect, useNavigate } from '../../router';
 
 
 let columns: GridColDef[] = [
@@ -88,24 +89,20 @@ let columns: GridColDef[] = [
 
 export default function TableStocks(props: TableStocksProps) {
 
-  const [paginationModel, setPaginationModel] = React.useState({
-    page: 0,
+  const [paginationModel, setPaginationModel] = useState({
+    page: 1,
     pageSize: 15,
   });
 
-  
-
-  const fetchActionNextPage = async () => {
+  const fetchActionNextPage = async (model: GridPaginationModel) => {
+    console.log(model)
     setPaginationModel({
-      page: paginationModel.page + 1, 
-      pageSize: paginationModel.pageSize,
+      page:model.page,
+      pageSize: 15
     })
-    console.log(paginationModel.page)
-    console.log(paginationModel.pageSize)
     props.actionNextPage(paginationModel.page * paginationModel.pageSize, paginationModel.page * paginationModel.pageSize + paginationModel.pageSize)
   }
-
-
+  
 
   return (
         <div>
@@ -143,9 +140,6 @@ export default function TableStocks(props: TableStocksProps) {
                   }
                 }
                 disableRowSelectionOnClick
-                initialState={{
-                  
-                }}
                 rowSelection={false}
                 paginationMode='server'
                 pagination
@@ -156,6 +150,7 @@ export default function TableStocks(props: TableStocksProps) {
                 disableColumnFilter={true}
                 disableColumnMenu={true}
                 rowHeight={75}
+                onRowClick={props.rowClicked}
                 onPaginationModelChange={fetchActionNextPage}
                 >
                 </DataGrid>

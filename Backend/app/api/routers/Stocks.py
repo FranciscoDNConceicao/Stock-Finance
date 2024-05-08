@@ -65,31 +65,27 @@ async def getStocksDataForDay(params:SearchStocksValue):
         date_end = date_begin - timedelta(weeks=(54*3))
     try:
         request = api_alpaca.get_bars(code_stock, timeframe, date_end.strftime('%Y-%m-%d'), date_begin.strftime('%Y-%m-%d'), adjustment='raw').df
-        if request in (None, False) or 'close' not in request:
+        if 'close' not in request:
             url = f'https://api.polygon.io/v2/aggs/ticker/{code_stock}/range/{alternative_timeframe}{date_end.strftime('%Y-%m-%d')}/{date_begin.strftime('%Y-%m-%d')}?apiKey=p1ZovTNZa6Flx6uSxg0J64a4oDPdTdkS'
             requestData = request.get(url)
-            if 'results' in requestData:
+            if requestData and 'results' in requestData:
                 result_dict = {}
                 date_temp = date_end
                 for dictResults in 'results':
                     result_dict[date_temp.isoformat()] = dictResults['c']
                     date_temp += calculate_timeframe
 
-                return
-
+                return result_dict
+            return
         return request['close'].to_dict()
     except ValueError:
         raise HTTPException(status_code=422, detail="Invalid stock object")
 
 @router.post("/select/StockForDataGrid")
 async def getSelectedStockForDataGrid(params:DataGridPagination, session: Session = Depends(get_db)):
-
     data = []
-
     Initpage = params.initPage
     Endlimit = params.endPage
-    print(Initpage)
-    print(Endlimit)
     subquery = (session.query(StocksTable.id)
                 .filter(StocksTable.company_id == Company.id)
                 .order_by(StocksTable.date.desc())

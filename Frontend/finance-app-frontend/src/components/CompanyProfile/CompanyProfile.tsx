@@ -1,33 +1,39 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CompanyProfileProps } from "./interfaces";
-import { faLocationDot, faMapLocationDot, faLink, faCalendarDays, faUsers, faTerminal, faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faMapLocationDot, faLink, faCalendarDays, faUsers, faTerminal, faArrowTrendUp, faPlay } from "@fortawesome/free-solid-svg-icons";
 import LineGraph from "../LineGraph/Linegraph";
 
 
 
 export default function CompanyProfile(props: CompanyProfileProps){
+    
 
+    if (!props.dataCompany){
+        return(
+            <h1>404 NOT FOUND</h1>
+        )
+    }
 
-
+    const color = "#" + props.dataCompany.color
     return (
         <div className="flex w-full mt-[100px]">
-            <div className="m-[100px] flex flex-col w-full bg-secondary-background-color">
+            <div className={`my-[100px] flex flex-col w-full bg-secondary-background-color `} style={{ border: `5px solid ${color}`}}>
                 <div className="flex flex-col w-full justify-center relative mx-[auto] left-0 right-0 top-[-100px] text-center">
                     <div className="flex flex-col items-center ">
-                        <div className="border-[9px] border-secondary-background-color rounded-3xl">
-                            <img src={`/images/logos/${props.dataCompany.company}.png`}  alt="Company" className="px-[25px] py-[10px] bg-white rounded-3xl min-w-[30px] max-w-[600px] min-h-[70px] max-h-[200px] "></img>
+                        <div className={`rounded-[13px]`} style={{ border: `5px solid ${color}`}}>
+                            <img src={`/images/logos/${props.dataCompany.code}.png`}  alt="Company" className="px-[25px] py-[10px] bg-white rounded-[10px] min-w-[30px] max-w-[600px] min-h-[70px] max-h-[200px] "></img>
                         </div>
                         <div className="flex flex-col text-white center text-[40px] font-family bolder justify-center ">
                             <div>{props.dataCompany.name}</div>
                             
                         </div>
-                        <div className="text-[20px] font-family text-white bg-secondary-color rounded p-[5px]">{props.dataCompany.company}</div>
+                        <div className={`text-[20px] font-family text-white rounded p-[5px]`} style={{ backgroundColor: `${color}`}}>{props.dataCompany.code}</div>
                     </div>
                 </div>
                 <div className="w-full flex">
                     <div className="w-[50%] p-[20px] text-white font-family border-r-[2px] border-[grey]">
                         <div className="text-[20px] font-bold">About {props.dataCompany.name} :</div>
-                        <div className="font-extralight">Apple is among the largest companies in the world, with a broad portfolio of hardware and software products targeted at consumers and businesses. Apple's iPhone makes up a majority of the firm sales, and Apple's other products like Mac, iPad, and Watch are designed around the iPhone as the focal point of an expansive software ecosystem. Apple has progressively worked to add new applications, like streaming video, subscription bundles, and augmented reality. The firm designs its own software and semiconductors while working with subcontractors like Foxconn and TSMC to build its products and chips. Slightly less than half of Apple's sales come directly through its flagship stores, with a majority of sales coming indirectly through partnerships and distribution.</div>
+                        <div className="font-extralight">{props.dataCompany.description}</div>
                     </div>
                     <div className="w-[50%] p-[20px] text-white font-family">
                         <div className="flex">
@@ -66,11 +72,12 @@ export default function CompanyProfile(props: CompanyProfileProps){
                         isLoading={props.isLoading}
                         hasChoosingCategory={false} 
                         changingTimeCateg={props.changingTimeCateg} 
-                        categProp={[{"code": props.dataCompany.company}]}
+                        categProp={[{"code": props.dataCompany.code}]}
                         extendedVersion={true}
                         timeStampInitial={'3Y'}/>
                 </div>
             </div>       
+
         </div>    
     )  
         

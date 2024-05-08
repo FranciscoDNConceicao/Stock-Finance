@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean,Float, Column, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean,Float, Column, ForeignKey, Integer, String, Text, Date
 from app.database import Base
 
 
@@ -12,6 +12,8 @@ class CompanyTable(Base):
     currency_name = Column(String(10))
     address = Column(String(150))
     description = Column(Text)
+    list_date = Column(Date)
+    sic_code = Column(String(20))
     url = Column(String(70))
     number_employees = Column(Integer)
     high_max = Column(Float)

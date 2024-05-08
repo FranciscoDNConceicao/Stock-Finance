@@ -12,8 +12,9 @@ import { TickerActionInt} from "../components/Ticker/Interfaces"
 import { generateDataTicket } from "../scripts/Stocks/TickerDataStock"
 import TickerAction from "../components/Ticker/Ticker"
 import { generateNewsSeparateInfo } from "../scripts/News/SeparatorInfoNews"
-import { GridRowsProp } from "@mui/x-data-grid"
+import { GridRowParams, GridRowsProp } from "@mui/x-data-grid"
 import { stockDataToDatagrid } from "../scripts/Stocks/StockDataGrid"
+import { useNavigate } from "../router"
 
 
 const StocksCode = await generateCodesGraph()
@@ -21,7 +22,7 @@ const newsDataForComponent = await generateNewsSeparateInfo()
 
 
 export default function InitPage(){
-    
+    const navigate = useNavigate()
     const [isFixed, setIsFixed] = useState(false);
     const [isLoading, setLoading] = useState(true)
     const [isLoadingTicker, setLoadingTicker] = useState(true)
@@ -86,6 +87,9 @@ export default function InitPage(){
       }, [isFixed]);
 
     
+  const rowclicked = (params: GridRowParams) => {
+    navigate('/company/:id', { params: { id: params.id.toString() } });
+  }
 
 
     const wallet = {
@@ -128,7 +132,7 @@ export default function InitPage(){
                             <SeparatorInfo Data={newsDataForComponent?.data || null }/>
                         </div>
                         <div className="h-full w-full row-start-4 col-start-1 row-end-7 col-end-7 bg-secondary-background-color" >
-                            <TableStocks actionNextPage={nextPageDataGrid} rows={rowsGrid}/>
+                            <TableStocks actionNextPage={nextPageDataGrid} rows={rowsGrid} rowClicked={rowclicked}/>
                         </div>
                     </div>
                 </div>

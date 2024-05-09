@@ -10,11 +10,11 @@
     --secondary-color: rgb(49, 70, 255);
 }
 
- #root{
-    height: 100%;
-    margin: 0;
-    
-  }
+html, body, #root{
+  height: max-content;
+  margin: 0;
+
+}
 .font-family{
     font-family: "Inter", sans-serif;
     font-weight: 400;

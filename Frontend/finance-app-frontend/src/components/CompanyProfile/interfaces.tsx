@@ -1,6 +1,7 @@
 import { DataGraph } from "../LineGraph/interfaces";
 
 export interface CompanyInfo{
+    id: string
     name: string;
     code: string;
     description: string;

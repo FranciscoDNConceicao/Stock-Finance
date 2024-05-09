@@ -8,13 +8,13 @@ import TableStocks from "../components/TableStocks/Tablestocks"
 import { useEffect, useState } from "react"
 import { generateCodesGraph, generateDataStockTime } from "../scripts/Stocks/DataStockTime"
 import { DataGraph } from "../components/LineGraph/interfaces"
-import { TickerActionInt} from "../components/Ticker/Interfaces"
 import { generateDataTicket } from "../scripts/Stocks/TickerDataStock"
-import TickerAction from "../components/Ticker/Ticker"
 import { generateNewsSeparateInfo } from "../scripts/News/SeparatorInfoNews"
 import { GridRowParams, GridRowsProp } from "@mui/x-data-grid"
 import { stockDataToDatagrid } from "../scripts/Stocks/StockDataGrid"
 import { useNavigate } from "../router"
+import { TickerActionInt } from "../components/Ticker/Interfaces"
+import TickerAction from "../components/Ticker/Ticker"
 
 
 const StocksCode = await generateCodesGraph()
@@ -56,12 +56,10 @@ export default function InitPage(){
 
     const nextPageDataGrid = async (initPage:number, endPage:number) => {
       const rowsStock = await stockDataToDatagrid(initPage, endPage)
-
       setRowsGrid(rowsStock?.data || null)
     }
     useEffect(() => {
       if (isFirstTime) {       
-
 
         fetchTickerData() 
         if (StocksCode?.data?.length && StocksCode.data[0].code) {       
@@ -88,10 +86,9 @@ export default function InitPage(){
 
     
   const rowclicked = (params: GridRowParams) => {
+    console.log(params.id.toString() )
     navigate('/company/:id', { params: { id: params.id.toString() } });
   }
-
-
     const wallet = {
         'balance': 3824.45,
         'wallet_balance': 2694.32,

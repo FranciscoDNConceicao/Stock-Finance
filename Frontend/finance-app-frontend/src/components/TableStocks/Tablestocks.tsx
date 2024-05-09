@@ -1,7 +1,7 @@
-import { DataGrid, GridCallbackDetails, GridColDef, GridPaginationModel, GridRowParams} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridPaginationModel} from '@mui/x-data-grid';
 import { TableStocksProps } from './interfaces';
-import React, { useState } from 'react';
-import { redirect, useNavigate } from '../../router';
+import { useState } from 'react';
+
 
 
 let columns: GridColDef[] = [
@@ -112,13 +112,15 @@ export default function TableStocks(props: TableStocksProps) {
                 isRowSelectable={() => {return false}}
                 sx={
                   {
+                    '.MuiDataGrid-row': {
+                      cursor: "pointer"
+                    },
                     '.MuiDataGrid-columnSeparator': {
                       display: 'none',
                     },
                     '.MuiDataGrid-cellContent': {
                       color: "white",
-                      fontFamily:"Inter, sans-serif",
-                      
+                      fontFamily:"Inter, sans-serif"
                     },
                     '.MuiDataGrid-cell':{
                       justifyContent: "left"
@@ -144,7 +146,7 @@ export default function TableStocks(props: TableStocksProps) {
                 paginationMode='server'
                 pagination
                 autoPageSize
-                rowCount={400}
+                rowCount={500}
                 pageSizeOptions={[paginationModel.pageSize]}
                 paginationModel={paginationModel}
                 disableColumnFilter={true}
@@ -152,6 +154,7 @@ export default function TableStocks(props: TableStocksProps) {
                 rowHeight={75}
                 onRowClick={props.rowClicked}
                 onPaginationModelChange={fetchActionNextPage}
+                
                 >
                 </DataGrid>
         </div>

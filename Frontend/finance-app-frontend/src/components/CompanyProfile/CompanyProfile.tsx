@@ -1,27 +1,38 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CompanyProfileProps } from "./interfaces";
-import { faLocationDot, faMapLocationDot, faLink, faCalendarDays, faUsers, faTerminal, faArrowTrendUp, faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faLocationDot, faMapLocationDot, faLink, faCalendarDays, faUsers, faTerminal, faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
 import LineGraph from "../LineGraph/Linegraph";
+import TableStocks from "../TableStocks/Tablestocks";
+import TableNews from "../TableNews/TableNews";
+import { useState } from "react";
+import { getCompanyNews } from "../../scripts/Company/getCompanyValues";
+import { NewsCompany } from "../TableNews/interfaces";
 
 
 
 export default function CompanyProfile(props: CompanyProfileProps){
     
-
+    const [page, setPage] = useState(1)
+    const [dataNewsCompany, setCompanyNews] = useState<NewsCompany[] | null>()
     if (!props.dataCompany){
         return(
             <h1>404 NOT FOUND</h1>
         )
     }
-
+    const ChangePageNewsStock = async (init: number, end:number) => {
+        const data = await getCompanyNews(props.dataCompany?.id || '', init, end)
+        setPage(page+1)
+        setCompanyNews(data?.data || [])
+    }
     const color = "#" + props.dataCompany.color
     return (
         <div className="flex w-full mt-[100px]">
+            
             <div className={`my-[100px] flex flex-col w-full bg-secondary-background-color `} style={{ border: `5px solid ${color}`}}>
                 <div className="flex flex-col w-full justify-center relative mx-[auto] left-0 right-0 top-[-100px] text-center">
                     <div className="flex flex-col items-center ">
                         <div className={`rounded-[13px]`} style={{ border: `5px solid ${color}`}}>
-                            <img src={`/images/logos/${props.dataCompany.code}.png`}  alt="Company" className="px-[25px] py-[10px] bg-white rounded-[10px] min-w-[30px] max-w-[600px] min-h-[70px] max-h-[200px] "></img>
+                            <img src={`/images/logos/${props.dataCompany.code}.png`}  alt="Company" className="px-[25px] py-[10px] bg-white rounded-[10px] min-w-[30px] max-w-[800px] h-[150px] "></img>
                         </div>
                         <div className="flex flex-col text-white center text-[40px] font-family bolder justify-center ">
                             <div>{props.dataCompany.name}</div>
@@ -29,6 +40,16 @@ export default function CompanyProfile(props: CompanyProfileProps){
                         </div>
                         <div className={`text-[20px] font-family text-white rounded p-[5px]`} style={{ backgroundColor: `${color}`}}>{props.dataCompany.code}</div>
                     </div>
+                </div>
+                <div className="mb-[40px]">
+                    <LineGraph 
+                        data={props.dataGraph}
+                        isLoading={false}
+                        hasChoosingCategory={false} 
+                        changingTimeCateg={props.changingTimeCateg} 
+                        categProp={[{"code": props.dataCompany.code}]}
+                        extendedVersion={true}
+                        timeStampInitial={'3Y'}/>
                 </div>
                 <div className="w-full flex">
                     <div className="w-[50%] p-[20px] text-white font-family border-r-[2px] border-[grey]">
@@ -66,15 +87,16 @@ export default function CompanyProfile(props: CompanyProfileProps){
                         </div>
                     </div>
                 </div>
-                <div>
-                    <LineGraph 
-                        data={props.dataGraph}
-                        isLoading={props.isLoading}
-                        hasChoosingCategory={false} 
-                        changingTimeCateg={props.changingTimeCateg} 
-                        categProp={[{"code": props.dataCompany.code}]}
-                        extendedVersion={true}
-                        timeStampInitial={'3Y'}/>
+                <div className="w-full"> 
+                    <TableNews 
+                        data={dataNewsCompany || []}
+                        color={props.dataCompany.color}
+                        pageChange={ChangePageNewsStock}
+                        CountRows={400}
+                        page={page}
+                        rowperPage={10}
+
+                    />
                 </div>
             </div>       
 

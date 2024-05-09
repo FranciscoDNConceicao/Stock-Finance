@@ -91,7 +91,6 @@ export default function LineGraph(props:LineGraphProps){
     return (
        <div className=" bg-secondary-background-color ">
             {props.isLoading && <div className="loader"></div>}
-            
             <TimeChangedGraph 
             changingTimeCateg={changingTime}
             initialTimeStamp={props.timeStampInitial}/>
@@ -140,11 +139,12 @@ export default function LineGraph(props:LineGraphProps){
                         data: series,
                         area: true,
                         showMark: false,
-                        
+
                     }
                 ]}
                 width={props.extendedVersion? width * 0.75 : (width * 0.42)}
                 height={height * 0.50}
+                
             >
                
             </LineChart>

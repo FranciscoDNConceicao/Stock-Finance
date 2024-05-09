@@ -94,7 +94,7 @@ async def CompanyAllValues(id: str,session: Session = Depends(get_db)):
             'currency_name': companySelect[3],
             'address': companySelect[4],
             'description': companySelect[5],
-            'number_employees': companySelect[6],
+            'num_employees': companySelect[6],
             'URL': companySelect[7],
             'color': companySelect[8],
             'highMax': companySelect[9],

@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CompanyProfile from "../../../components/CompanyProfile/CompanyProfile";
 import Header from "../../../components/Header/Header";
 import Sidebar from "../../../components/Sidebar/Sidebar";
-import { CompanyData, DataGraph } from "../../../components/LineGraph/interfaces";
+import { DataGraph } from "../../../components/LineGraph/interfaces";
 import { generateDataStockTime } from "../../../scripts/Stocks/DataStockTime";
 import { CompanyInfo, LeftOrRightCompany } from "../../../components/CompanyProfile/interfaces";
 import { LeftAndRightValues, getAllValuesFromCompany } from "../../../scripts/Company/getCompanyValues";
@@ -36,34 +36,44 @@ export default function CompanyPage(){
     const getAllValuesToPage = async (id:string) => {
         const dataRequestCompany = await getAllValuesFromCompany(id);
         setCompanyData(dataRequestCompany?.data || null)
+        fetchDatatoGraph('3Y', dataCompany?.code || '')
     }
     const getLeftAndRightValues = async (state:string) => {
         if(state === 'left'){
+            setRightCompany({
+                'id': id.toString(),
+                'code': dataCompany?.code || '',
+                'color': dataCompany?.color || ''
+            })
+            getAllValuesToPage(leftCompany?.id || '0')
             const dataLeftCompany = await LeftAndRightValues();
-            console.log('esquerda')
-            setLeftCompany(dataLeftCompany?.data || {'id': '0','code': '','color': 'transparent'})
-            getAllValuesToPage(dataLeftCompany?.data?.id || '0')
+            setLeftCompany(dataLeftCompany?.data 
+                || 
+                {'id': '0',
+                'code': '',
+                'color': 'transparent'})
+            
+            
         }else if(state === 'right'){
-            const dataRightCompany = await LeftAndRightValues();
-            setRightCompany(dataRightCompany?.data || {'id': '0','code': '','color': 'transparent'})
-            console.log('direita')
-            getAllValuesToPage(dataRightCompany?.data?.id || '0')
+            setLeftCompany({
+                'id': id.toString(),
+                'code': dataCompany?.code || '',
+                'color': dataCompany?.color || ''
+            })
+            getAllValuesToPage(rightCompany?.id || '0')
+            const newdataRightCompany = await LeftAndRightValues();
+            setRightCompany(newdataRightCompany?.data || {'id': '0','code': '','color': 'transparent'})
         }else{
-            console.log('todos')
             const dataLeftCompany = await LeftAndRightValues();
             const dataRightCompany = await LeftAndRightValues();
             setLeftCompany(dataLeftCompany?.data || {'id': '0','code': '','color': 'transparent'})
-            getAllValuesToPage(dataLeftCompany?.data?.id || '0')
             setRightCompany(dataRightCompany?.data || {'id': '0','code': '','color': 'transparent'})
-            getAllValuesToPage(dataRightCompany?.data?.id || '0')
         }
         
     }
 
     const fetchDatatoGraph = async (timestamp:string, code:string) => {
-        console.log('ENTROU')
-        console.log(timestamp)
-        console.log(code)
+
         setDataGraph({
             'company_data': null,
           });
@@ -78,10 +88,11 @@ export default function CompanyPage(){
     if(!FirsTimeRender){
         getAllValuesToPage(id)
         getLeftAndRightValues('both')
-        fetchDatatoGraph('3Y', 'AAPL')
         setRender(true)
     }
-    
+    useEffect(() => {
+        fetchDatatoGraph('3Y', dataCompany?.code || '')
+    }, [dataCompany]);
     return (
         <div className="bg-background-color h-full">
             <div className="h-16 shadow-[rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;]">
@@ -91,12 +102,12 @@ export default function CompanyPage(){
                 <div className="w-[15%]">
                     <Sidebar />
                 </div>
-                <div className="flex w-full">
-                    <div className="flex flex-col items-center cursor-pointer" onClick={() => {}}>
-                        <FontAwesomeIcon icon={faPlay} className="mx-[30px] rotate-180 text-[35px] text-white" onClick={() => getLeftAndRightValues('left')}/>
-                        <div>
+                {<div className="flex w-full items-center">
+                    <div className="flex flex-col items-center cursor-pointer mx-[10px] w-[100px]" >
+                        <FontAwesomeIcon icon={faPlay} className="mx-[10px] rotate-180 text-[35px] text-white" onClick={() => getLeftAndRightValues('left')}/>
+                        <div className={`flex flex-col items-center rounded-[30px] pt-[4px]`}>
                             <div>
-                                <img className="min-w-[30px] max-w-[130px] min-h-[35px] max-h-[30px] rounded-md bg-[#FFFBF5] p-[5px]" src={`images/logos/${leftCompany.code}.png`} />
+                                <img className="min-w-[30px] max-w-[80px] min-h-[25px] max-h-[30px] rounded-md bg-[#FFFBF5] p-[5px]" src={`/images/logos/${leftCompany.code}.png`}  />
                             </div>
                             <div  className="text-white">
                                 {leftCompany.code}
@@ -109,18 +120,18 @@ export default function CompanyPage(){
                         isLoading={isLoading}
                         changingTimeCateg={fetchDatatoGraph}    
                          />
-                    <div className="flex flex-col items-center cursor-pointer" onClick={() => {}}>
-                        <FontAwesomeIcon icon={faPlay} className="mx-[30px] text-[40px] text-white" onClick={() => getLeftAndRightValues('right')}/>
-                        <div>
+                    <div className="flex flex-col items-center cursor-pointer mx-[10px] w-[100px]" >
+                        <FontAwesomeIcon icon={faPlay} className=" text-[40px] text-white" onClick={() => getLeftAndRightValues('right')}/>
+                        <div className={`flex flex-col items-center rounded-[30px] pt-[4px]`}>
                             <div>
-                                <img className="min-w-[30px] max-w-[130px] min-h-[35px] max-h-[30px] rounded-md bg-[#FFFBF5] p-[5px]" src={`images/logos/${rightCompany.code}.png`} />
+                                <img className="min-w-[30px] max-w-[80px] min-h-[25px] max-h-[30px]  rounded-md bg-[#FFFBF5] p-[5px]" src={`/images/logos/${rightCompany.code}.png`} />
                             </div>
                             <div className="text-white">
                                 {rightCompany.code}
                             </div>
                         </div>
                     </div>  
-                </div>
+    </div>}
             </div>
         </div>
     )

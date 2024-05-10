@@ -2,37 +2,41 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CompanyProfileProps } from "./interfaces";
 import { faLocationDot, faMapLocationDot, faLink, faCalendarDays, faUsers, faTerminal, faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
 import LineGraph from "../LineGraph/Linegraph";
-import TableStocks from "../TableStocks/Tablestocks";
 import TableNews from "../TableNews/TableNews";
-import { useState } from "react";
-import { getCompanyNews } from "../../scripts/Company/getCompanyValues";
-import { NewsCompany } from "../TableNews/interfaces";
+
 
 
 
 export default function CompanyProfile(props: CompanyProfileProps){
-    
-    const [page, setPage] = useState(1)
-    const [dataNewsCompany, setCompanyNews] = useState<NewsCompany[] | null>()
+
     if (!props.dataCompany){
         return(
             <h1>404 NOT FOUND</h1>
         )
     }
-    const ChangePageNewsStock = async (init: number, end:number) => {
-        const data = await getCompanyNews(props.dataCompany?.id || '', init, end)
-        setPage(page+1)
-        setCompanyNews(data?.data || [])
+    const ChangePageNewsStock = async (init: number, end:number) => { 
+        await props.changePageNewsStock(init, end, false);
     }
+        
     const color = "#" + props.dataCompany.color
+    if(props.isLoading){
+        return(
+            <div className="absolute m-auto t-0 b-0 l-0 r-0 w-full h-full `bg-[rgba(0,0,0,0.5)]">
+                <div className={`bg-[rgba(0,0,0,0.5)]`} style={{ border: `5px solid `}}>
+                    <div className="loader-full "></div>
+                </div>
+            </div>
+        )
+
+    }
     return (
         <div className="flex w-full mt-[100px]">
-            
+            {props.isLoading && <div className="loader"></div>}
             <div className={`my-[100px] flex flex-col w-full bg-secondary-background-color `} style={{ border: `5px solid ${color}`}}>
                 <div className="flex flex-col w-full justify-center relative mx-[auto] left-0 right-0 top-[-100px] text-center">
                     <div className="flex flex-col items-center ">
                         <div className={`rounded-[13px]`} style={{ border: `5px solid ${color}`}}>
-                            <img src={`/images/logos/${props.dataCompany.code}.png`}  alt="Company" className="px-[25px] py-[10px] bg-white rounded-[10px] min-w-[30px] max-w-[800px] h-[150px] "></img>
+                            <img src={`/images/logos/${props.dataCompany.code}.png`}  alt="Company" className="px-[25px] py-[10px] bg-white rounded-[10px] min-w-[30px] max-w-[1000px] h-[150px] "></img>
                         </div>
                         <div className="flex flex-col text-white center text-[40px] font-family bolder justify-center ">
                             <div>{props.dataCompany.name}</div>
@@ -89,13 +93,11 @@ export default function CompanyProfile(props: CompanyProfileProps){
                 </div>
                 <div className="w-full"> 
                     <TableNews 
-                        data={dataNewsCompany || []}
+                        dataTable={props.dataCompanyNews}
                         color={props.dataCompany.color}
                         pageChange={ChangePageNewsStock}
-                        CountRows={400}
-                        page={page}
+                        page={props.page}
                         rowperPage={10}
-
                     />
                 </div>
             </div>       

@@ -6,7 +6,10 @@ class CompanyLogo(BaseModel):
 class LimitRandom(BaseModel):
     limit : int
 
-
+class PaginationNewsCompanyTable(BaseModel):
+    id : str
+    initPage: int
+    endPage:int
 class StockCode(BaseModel):
     code: str
 

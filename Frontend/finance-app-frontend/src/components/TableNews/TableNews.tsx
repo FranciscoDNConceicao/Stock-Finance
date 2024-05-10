@@ -1,51 +1,55 @@
-import * as React from 'react';
 import { styled } from '@mui/system';
 import {
   TablePagination,
   tablePaginationClasses as classes,
 } from '@mui/base/TablePagination';
-import { NewsCompany, TableNewsRoot } from './interfaces';
+import { TableNewsRoot } from './interfaces';
+import {  useState } from 'react';
 
 
 
 export default function TableNews(props: TableNewsRoot) {
+    const [pageNum,setPage] = useState(props.page)
+    const pageChange = (event: React.MouseEvent<HTMLButtonElement> | null, page:number) => {
 
-    const pageChange = () => {
-        props.pageChange(props.rowperPage * props.page, props.rowperPage * props.page + 1)
+        props.pageChange(props.rowperPage * (page), props.rowperPage * (page + 1))     
+        setPage(page)
+           
     }
 
     return (
         <div className='w-full p-[20px]'>
             <div className='w-full bg-primary-background text-white font-family rounded border-[2px] bg-secondary-background-color ' >
-                <div className='w-full bg-primary-background text-white bolder p-[5px] text-[17px] flex justify-center border-b-[2px]' >
+                <div className='w-full bg-background-color text-white bolder p-[5px] text-[17px] flex justify-center border-b-[2px]' >
                     <span>News of this Company</span>
                 </div>
                 <table className='w-full'>
                     <tbody className='w-full bg-primary-background text-white bg-secondary-background-color'>
-                        {props.data.map((row) => (
-                            <tr key={row.id}>
-                                <td className="w-[30%]">
-                                    {row.url_image}
-                                </td>
-                                <td className="w-[100%]">
-                                    <div>
-                                        {row.title}
+                        {props.dataTable.data.map((row) => (
+                            <tr key={row.id} className='border-b-[2px] h-[50px]'>
+                                <td className="w-[100%] px-[10px] py-[4px]">
+                                    <div className="flex justify-between">
+                                        <div>{row.title}</div>
+                                        <div>{row.date_published}</div>
+                                        
                                     </div>
-                                    <div>
+                                    <div className="text-[13px] text-[white] font-thin">
                                         {row.author}
                                     </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
-                    <tfoot className='w-full style={{  background: `#${props.color}`}} border-t-[2px]' > 
-                        <CustomTablePagination
-                            count={props.CountRows}
-                            rowsPerPageOptions={[props.rowperPage]}
-                            onPageChange={pageChange}
-                            page={props.page}
-                            rowsPerPage={props.rowperPage}
-                        />
+                    <tfoot className='w-full bg-background-color border-t-[2px]' > 
+                        <tr>
+                            <CustomTablePagination
+                                    count={props.dataTable.num_Rows}
+                                    rowsPerPageOptions={[props.rowperPage]}
+                                    onPageChange={pageChange}
+                                    page={pageNum}
+                                    rowsPerPage={props.rowperPage}
+                                />
+                        </tr>
                     </tfoot>
                 </table>
             </div>

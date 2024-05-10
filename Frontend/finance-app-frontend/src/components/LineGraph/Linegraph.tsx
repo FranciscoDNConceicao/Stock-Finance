@@ -68,7 +68,6 @@ export default function LineGraph(props:LineGraphProps){
               setIndex(index + 1);
             }
           }
-        console.log(props.categProp)
         setSelectCateg(props.categProp && props.categProp[index] ? props.categProp[index] : { code: '' });
         props.changingTimeCateg(timestampSelected, selectedCateg.code)
     };
@@ -88,6 +87,7 @@ export default function LineGraph(props:LineGraphProps){
     const maxYaxis:number = Math.max(...series) + (Math.max(...series) * 0.01)
 
     const isDown:boolean = isLastGreaterThanLastFour(series)
+
     return (
        <div className=" bg-secondary-background-color ">
             {props.isLoading && <div className="loader"></div>}

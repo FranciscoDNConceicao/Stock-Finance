@@ -16,7 +16,7 @@ export const generateCompanyLogos = async (code: string) : Promise<AxiosResponse
             
             return response;
         }else{
-            console.log('Invalid parameter')
+
             return Promise.reject('Invalid parameter');
         }
     }catch (error){

@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 import { CompanyInfo, LeftOrRightCompany } from "../../components/CompanyProfile/interfaces";
-import { NewsCompany } from "../../components/TableNews/interfaces";
+import { NewsCompanyTable } from "../../components/TableNews/interfaces";
+
 
 export const getAllValuesFromCompany = async (id: string) : Promise<AxiosResponse<CompanyInfo | null>> => {
-    console.log('ENTROU EM GET ALL VALUES' + id)
     const link = 'http://127.0.0.1:8000/company/get/all/' + id;
     try {
         if(link){
@@ -43,7 +43,7 @@ export const LeftAndRightValues = async () : Promise<AxiosResponse<LeftOrRightCo
     }
     
 };
-export const getCompanyNews = async (id: string, initPage: number, endPage:number) : Promise<AxiosResponse<NewsCompany[] | null>> => {
+export const getCompanyNews = async (id: string, initPage: number, endPage:number) : Promise<AxiosResponse<NewsCompanyTable | null>> => {
 
     const link = 'http://127.0.0.1:8000/news/perCompany/get';
     try {

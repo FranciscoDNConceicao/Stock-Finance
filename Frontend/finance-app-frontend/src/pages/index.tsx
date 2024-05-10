@@ -49,7 +49,6 @@ export default function InitPage(){
     const fetchTickerData = async () => {
       setLoadingTicker(true)
       const Response = await generateDataTicket();
-      console.log(Response.data)
       setDataTicker(Response?.data || null);
       setLoadingTicker(false)
     }
@@ -86,7 +85,7 @@ export default function InitPage(){
 
     
   const rowclicked = (params: GridRowParams) => {
-    console.log(params.id.toString() )
+
     navigate('/company/:id', { params: { id: params.id.toString() } });
   }
     const wallet = {

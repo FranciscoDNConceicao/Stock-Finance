@@ -95,7 +95,6 @@ export default function TableStocks(props: TableStocksProps) {
   });
 
   const fetchActionNextPage = async (model: GridPaginationModel) => {
-    console.log(model)
     setPaginationModel({
       page:model.page,
       pageSize: 15

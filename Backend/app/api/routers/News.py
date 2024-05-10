@@ -7,7 +7,7 @@ from sqlalchemy import func
 from app.database import SessionLocal
 from app.models.Company.NewsCompany.NewsCompany import NewsCompanyTable
 from app.models.News.DateNews import NewsTable
-from app.models.CompanyLogo import LimitRandom
+from app.models.CompanyLogo import LimitRandom, PaginationNewsCompanyTable
 from fastapi import HTTPException, Depends
 from sqlalchemy.orm import Session
 
@@ -27,25 +27,32 @@ router = APIRouter()
 
 
 @router.post('/perCompany/get')
-async def getNewsPerCompany(id: str, initPage: int, endPage:int, session: Session = Depends(get_db)):
-    selectedNewsCompany = (session.query(NewsTable.title,
+async def getNewsPerCompany(data: PaginationNewsCompanyTable, session: Session = Depends(get_db)):
+    initPage = data.initPage
+    endPage = data.endPage
+    id = data.id
+    result = {'data': [],
+              'num_Rows': session.query(func.count(NewsTable.id)).join(NewsCompanyTable,
+                                                                       NewsTable.id == NewsCompanyTable.id).filter(
+                  NewsCompanyTable.company_id == id).scalar()}
+    selectedNewsCompany = (session.query(NewsTable.id,
+                                         NewsTable.title,
                                          NewsTable.image_url,
                                          NewsTable.author,
                                          NewsTable.date_published).join(NewsCompanyTable,
                                                                         NewsTable.id == NewsCompanyTable.id)
-                           .filter(NewsCompanyTable.company_id == id).order_by(NewsTable.date_published).slice(initPage, endPage))
+                           .filter(NewsCompanyTable.company_id == id).order_by(NewsTable.date_published.desc()).slice(
+        initPage, endPage))
 
-    data = []
     for selectedNewCompany in selectedNewsCompany:
-        data.append({
-            'title': selectedNewCompany[0],
-            'image_url': selectedNewCompany[1],
-            'author': selectedNewCompany[2],
-            'date_published': selectedNewsCompany[3]
+        result['data'].append({
+            'id': selectedNewCompany[0],
+            'title': selectedNewCompany[1],
+            'url_image': selectedNewCompany[2],
+            'author': selectedNewCompany[3],
+            'date_published': selectedNewCompany[4]
         })
-    result = {
-        'data': data
-    }
+
     return result
 
 
@@ -64,8 +71,8 @@ async def getEssentialSeparatedDateNews(limit: LimitRandom, session: Session = D
                                          NewsTable.image_url,
                                          PublisherTable.name,
                                          NewsTable.date_published)
-                           .join(PublisherTable, PublisherTable.id == NewsTable.publisher_id)
-                           .filter(func.date(NewsTable.date_published) == dateNow).order_by(func.random()).limit(
+    .join(PublisherTable, PublisherTable.id == NewsTable.publisher_id)
+    .filter(func.date(NewsTable.date_published) == dateNow).order_by(func.random()).limit(
         limit.limit))
     for selectedNewThisDay in selectedNewsThisDay:
         data['This day'].append({

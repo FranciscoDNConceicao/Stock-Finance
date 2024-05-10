@@ -1,4 +1,5 @@
 import { DataGraph } from "../LineGraph/interfaces";
+import { NewsCompany, NewsCompanyTable } from "../TableNews/interfaces";
 
 export interface CompanyInfo{
     id: string
@@ -18,8 +19,11 @@ export interface CompanyInfo{
 export interface CompanyProfileProps{
     dataCompany: CompanyInfo|null;
     changingTimeCateg: (TimeCateg: string, Stock:string) => void;
+    changePageNewsStock: (init:number, end:number, firstRender:boolean) => void;
+    dataCompanyNews: NewsCompanyTable;
     dataGraph: DataGraph;
     isLoading: boolean;
+    page: number;
 }
 export interface LeftOrRightCompany {
     id:string,

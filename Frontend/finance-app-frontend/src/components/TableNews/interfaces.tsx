@@ -3,12 +3,16 @@ export interface NewsCompany {
     title: string;
     author: string;
     url_image: string
+    date_published: string
 }
 export interface TableNewsRoot{
-    data: NewsCompany[]
+    dataTable: NewsCompanyTable
     color:string
-    CountRows: number
     page: number
     rowperPage: number
     pageChange : (init:number, end:number) => void
+}
+export interface NewsCompanyTable{
+    data: NewsCompany[]
+    num_Rows: number
 }

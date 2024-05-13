@@ -46,8 +46,9 @@ export default  function CompanyPage(){
         }
     }
     const getLeftAndRightValues = async (state:string) => {
+        setLoading(true)
         if(state === 'left'){
-            setLoading(true)
+            
             setRightCompany({
                 'id': id.toString(),
                 'code': dataCompany?.code || '',
@@ -60,11 +61,10 @@ export default  function CompanyPage(){
                 {'id': '0',
                 'code': '',
                 'color': 'transparent'})
-            setLoading(false)
             
         }else if(state === 'right'){
             console.log("Enter")
-            setLoading(true)
+
             setLeftCompany({
                 'id': id.toString(),
                 'code': dataCompany?.code || '',
@@ -75,15 +75,16 @@ export default  function CompanyPage(){
             const newdataRightCompany = await LeftAndRightValues();
             
             setRightCompany(newdataRightCompany?.data || {'id': '0','code': '','color': 'transparent'})
-            setLoading(false)
+
         }else{
-            setLoading(true)
+
             const dataLeftCompany = await LeftAndRightValues();
             const dataRightCompany = await LeftAndRightValues();
             setLeftCompany(dataLeftCompany?.data || {'id': '0','code': '','color': 'transparent'})
             setRightCompany(dataRightCompany?.data || {'id': '0','code': '','color': 'transparent'})
-            setLoading(true)
+
         }
+        setLoading(false)
         
     }
 
@@ -92,12 +93,12 @@ export default  function CompanyPage(){
         setDataGraph({
             'company_data': null,
           });
-        setLoading(true)
+
         const Response = await generateDataStockTime(code, timestamp);
-        setLoading(false)
         setDataGraph({
             'company_data': Response?.data || null
         });
+
       };
     
     const changePageNewsStock = async (init:number, end:number, firstRender:boolean) => {
@@ -124,7 +125,7 @@ export default  function CompanyPage(){
           
     }, [dataCompany]);
     return (
-        <div className="bg-background-color h-full">
+        <div className="bg-background-color h-full ">
             <div className="h-16 shadow-[rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;]">
                 <Header />
             </div>
@@ -133,19 +134,19 @@ export default  function CompanyPage(){
                     <Sidebar />
                 </div>
                 <div className="flex w-full items-center ml-[40px]">
-                    <CompanyProfile 
+                    <CompanyProfile
                         dataCompany={dataCompany}
                         dataGraph={dataGraph}
-                        isLoading={true}
+                        isLoading={isLoading}
                         changingTimeCateg={fetchDatatoGraph}  
-                        changePageNewsStock={changePageNewsStock}  
+                        changePageNewsStock={changePageNewsStock}
                         page={0}
                         dataCompanyNews={dataCompanyNews}
                          />
-                    <div className={`hidden h-full ${isLoading?"hidden": ""}`} >
-                        <div className="sticky">
+                    <div className={`fixed left-[95%] h-full ${isLoading? "hidden": ""}`} >
+                        <div className="">
                             <div className="flex flex-col items-center cursor-pointer mx-[10px] w-[100px]" >
-                                <div className={`flex flex-col items-center rounded-[30px] pt-[4px]`}>
+                                <div className={`flex flex-col items-center rounded-[30px] pt-[4px]`}  onClick={() => getLeftAndRightValues('left')}>
                                     <div>
                                         <img className="min-w-[30px] max-w-[80px] min-h-[25px] max-h-[30px] rounded-md bg-[#FFFBF5] p-[5px]" src={`/images/logos/${leftCompany.code}.png`}  />
                                     </div>
@@ -153,10 +154,10 @@ export default  function CompanyPage(){
                                         {leftCompany.code}
                                     </div>
                                 </div>
-                                <FontAwesomeIcon icon={faPlay} className="mx-[10px] rotate-[270deg] text-[40px] text-white" onClick={() => getLeftAndRightValues('left')}/>
+                                <FontAwesomeIcon icon={faPlay} className="mx-[10px] rotate-[270deg] text-[40px] text-white"/>
                             </div>
-                            <div className="flex flex-col items-center cursor-pointer mx-[10px] w-[100px]" >
-                                <FontAwesomeIcon icon={faPlay} className="rotate-90 text-[40px] text-white" onClick={() => getLeftAndRightValues('right')}/>
+                            <div className="flex flex-col items-center cursor-pointer mx-[10px] w-[100px]"  onClick={() => getLeftAndRightValues('right')}>
+                                <FontAwesomeIcon icon={faPlay} className="rotate-90 text-[40px] text-white"/>
                                 <div className={`flex flex-col items-center rounded-[30px] pt-[4px]`}>
                                     <div>
                                         <img className="min-w-[30px] max-w-[80px] min-h-[25px] max-h-[30px]  rounded-md bg-[#FFFBF5] p-[5px]" src={`/images/logos/${rightCompany.code}.png`} />

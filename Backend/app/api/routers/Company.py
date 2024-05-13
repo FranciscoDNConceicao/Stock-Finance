@@ -23,8 +23,8 @@ def get_db():
 
 @router.post("/random")
 async def getRandomCode(limit:LimitRandom,session: Session = Depends(get_db)):
-    selectCodes = session.query(Company.code).order_by(func.random()).limit(limit.limit)
-    codes = [{'code': code[0]} for code in selectCodes]
+    selectCodes = session.query(Company.code, Company.id).order_by(func.random()).limit(limit.limit)
+    codes = [{'code': code[0], 'id': str(code[1])} for code in selectCodes]
     return codes
 @router.post("/discount")
 async def getDiscount(params:CompanyLogo,session: Session = Depends(get_db)):

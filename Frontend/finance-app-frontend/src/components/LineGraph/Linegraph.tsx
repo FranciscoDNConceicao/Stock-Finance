@@ -26,7 +26,7 @@ const valueFormatter = (date: Date) =>
 
 export default function LineGraph(props:LineGraphProps){
     
-    const [selectedCateg, setSelectCateg] = useState<StockImage>(props.categProp? props.categProp[0] : {'code': ''})
+    const [selectedCateg, setSelectCateg] = useState<StockImage>(props.categProp? props.categProp[0] : {'code': '', id: '0' })
 
     let lenghtData = props.categProp?.length 
 
@@ -68,7 +68,7 @@ export default function LineGraph(props:LineGraphProps){
               setIndex(index + 1);
             }
           }
-        setSelectCateg(props.categProp && props.categProp[index] ? props.categProp[index] : { code: '' });
+        setSelectCateg(props.categProp && props.categProp[index] ? props.categProp[index] : { code: '', id: '0' });
         props.changingTimeCateg(timestampSelected, selectedCateg.code)
     };
 
@@ -151,6 +151,7 @@ export default function LineGraph(props:LineGraphProps){
             {props.hasChoosingCategory && <ChoosingCategory 
                 changeStock={changeStockGraph}
                 company={selectedCateg.code}
+                idCompany={selectedCateg.id}
             />}
             
        </div> 

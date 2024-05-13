@@ -21,16 +21,14 @@ export default function CompanyProfile(props: CompanyProfileProps){
     const color = "#" + props.dataCompany.color
     if(props.isLoading){
         return(
-            <div className="absolute m-auto t-0 b-0 l-0 r-0 w-full h-full `bg-[rgba(0,0,0,0.5)]">
-                <div className={`bg-[rgba(0,0,0,0.5)]`} style={{ border: `5px solid `}}>
-                    <div className="loader-full "></div>
-                </div>
+            <div className=" w-full h-full m-auto">
+                <div className="loader-full text-white relative top-[50%] "></div>
             </div>
         )
 
     }
     return (
-        <div className="flex w-full mt-[100px]">
+        <div className="flex w-full mt-[100px] ml-[50px] mr-[100px]">
             {props.isLoading && <div className="loader"></div>}
             <div className={`my-[100px] flex flex-col w-full bg-secondary-background-color `} style={{ border: `5px solid ${color}`}}>
                 <div className="flex flex-col w-full justify-center relative mx-[auto] left-0 right-0 top-[-100px] text-center">

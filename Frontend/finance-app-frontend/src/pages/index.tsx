@@ -85,7 +85,6 @@ export default function InitPage(){
 
     
   const rowclicked = (params: GridRowParams) => {
-
     navigate('/company/:id', { params: { id: params.id.toString() } });
   }
     const wallet = {

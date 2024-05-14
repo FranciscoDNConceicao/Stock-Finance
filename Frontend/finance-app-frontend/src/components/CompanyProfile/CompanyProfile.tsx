@@ -21,15 +21,13 @@ export default function CompanyProfile(props: CompanyProfileProps){
     const color = "#" + props.dataCompany.color
     if(props.isLoading){
         return(
-            <div className=" w-full h-full m-auto">
+            <div className=" w-full h-full flex justify-center py-[465px]">
                 <div className="loader-full text-white relative top-[50%] "></div>
             </div>
         )
-
     }
     return (
-        <div className="flex w-full mt-[100px] ml-[50px] mr-[100px]">
-            {props.isLoading && <div className="loader"></div>}
+        <div className="flex w-full mt-[100px] ml-[50px] mr-[140px]">
             <div className={`my-[100px] flex flex-col w-full bg-secondary-background-color `} style={{ border: `5px solid ${color}`}}>
                 <div className="flex flex-col w-full justify-center relative mx-[auto] left-0 right-0 top-[-100px] text-center">
                     <div className="flex flex-col items-center ">
@@ -49,7 +47,7 @@ export default function CompanyProfile(props: CompanyProfileProps){
                         isLoading={false}
                         hasChoosingCategory={false} 
                         changingTimeCateg={props.changingTimeCateg} 
-                        categProp={[{"code": props.dataCompany.code}]}
+                        categProp={[{"code": props.dataCompany.code, "id": props.dataCompany.id}]}
                         extendedVersion={true}
                         timeStampInitial={'3Y'}/>
                 </div>

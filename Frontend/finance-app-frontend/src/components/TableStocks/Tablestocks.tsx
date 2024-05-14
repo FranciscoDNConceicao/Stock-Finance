@@ -89,17 +89,23 @@ let columns: GridColDef[] = [
 
 export default function TableStocks(props: TableStocksProps) {
 
+  const [isFirstTime, setIsFirstTime] = useState(true)
+
+
   const [paginationModel, setPaginationModel] = useState({
-    page: 1,
+    page: 0,
     pageSize: 15,
   });
 
   const fetchActionNextPage = async (model: GridPaginationModel) => {
-    setPaginationModel({
-      page:model.page,
-      pageSize: 15
-    })
-    props.actionNextPage(paginationModel.page * paginationModel.pageSize, paginationModel.page * paginationModel.pageSize + paginationModel.pageSize)
+    if(model.page != paginationModel.page || isFirstTime){
+      setPaginationModel({
+        page:model.page,
+        pageSize: 15
+      })
+      props.actionNextPage(model.page * paginationModel.pageSize,model.page * paginationModel.pageSize + paginationModel.pageSize)
+      setIsFirstTime(false)
+    }
   }
   
 

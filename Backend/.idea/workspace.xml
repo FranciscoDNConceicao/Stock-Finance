@@ -6,11 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="8c12bfc8-0e18-470e-b87c-63b95be86938" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/routers/Company.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/Company.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/CompanyProfile/CompanyProfile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/CompanyProfile/CompanyProfile.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/LineGraph/Linegraph.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/LineGraph/Linegraph.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableStocks/Tablestocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableStocks/Tablestocks.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/pages/company/[id]/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/pages/company/[id]/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/style/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/style/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/pages/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

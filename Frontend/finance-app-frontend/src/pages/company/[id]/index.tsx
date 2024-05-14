@@ -10,6 +10,7 @@ import { useParams } from "../../../router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { NewsCompanyTable } from "../../../components/TableNews/interfaces";
+import { useProps } from "@mui/x-data-grid/internals";
 
 
     
@@ -133,7 +134,7 @@ export default  function CompanyPage(){
                 <div className="w-[15%]">
                     <Sidebar />
                 </div>
-                <div className="flex w-full items-center ml-[40px]">
+                <div className="flex w-full items-center ml-[10px]">
                     <CompanyProfile
                         dataCompany={dataCompany}
                         dataGraph={dataGraph}
@@ -143,10 +144,10 @@ export default  function CompanyPage(){
                         page={0}
                         dataCompanyNews={dataCompanyNews}
                          />
-                    <div className={`fixed left-[95%] h-full ${isLoading? "hidden": ""}`} >
+                    <div className={`fixed top-[50%] left-[95%] h-full ${isLoading? "hidden": ""}`} >
                         <div className="">
-                            <div className="flex flex-col items-center cursor-pointer mx-[10px] w-[100px]" >
-                                <div className={`flex flex-col items-center rounded-[30px] pt-[4px]`}  onClick={() => getLeftAndRightValues('left')}>
+                            <div className="flex flex-col items-center cursor-pointer mx-[10px] w-[100px]" onClick={() => getLeftAndRightValues('left')} >
+                                <div className={`flex flex-col items-center rounded-[30px] pt-[4px]`}  >
                                     <div>
                                         <img className="min-w-[30px] max-w-[80px] min-h-[25px] max-h-[30px] rounded-md bg-[#FFFBF5] p-[5px]" src={`/images/logos/${leftCompany.code}.png`}  />
                                     </div>

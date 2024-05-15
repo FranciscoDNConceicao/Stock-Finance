@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8c12bfc8-0e18-470e-b87c-63b95be86938" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/CompanyProfile/CompanyProfile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/CompanyProfile/CompanyProfile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/routers/News.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/News.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/CompanyLogo.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/CompanyLogo.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableStocks/Tablestocks.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableStocks/Tablestocks.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/pages/company/[id]/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/pages/company/[id]/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/pages/index.tsx" afterDir="false" />
@@ -41,28 +42,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.Color Picker Company.executor&quot;: &quot;Run&quot;,
-    &quot;Python.CompanyDataToDatabase.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.DeleteImagesNotSP500.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.FastAPI-uvicorn.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.ListOfNoInfoStock.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.StockToCompany.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.datetimeStocksServices.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenDatabaseViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/francisco_conceicao/Documents/Finance/Stock-Finance/Backend/utils/StockToCompany.py&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.Color Picker Company.executor": "Run",
+    "Python.CompanyDataToDatabase.executor": "Debug",
+    "Python.DeleteImagesNotSP500.executor": "Debug",
+    "Python.FastAPI-uvicorn.executor": "Debug",
+    "Python.ListOfNoInfoStock.executor": "Debug",
+    "Python.StockToCompany.executor": "Debug",
+    "Python.datetimeStocksServices.executor": "Debug",
+    "RunOnceActivity.OpenDatabaseViewOnStart": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/francisco_conceicao/Documents/Finance/Stock-Finance/Backend/utils/StockToCompany.py",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend\FinanceServer\api\services" />

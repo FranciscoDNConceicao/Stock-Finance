@@ -2,11 +2,11 @@ export interface DataPublisher{
     name: string;
     url: string;
     logo_url: string;
-    favicon_url:string;
 }
 export interface CompanyDataNews{
     code:string;
     id:string;
+    color:string;
 }
 export interface DataNews{
     title: string;
@@ -20,5 +20,6 @@ export interface DataNews{
 }
 export interface NewsMainProps {
     data: DataNews;
+    isLoading: boolean;
 
 }

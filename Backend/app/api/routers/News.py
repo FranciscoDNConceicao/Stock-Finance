@@ -1,3 +1,5 @@
+import math
+import random
 from datetime import datetime, timedelta
 
 import requests
@@ -5,13 +7,16 @@ from fastapi import APIRouter
 from sqlalchemy import func
 
 from app.database import SessionLocal
+from app.models.Company.Company import CompanyTable
 from app.models.Company.NewsCompany.NewsCompany import NewsCompanyTable
 from app.models.News.DateNews import NewsTable
-from app.models.CompanyLogo import LimitRandom, PaginationNewsCompanyTable
+from app.models.CompanyLogo import LimitRandom, PaginationNewsCompanyTable, NewsCompanyDataSetRelated
 from fastapi import HTTPException, Depends
 from sqlalchemy.orm import Session
 
 from app.models.News.Publisher.Publisher import PublisherTable
+
+from sqlalchemy import *
 
 
 # Dependency to get a database session
@@ -41,7 +46,7 @@ async def getNewsPerCompany(data: PaginationNewsCompanyTable, session: Session =
                                          NewsTable.author,
                                          NewsTable.date_published).join(NewsCompanyTable,
                                                                         NewsTable.id == NewsCompanyTable.id)
-                           .filter(NewsCompanyTable.company_id == id).order_by(NewsTable.date_published.desc()).slice(
+    .filter(NewsCompanyTable.company_id == id).order_by(NewsTable.date_published.desc()).slice(
         initPage, endPage))
 
     for selectedNewCompany in selectedNewsCompany:
@@ -53,6 +58,85 @@ async def getNewsPerCompany(data: PaginationNewsCompanyTable, session: Session =
             'date_published': selectedNewCompany[4]
         })
 
+    return result
+
+@router.get('/get/related/company')
+async def getRelatedNews(data : NewsCompanyDataSetRelated,session: Session = Depends(get_db)):
+    result = {
+        data.label: []
+    }
+    companiesIds = data.companies
+    numIdsCompanies = len(data.companies)
+    if numIdsCompanies > data.limit:
+        companiesIds = random.sample(companiesIds, data.limit)
+
+    chooseNewsPerCompanies = math.floor(data.limit / len(companiesIds))
+
+    for companyId in companiesIds:
+        queryNewsCompanies = (session.query(NewsTable.id,
+                                            NewsTable.image_url,
+                                            NewsTable.description,
+                                            NewsTable.author,
+                                            NewsTable.date_published)
+                              .join(NewsTable, NewsCompanyTable.id == NewsTable.news_id)
+                              .filter(NewsCompanyTable.company_id == int(companyId)).limit(chooseNewsPerCompanies))
+
+        for queryNewsCompany in queryNewsCompanies:
+            result[data.label].append({
+                'id': queryNewsCompany[0],
+                'Image': queryNewsCompany[1],
+                'Description': queryNewsCompany[2],
+                'Publisher': queryNewsCompany[3],
+                'Date': queryNewsCompany[4]
+            })
+
+    return result
+
+@router.get('/get/all/{id}')
+async def getAllValuesFromNews(id: str, session: Session = Depends(get_db)):
+    result = {}
+    queryNews = (session.query(NewsTable.title,
+                               NewsTable.description,
+                               NewsTable.author,
+                               NewsTable.article_url,
+                               NewsTable.date_published,
+                               NewsTable.image_url,
+                               PublisherTable.id,
+                               PublisherTable.name,
+                               PublisherTable.url,
+                               PublisherTable.logo_url
+                               ).join(PublisherTable, PublisherTable.id == NewsTable.publisher_id
+                                      ).filter(NewsTable.id == id))
+
+    for queryNewsResult in queryNews:
+        result = {
+            'title': queryNewsResult[0],
+            'description': queryNewsResult[1],
+            'author': queryNewsResult[2],
+            'article_url': queryNewsResult[3],
+            'date_published': queryNewsResult[4],
+            'image_url': queryNewsResult[5],
+            'publisher': {
+                'id': queryNewsResult[6],
+                'name': queryNewsResult[7],
+                'url': queryNewsResult[8],
+                'logo_url': queryNewsResult[9]
+            },
+            'Companies': []
+        }
+    if result:
+        queryNewsCompanies = (session.query(CompanyTable.id,
+                                            CompanyTable.code,
+                                            CompanyTable.color)
+                              .join(NewsCompanyTable, CompanyTable.id == NewsCompanyTable.company_id)
+                              .filter(NewsCompanyTable.news_id == int(id)))
+
+        for queryNewsCompaniesResult in queryNewsCompanies:
+            result['Companies'].append({
+                'id': queryNewsCompaniesResult[0],
+                'code': queryNewsCompaniesResult[1],
+                'color': queryNewsCompaniesResult[2],
+            })
     return result
 
 
@@ -70,12 +154,14 @@ async def getEssentialSeparatedDateNews(limit: LimitRandom, session: Session = D
     selectedNewsThisDay = (session.query(NewsTable.title,
                                          NewsTable.image_url,
                                          PublisherTable.name,
-                                         NewsTable.date_published)
+                                         NewsTable.date_published,
+                                         NewsTable.id)
     .join(PublisherTable, PublisherTable.id == NewsTable.publisher_id)
     .filter(func.date(NewsTable.date_published) == dateNow).order_by(func.random()).limit(
         limit.limit))
     for selectedNewThisDay in selectedNewsThisDay:
         data['This day'].append({
+            'id': str(selectedNewThisDay[4]),
             'Image': selectedNewThisDay[1],
             'Description': selectedNewThisDay[0],
             'Publisher': selectedNewThisDay[2],
@@ -85,7 +171,8 @@ async def getEssentialSeparatedDateNews(limit: LimitRandom, session: Session = D
     selectedNewsThisWeek = (session.query(NewsTable.title,
                                           NewsTable.image_url,
                                           PublisherTable.name,
-                                          NewsTable.date_published)
+                                          NewsTable.date_published,
+                                          NewsTable.id)
                             .join(PublisherTable, NewsTable.publisher_id == PublisherTable.id)
                             .filter(func.date(NewsTable.date_published) <= dateNow,
                                     func.date(NewsTable.date_published) >= dateWeekBefore)
@@ -93,6 +180,7 @@ async def getEssentialSeparatedDateNews(limit: LimitRandom, session: Session = D
                             .limit(limit.limit))
     for selectedNewsThisWeek in selectedNewsThisWeek:
         data['This week'].append({
+            'id': str(selectedNewsThisWeek[4]),
             'Image': selectedNewsThisWeek[1],
             'Description': selectedNewsThisWeek[0],
             'Publisher': selectedNewsThisWeek[2],
@@ -101,7 +189,8 @@ async def getEssentialSeparatedDateNews(limit: LimitRandom, session: Session = D
     selectedNewsThisYear = (session.query(NewsTable.title,
                                           NewsTable.image_url,
                                           PublisherTable.name,
-                                          NewsTable.date_published)
+                                          NewsTable.date_published,
+                                          NewsTable.id)
                             .join(PublisherTable, NewsTable.publisher_id == PublisherTable.id)
                             .filter(func.date(NewsTable.date_published) <= dateNow,
                                     func.date(NewsTable.date_published) >= dateYearBefore)
@@ -109,6 +198,7 @@ async def getEssentialSeparatedDateNews(limit: LimitRandom, session: Session = D
                             .limit(limit.limit))
     for selectedNewThisYear in selectedNewsThisYear:
         data['This year'].append({
+            'id': str(selectedNewThisYear[4]),
             'Image': selectedNewThisYear[1],
             'Description': selectedNewThisYear[0],
             'Publisher': selectedNewThisYear[2],

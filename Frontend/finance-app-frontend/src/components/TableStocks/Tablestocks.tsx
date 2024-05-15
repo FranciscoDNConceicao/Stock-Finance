@@ -62,9 +62,8 @@ let columns: GridColDef[] = [
     field: 'actionBuy',
     type: 'actions',
     getActions: () => [
-      <div className='flex '>
-          <button className='text-green-500 p-[3px] font-family font-bolder border border-green-500 mr-[5px] hover:bg-green-500 hover:text-white'>Buy</button>
-          
+      <div className='flex'>
+          <button className='text-green-500 p-[3px] font-family font-bolder border border-green-500 mr-[5px] hover:bg-green-500 hover:text-white'>Buy</button> 
       </div>
       
     ],

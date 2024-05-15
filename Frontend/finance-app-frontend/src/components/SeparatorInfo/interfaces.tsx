@@ -1,4 +1,5 @@
 interface NewsItem {
+    id: string
     Image: string;
     Description: string;
     Publisher: string;

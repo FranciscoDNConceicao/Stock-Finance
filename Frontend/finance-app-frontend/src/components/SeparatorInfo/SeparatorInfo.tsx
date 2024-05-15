@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "../../router";
 
 
 export default function SeparatorInfo (props:SeparatorInfo) {
+    const navigate = useNavigate()
+    
     if(!props.Data){
         props.Data = {
             'This day': [],
@@ -21,6 +24,9 @@ export default function SeparatorInfo (props:SeparatorInfo) {
             changeNewsSelected(props.Data[category])
         }
         
+    }
+    const NewsClicked = (id:string) => {
+        navigate('/news/:id', { params: { id: id } });
     }
 
     return (
@@ -42,7 +48,7 @@ export default function SeparatorInfo (props:SeparatorInfo) {
             </div>
             <div className="bg-background-color border-[1px] border-[white]">
                 {NewsSelected.map((item, index) => (
-                    <div className="flex flex-col" key={index} >
+                    <div className="cursor-pointer flex flex-col" key={index} onClick={() => NewsClicked(item.id)}>
                         <div className="p-[10px] flex cursor-pointer hover:bg-secondary-background-color">
                             <div className="h-[60px] w-[100px]">
                                 <img src={item.Image} alt="News Image" className="h-[55px] w-[100px]" />

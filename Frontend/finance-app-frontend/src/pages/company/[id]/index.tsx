@@ -144,7 +144,7 @@ export default  function CompanyPage(){
                         page={0}
                         dataCompanyNews={dataCompanyNews}
                          />
-                    <div className={`fixed top-[50%] left-[95%] h-full ${isLoading? "hidden": ""}`} >
+                    <div className={`fixed top-[] left-[95%] h-full ${isLoading? "hidden": ""}`} >
                         <div className="">
                             <div className="flex flex-col items-center cursor-pointer mx-[10px] w-[100px]" onClick={() => getLeftAndRightValues('left')} >
                                 <div className={`flex flex-col items-center rounded-[30px] pt-[4px]`}  >

@@ -23,6 +23,7 @@ const newsDataForComponent = await generateNewsSeparateInfo()
 
 export default function InitPage(){
     const navigate = useNavigate()
+    
     const [isFixed, setIsFixed] = useState(false);
     const [isLoading, setLoading] = useState(true)
     const [isLoadingTicker, setLoadingTicker] = useState(true)

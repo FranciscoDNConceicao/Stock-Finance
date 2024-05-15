@@ -16,3 +16,10 @@ class StockCode(BaseModel):
 class DataGridPagination(BaseModel):
     initPage: int
     endPage: int
+
+
+class NewsCompanyDataSetRelated(BaseModel):
+    id : str
+    companies: list = []
+    limit: int
+    label: str

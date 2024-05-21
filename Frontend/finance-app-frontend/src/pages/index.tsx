@@ -7,18 +7,16 @@ import SeparatorInfo from "../components/SeparatorInfo/SeparatorInfo"
 import TableStocks from "../components/TableStocks/Tablestocks"
 import { useEffect, useState } from "react"
 import { generateCodesGraph, generateDataStockTime } from "../scripts/Stocks/DataStockTime"
-import { DataGraph } from "../components/LineGraph/interfaces"
+import { DataGraph, StockImage } from "../components/LineGraph/interfaces"
 import { generateDataTicket } from "../scripts/Stocks/TickerDataStock"
 import { generateNewsSeparateInfo } from "../scripts/News/SeparatorInfoNews"
 import { GridRowParams, GridRowsProp } from "@mui/x-data-grid"
-import { stockDataToDatagrid } from "../scripts/Stocks/StockDataGrid"
 import { useNavigate } from "../router"
 import { TickerActionInt } from "../components/Ticker/Interfaces"
 import TickerAction from "../components/Ticker/Ticker"
+import { POST } from "../scripts/axios"
 
 
-const StocksCode = await generateCodesGraph()
-const newsDataForComponent = await generateNewsSeparateInfo()
 
 
 export default function InitPage(){
@@ -27,12 +25,10 @@ export default function InitPage(){
     const [isFixed, setIsFixed] = useState(false);
     const [isLoading, setLoading] = useState(true)
     const [isLoadingTicker, setLoadingTicker] = useState(true)
-    const [dataGraph, setDataGraph] = useState<DataGraph>({
-        'company_data': null
-      });
-
+    const [dataGraph, setDataGraph] = useState<DataGraph>({'company_data': null});
+    const [newsDataForComponent, setNewsDataForComponent] = useState<NewsData>({'This day': [], 'This Week': [], 'This Year': []}) 
+    const [stocksCode, setStocksCode] = useState<StockImage[] >([])
     const [dataTicker, setDataTicker] = useState<TickerActionInt[] | null>([])
-    const [isFirstTime,setIsFirstTime] = useState(true)
     const [rowsGrid, setRowsGrid] = useState<GridRowsProp | null>([])
       
     const fetchDatatoGraph = async (timestamp:string, code:string) => {
@@ -53,22 +49,42 @@ export default function InitPage(){
       setDataTicker(Response?.data || null);
       setLoadingTicker(false)
     }
-
-    const nextPageDataGrid = async (initPage:number, endPage:number) => {
-      const rowsStock = await stockDataToDatagrid(initPage, endPage)
-      setRowsGrid(rowsStock?.data || null)
+    
+    const fetchDataGraph = async () => {
+      const StocksCode = await POST('http://127.0.0.1:8000/company/random/',  {"limit": 20}) as StockImage[]
+      setStocksCode(StocksCode)
     }
+    const newsSeparateInfo = async () => {
+      const newsDataForComponent = await POST('http://127.0.0.1:8000/news/get/essential/SeparatedDate',  {"limit": 6}) as NewsData
+
+      console.log(newsDataForComponent)
+      setNewsDataForComponent(newsDataForComponent )
+    }
+    const nextPageDataGrid = async (initPage:number, endPage:number) => {
+      const data = await POST('http://127.0.0.1:8000/stock/select/StockForDataGrid',{"initPage": initPage, "endPage": endPage} ) as GridRowsProp
+      
+      setRowsGrid(data)
+    }
+
     useEffect(() => {
-      if (isFirstTime) {       
+      
+      if (stocksCode && stocksCode?.length > 1) {   
+        console.log('correu')
+        fetchDatatoGraph('1D', stocksCode[0].code);
+        
+      }else{
+        fetchDataGraph()
+      }
+    }, [stocksCode])
 
-        fetchTickerData() 
-        if (StocksCode?.data?.length && StocksCode.data[0].code) {       
-          fetchDatatoGraph('1D', StocksCode.data[0].code);
-          setIsFirstTime(false);
-          
-        } 
-    }}, [isFirstTime]);
 
+    useEffect(() => {
+      if(dataTicker && dataTicker.length > 0){
+        fetchTickerData()
+      }
+      newsSeparateInfo()
+      
+    }, [])
     useEffect(() => {
         const handleScroll = () => {
           if (window.scrollY > 60 && !isFixed) {
@@ -115,7 +131,7 @@ export default function InitPage(){
                                 changingTimeCateg={fetchDatatoGraph}
                                 isLoading={isLoading}
                                 data={dataGraph} 
-                                categProp={StocksCode?.data || null}
+                                categProp={stocksCode}
                                 hasChoosingCategory={true}
                                 extendedVersion={false}
                                 timeStampInitial={'1D'}
@@ -125,7 +141,7 @@ export default function InitPage(){
                             <WalletComponent WalletData={wallet} />
                         </div>
                         <div className="h-full w-full row-start-2 col-start-4 row-end-3 col-end-7 bg-secondary-background-color" >
-                            <SeparatorInfo Data={newsDataForComponent?.data || null }/>
+                            <SeparatorInfo Data={newsDataForComponent}/>
                         </div>
                         <div className="h-full w-full row-start-4 col-start-1 row-end-7 col-end-7 bg-secondary-background-color" >
                             <TableStocks actionNextPage={nextPageDataGrid} rows={rowsGrid} rowClicked={rowclicked}/>

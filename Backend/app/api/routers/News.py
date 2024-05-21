@@ -60,7 +60,7 @@ async def getNewsPerCompany(data: PaginationNewsCompanyTable, session: Session =
 
     return result
 
-@router.get('/get/related/company')
+@router.post('/get/related/company')
 async def getRelatedNews(data : NewsCompanyDataSetRelated,session: Session = Depends(get_db)):
     result = {
         data.label: []
@@ -70,17 +70,30 @@ async def getRelatedNews(data : NewsCompanyDataSetRelated,session: Session = Dep
     if numIdsCompanies > data.limit:
         companiesIds = random.sample(companiesIds, data.limit)
 
-    chooseNewsPerCompanies = math.floor(data.limit / len(companiesIds))
+    if len(companiesIds) == 0:
+        numCompanies = 1
+    else:
+        numCompanies = len(companiesIds)
+    chooseNewsPerCompanies = math.floor(data.limit / numCompanies)
 
     for companyId in companiesIds:
-        queryNewsCompanies = (session.query(NewsTable.id,
-                                            NewsTable.image_url,
-                                            NewsTable.description,
-                                            NewsTable.author,
-                                            NewsTable.date_published)
-                              .join(NewsTable, NewsCompanyTable.id == NewsTable.news_id)
-                              .filter(NewsCompanyTable.company_id == int(companyId)).limit(chooseNewsPerCompanies))
+        if 'id' in companyId:
+            queryNewsCompanies = (session.query(NewsTable.id,
+                                                NewsTable.image_url,
+                                                NewsTable.title,
+                                                NewsTable.author,
+                                                NewsTable.date_published)
+                                  .join(NewsCompanyTable, NewsCompanyTable.news_id == NewsTable.id)
+                                  .filter(NewsCompanyTable.company_id == int(companyId['id'])).limit(chooseNewsPerCompanies))
 
+        else:
+            queryNewsCompanies = (session.query(NewsTable.id,
+                                                NewsTable.image_url,
+                                                NewsTable.title,
+                                                NewsTable.author,
+                                                NewsTable.date_published)
+                                  .join(NewsCompanyTable, NewsCompanyTable.news_id == NewsTable.id)
+                                  .limit(chooseNewsPerCompanies))
         for queryNewsCompany in queryNewsCompanies:
             result[data.label].append({
                 'id': queryNewsCompany[0],

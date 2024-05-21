@@ -11,7 +11,7 @@ import {  useState } from 'react';
 export default function TableNews(props: TableNewsRoot) {
     const [pageNum,setPage] = useState(props.page)
     const pageChange = (event: React.MouseEvent<HTMLButtonElement> | null, page:number) => {
-
+        console.log(event)
         props.pageChange(props.rowperPage * (page), props.rowperPage * (page + 1))     
         setPage(page)
            

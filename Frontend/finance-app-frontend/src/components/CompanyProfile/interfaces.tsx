@@ -1,5 +1,5 @@
 import { DataGraph } from "../LineGraph/interfaces";
-import { NewsCompany, NewsCompanyTable } from "../TableNews/interfaces";
+import {  NewsCompanyTable } from "../TableNews/interfaces";
 
 export interface CompanyInfo{
     id: string

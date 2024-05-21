@@ -6,7 +6,7 @@ export const stockDataToDatagrid = async (init: number, end:number) : Promise<Ax
     const link = 'http://127.0.0.1:8000/stock/select/StockForDataGrid';
     try {
         if(link){
-
+            
             const data = {
                     "initPage": init,
                     "endPage": end
@@ -17,6 +17,7 @@ export const stockDataToDatagrid = async (init: number, end:number) : Promise<Ax
                   'Content-Type': 'application/json'
                 }
               });
+
             return response;
         }else{
             console.log('Invalid parameter')

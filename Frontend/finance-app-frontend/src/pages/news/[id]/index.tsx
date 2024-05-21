@@ -5,6 +5,7 @@ import Sidebar from "../../../components/Sidebar/Sidebar";
 import { useParams } from "../../../router";
 import { getAllValuesOfNews } from "../../../scripts/News/SeparatorInfoNews";
 import { DataNews } from "../../../components/NewsProfile/interfaces";
+import { POST } from "../../../scripts/axios";
 
 export default function NewsPage(){
     const defaultObject:DataNews = {
@@ -21,6 +22,8 @@ export default function NewsPage(){
         },
         'title': ''
     }
+    
+    const [newsRelated, setNewsRelated] = useState<NewsData>({})
     const { id } = useParams('/news/:id')
     const [data, setData] = useState<DataNews>(defaultObject)
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -28,14 +31,43 @@ export default function NewsPage(){
     const getAllData = async (id:string) => {
         const data = await getAllValuesOfNews(id)
         setData(data?.data || defaultObject)
+                
+        getNewsRelatedRequest()
     }
+    const getNewsRelatedRequest = async() => {
+        await getNewsRelated()
+    }
+    const getNewsRelated = async () => {
+        
+        console.log(data.Companies)
+        if(data.Companies.length > 0){
+            console.log("aaaaaa::: ",data.Companies)
+            const dataRequestRelatedNews = {
+                'id': id,
+                'companies': data.Companies,
+                'limit': 10,
+                'label': "Related News"
+            }
+            
+            const dataRelatedNews = await POST('http://127.0.0.1:8000/news/get/related/company', dataRequestRelatedNews) as NewsData 
+            console.log(dataRelatedNews)
+            setNewsRelated(dataRelatedNews)
+    
+        }
 
-    useEffect( () => {
-        setIsLoading(true)
-        getAllData(id.toString())
-        setIsLoading(false)
+    }
+    useEffect(() => {
+        setIsLoading(true);
+        getAllData(id.toString());
+        
+        setIsLoading(false);
     }, []);
 
+    useEffect(() => {
+        
+        console.log('uma vez');
+        getNewsRelated();
+    }, [data.Companies]);
     return (
         <div className="bg-background-color h-full ">
             <div className="h-16 shadow-[rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;]">
@@ -49,6 +81,7 @@ export default function NewsPage(){
                     <NewsProfile 
                         data={data}
                         isLoading={isLoading}
+                        newsRelated={newsRelated}
                     />
                 </div>
             </div>

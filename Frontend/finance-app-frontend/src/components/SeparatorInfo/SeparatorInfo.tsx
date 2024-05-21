@@ -1,38 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "../../router";
 
 
 export default function SeparatorInfo (props:SeparatorInfo) {
     const navigate = useNavigate()
-    
-    if(!props.Data){
-        props.Data = {
-            'This day': [],
-            'This week': [],
-            'This year': []
-        }
-    }
-    const categories = Object.keys(props.Data);
-    const [categorieActive, changeCategoryActive] = useState(categories[0])
-    const [NewsSelected, changeNewsSelected] = useState(props.Data[categorieActive])
+
+    const defaultData = {'Loading': []}
+
+    console.log
+
+    const [categorieActive, changeCategoryActive] = useState(props.categorieSelected)
+    const [NewsSelected, changeNewsSelected] = useState<NewsItem[]>(props.Data?props.Data[categorieActive] : [])
     const CategoryClicked = (category:string) => {
         if(!props.Data){
             changeCategoryActive(category)
-            changeNewsSelected([])
         }else{
             changeCategoryActive(category)
-            changeNewsSelected(props.Data[category])
         }
+        changeNewsSelected(props.Data?props.Data[category]: [])
         
     }
     const NewsClicked = (id:string) => {
         navigate('/news/:id', { params: { id: id } });
     }
 
+
+    if(NewsSelected === undefined || !props.Data || 'loading' in props.Data){
+        return(<div></div>)
+    }
     return (
         <div className="w-full h-full border-[1px] border-[white] px-[50px] py-[20px]">
             <div className="flex">
-                {categories.map((category, index) => (
+                {Object.keys(props.Data ? props.Data : defaultData).map((category, index) => (
                     <div
                         onClick={() => CategoryClicked(category)}
                         key={index}
@@ -40,8 +39,7 @@ export default function SeparatorInfo (props:SeparatorInfo) {
                             category === categorieActive
                                 ? "bg-background-color border-x-[1px] border-t-[1px] border-[white] relative z-20 top-[1px]"
                                 : "bg-secondary-background-color border-x-[1px] border-t-[1px] border-[white]"
-                        }`}
-                    >
+                        }`}>
                         <h2>{category}</h2>
                     </div>
                 ))}

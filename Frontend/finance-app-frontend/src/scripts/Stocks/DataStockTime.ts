@@ -31,6 +31,8 @@ export const generateDataStockTime = async (code: string, datetime:string) : Pro
 export const generateCodesGraph = async () : Promise<AxiosResponse<StockImage[] | null>> => {
 
     const link = 'http://127.0.0.1:8000/company/random/';
+    console.log('Starting API call');
+
     try {
         if(link){
 
@@ -42,6 +44,7 @@ export const generateCodesGraph = async () : Promise<AxiosResponse<StockImage[] 
                   'Content-Type': 'application/json'
                 }
               });
+           
             return response;
         }else{
             console.log('Invalid parameter')

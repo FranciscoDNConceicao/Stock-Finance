@@ -10,7 +10,6 @@ import { useParams } from "../../../router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { NewsCompanyTable } from "../../../components/TableNews/interfaces";
-import { useProps } from "@mui/x-data-grid/internals";
 
 
     
@@ -94,7 +93,6 @@ export default  function CompanyPage(){
         setDataGraph({
             'company_data': null,
           });
-
         const Response = await generateDataStockTime(code, timestamp);
         setDataGraph({
             'company_data': Response?.data || null

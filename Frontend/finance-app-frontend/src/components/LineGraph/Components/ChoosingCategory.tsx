@@ -15,9 +15,7 @@ export default function ChoosingCategory(props:ChoosingCategoryProps) {
         props.changeStock(parameterleftright)
     }
 
-    console.log(props.idCompany)
     const companyclicked = () => {
-        console.log(props.idCompany)
         navigate('/company/:id', { params: { id: props.idCompany.toString() } });
     }
     return (

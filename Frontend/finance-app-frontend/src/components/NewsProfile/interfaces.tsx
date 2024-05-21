@@ -21,5 +21,6 @@ export interface DataNews{
 export interface NewsMainProps {
     data: DataNews;
     isLoading: boolean;
+    newsRelated: NewsData;
 
 }

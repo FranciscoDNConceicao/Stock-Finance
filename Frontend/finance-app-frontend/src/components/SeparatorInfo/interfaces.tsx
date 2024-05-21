@@ -11,4 +11,5 @@ interface NewsData{
 }
 interface SeparatorInfo{
     Data: NewsData | null;
+    categorieSelected: string;
 }

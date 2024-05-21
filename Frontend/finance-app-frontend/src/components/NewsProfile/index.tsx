@@ -1,17 +1,19 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NewsMainProps } from "./interfaces";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
+import SeparatorInfo from "../SeparatorInfo/SeparatorInfo";
+import { useState } from "react";
 
 export default function NewsProfile(props:NewsMainProps){
 
 
-    if(props.isLoading){
+    if(props.isLoading ){
         return (
             <div className=" w-full h-full flex justify-center py-[465px]">
                 <div className="loader-full text-white relative top-[50%] "></div>
             </div>
         )
-    }
+    }    
     return (
         <div className="text-white font-family m-[40px] text-[15px] bg-secondary-background-color p-[30px] rounded-lg border-[3px]">
             <div className="flex flex-col"> 
@@ -55,7 +57,11 @@ export default function NewsProfile(props:NewsMainProps){
                             <a href={props.data.publisher.url} className="flex justify-center px-[15px] pb-[3px]">{props.data.publisher.url}</a>
                         </div>
                 </div>
-                
+                <div>
+                    <SeparatorInfo 
+                    categorieSelected={Object.keys(props.newsRelated ? props.newsRelated : {' ': []})[0]}
+                    Data={props.newsRelated}/>
+                </div>
             </div>
         </div>
     )

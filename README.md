@@ -1,2 +1,2 @@
 # Stock-Finance
-Aplication for the stock market
+React and FastAPI Web Aplication to view the stock market, companies information and news reports

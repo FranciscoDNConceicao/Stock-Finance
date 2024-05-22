@@ -23,7 +23,7 @@ export default function NewsPage(){
         'title': ''
     }
     
-    const [newsRelated, setNewsRelated] = useState<NewsData>({})
+    const [newsRelated, setNewsRelated] = useState<NewsData>({'Related News': []})
     const { id } = useParams('/news/:id')
     const [data, setData] = useState<DataNews>(defaultObject)
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -39,9 +39,7 @@ export default function NewsPage(){
     }
     const getNewsRelated = async () => {
         
-        console.log(data.Companies)
         if(data.Companies.length > 0){
-            console.log("aaaaaa::: ",data.Companies)
             const dataRequestRelatedNews = {
                 'id': id,
                 'companies': data.Companies,
@@ -50,7 +48,7 @@ export default function NewsPage(){
             }
             
             const dataRelatedNews = await POST('http://127.0.0.1:8000/news/get/related/company', dataRequestRelatedNews) as NewsData 
-            console.log(dataRelatedNews)
+
             setNewsRelated(dataRelatedNews)
     
         }
@@ -61,12 +59,12 @@ export default function NewsPage(){
         getAllData(id.toString());
         
         setIsLoading(false);
-    }, []);
-
+    }, [id]);
+    
     useEffect(() => {
-        
-        console.log('uma vez');
+        setIsLoading(true);
         getNewsRelated();
+        setIsLoading(false);
     }, [data.Companies]);
     return (
         <div className="bg-background-color h-full ">

@@ -13,6 +13,7 @@ from app.models.News.DateNews import NewsTable
 from app.models.CompanyLogo import LimitRandom, PaginationNewsCompanyTable, NewsCompanyDataSetRelated
 from fastapi import HTTPException, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import and_
 
 from app.models.News.Publisher.Publisher import PublisherTable
 
@@ -76,6 +77,8 @@ async def getRelatedNews(data : NewsCompanyDataSetRelated,session: Session = Dep
         numCompanies = len(companiesIds)
     chooseNewsPerCompanies = math.floor(data.limit / numCompanies)
 
+    idsUsed = [str(data.id)]
+
     for companyId in companiesIds:
         if 'id' in companyId:
             queryNewsCompanies = (session.query(NewsTable.id,
@@ -84,7 +87,13 @@ async def getRelatedNews(data : NewsCompanyDataSetRelated,session: Session = Dep
                                                 NewsTable.author,
                                                 NewsTable.date_published)
                                   .join(NewsCompanyTable, NewsCompanyTable.news_id == NewsTable.id)
-                                  .filter(NewsCompanyTable.company_id == int(companyId['id'])).limit(chooseNewsPerCompanies))
+                                  .filter(
+                                        and_(
+                                            NewsCompanyTable.company_id == int(companyId['id']),
+                                            NewsCompanyTable.news_id.notin_(idsUsed)
+                                        )
+                                  )
+                                  .limit(chooseNewsPerCompanies))
 
         else:
             queryNewsCompanies = (session.query(NewsTable.id,
@@ -93,8 +102,10 @@ async def getRelatedNews(data : NewsCompanyDataSetRelated,session: Session = Dep
                                                 NewsTable.author,
                                                 NewsTable.date_published)
                                   .join(NewsCompanyTable, NewsCompanyTable.news_id == NewsTable.id)
+                                  .filter(NewsCompanyTable.news_id.notin_(idsUsed))
                                   .limit(chooseNewsPerCompanies))
         for queryNewsCompany in queryNewsCompanies:
+            idsUsed.append(queryNewsCompany[0])
             result[data.label].append({
                 'id': queryNewsCompany[0],
                 'Image': queryNewsCompany[1],

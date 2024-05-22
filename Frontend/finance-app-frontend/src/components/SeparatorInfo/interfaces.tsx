@@ -10,6 +10,6 @@ interface NewsData{
     [category : string] : NewsItem[]
 }
 interface SeparatorInfo{
-    Data: NewsData | null;
+    Data: NewsData;
     categorieSelected: string;
 }

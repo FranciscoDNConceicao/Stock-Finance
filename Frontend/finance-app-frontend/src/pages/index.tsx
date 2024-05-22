@@ -57,7 +57,6 @@ export default function InitPage(){
     const newsSeparateInfo = async () => {
       const newsDataForComponent = await POST('http://127.0.0.1:8000/news/get/essential/SeparatedDate',  {"limit": 6}) as NewsData
 
-      console.log(newsDataForComponent)
       setNewsDataForComponent(newsDataForComponent )
     }
     const nextPageDataGrid = async (initPage:number, endPage:number) => {
@@ -69,7 +68,6 @@ export default function InitPage(){
     useEffect(() => {
       
       if (stocksCode && stocksCode?.length > 1) {   
-        console.log('correu')
         fetchDatatoGraph('1D', stocksCode[0].code);
         
       }else{
@@ -141,7 +139,7 @@ export default function InitPage(){
                             <WalletComponent WalletData={wallet} />
                         </div>
                         <div className="h-full w-full row-start-2 col-start-4 row-end-3 col-end-7 bg-secondary-background-color" >
-                            <SeparatorInfo Data={newsDataForComponent}/>
+                            <SeparatorInfo Data={newsDataForComponent} categorieSelected={Object.keys(newsDataForComponent ? newsDataForComponent : {' ': []})[0]}/>
                         </div>
                         <div className="h-full w-full row-start-4 col-start-1 row-end-7 col-end-7 bg-secondary-background-color" >
                             <TableStocks actionNextPage={nextPageDataGrid} rows={rowsGrid} rowClicked={rowclicked}/>

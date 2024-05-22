@@ -11,7 +11,6 @@ import {  useState } from 'react';
 export default function TableNews(props: TableNewsRoot) {
     const [pageNum,setPage] = useState(props.page)
     const pageChange = (event: React.MouseEvent<HTMLButtonElement> | null, page:number) => {
-        console.log(event)
         props.pageChange(props.rowperPage * (page), props.rowperPage * (page + 1))     
         setPage(page)
            
@@ -26,7 +25,7 @@ export default function TableNews(props: TableNewsRoot) {
                 <table className='w-full'>
                     <tbody className='w-full bg-primary-background text-white bg-secondary-background-color'>
                         {props.dataTable.data.map((row) => (
-                            <tr key={row.id} className='border-b-[2px] h-[50px]'>
+                            <tr key={row.id} className='border-b-[2px] h-[50px] cursor-pointer hover:bg-background-color' onClick={()}>
                                 <td className="w-[100%] px-[10px] py-[4px]">
                                     <div className="flex justify-between">
                                         <div>{row.title}</div>

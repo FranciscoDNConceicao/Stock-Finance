@@ -63,14 +63,12 @@ export default  function CompanyPage(){
                 'color': 'transparent'})
             
         }else if(state === 'right'){
-            console.log("Enter")
 
             setLeftCompany({
                 'id': id.toString(),
                 'code': dataCompany?.code || '',
                 'color': dataCompany?.color || ''
             })
-            console.log(rightCompany.id)
             getAllValuesToPage(rightCompany.id)
             const newdataRightCompany = await LeftAndRightValues();
             

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "../../router";
+import { Navigate, useNavigate } from "../../router";
 
 
 export default function SeparatorInfo (props:SeparatorInfo) {
@@ -7,30 +7,29 @@ export default function SeparatorInfo (props:SeparatorInfo) {
 
     const defaultData = {'Loading': []}
 
-    console.log
-
     const [categorieActive, changeCategoryActive] = useState(props.categorieSelected)
-    const [NewsSelected, changeNewsSelected] = useState<NewsItem[]>(props.Data?props.Data[categorieActive] : [])
+    const [data, setData] =  useState(props.Data[categorieActive])
+
     const CategoryClicked = (category:string) => {
         if(!props.Data){
             changeCategoryActive(category)
         }else{
             changeCategoryActive(category)
         }
-        changeNewsSelected(props.Data?props.Data[category]: [])
-        
+        setData(props.Data[categorieActive])
     }
+
+    useEffect(() => {
+        setData(props.Data[categorieActive])
+    })
+
     const NewsClicked = (id:string) => {
-        navigate('/news/:id', { params: { id: id } });
-    }
-
-
-    if(NewsSelected === undefined || !props.Data || 'loading' in props.Data){
-        return(<div></div>)
+        navigate('/news/:id', { params: { id: id }, replace: true });
+        window.scrollTo(0, 0);
     }
     return (
-        <div className="w-full h-full border-[1px] border-[white] px-[50px] py-[20px]">
-            <div className="flex">
+        <div className="">
+            <div className="flex bg-transparent">
                 {Object.keys(props.Data ? props.Data : defaultData).map((category, index) => (
                     <div
                         onClick={() => CategoryClicked(category)}
@@ -45,7 +44,7 @@ export default function SeparatorInfo (props:SeparatorInfo) {
                 ))}
             </div>
             <div className="bg-background-color border-[1px] border-[white]">
-                {NewsSelected.map((item, index) => (
+                {data.map((item, index) => (
                     <div className="cursor-pointer flex flex-col" key={index} onClick={() => NewsClicked(item.id)}>
                         <div className="p-[10px] flex cursor-pointer hover:bg-secondary-background-color">
                             <div className="h-[60px] w-[100px]">

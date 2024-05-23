@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 import requests
 from alpaca_trade_api import REST, TimeFrame, TimeFrameUnit
 from fastapi import HTTPException, Depends
+
+from app.database import get_db
 from app.models.CompanyLogo import CompanyLogo, LimitRandom
 from app.models.Company.Company import CompanyTable as Company
 from fastapi import APIRouter
@@ -13,16 +15,6 @@ from sqlalchemy import select, MetaData, func
 from sqlalchemy.orm import Session
 
 router = APIRouter()
-
-
-# Dependency to get a database session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 
 @router.post("/random")
 async def getRandomCode(limit: LimitRandom, session: Session = Depends(get_db)):
@@ -74,7 +66,7 @@ async def getCompanyTicker(session: Session = Depends(get_db)):
             'code': stockCode,
             'discount': discount,
         }
-        response["data"].append(dict_temp)
+    response["data"].append(dict_temp)
 
     return response
 

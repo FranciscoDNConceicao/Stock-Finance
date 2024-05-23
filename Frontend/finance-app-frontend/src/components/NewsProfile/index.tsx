@@ -24,7 +24,7 @@ export default function NewsProfile(props:NewsMainProps){
                 <div className="flex overflow-x-auto">
                     {props.data.Companies.map((item, index) => (
                         
-                        <div className={`px-[10px] py-[3px] m-[5px] cursor-pointer rounded-3xl ${index > 20 ? "hidden":""}`} style={{ backgroundColor: `#${item.color}`}} onClick={() => CompanyClicked(item.id)} key={item.id}>{item.code}</div>
+                        <div className={`px-[10px] py-[3px] m-[5px] cursor-pointer rounded-3xl ${index > 20 ? "hidden":""}  ` } style={{ backgroundColor: `#${item.color}`}} onClick={() => CompanyClicked(item.id)} key={item.id}>{item.code}</div>
                     ))}
                 </div>
                 <div>
@@ -47,7 +47,7 @@ export default function NewsProfile(props:NewsMainProps){
                 <div className="flex">
                     <div className="w-[50%]">
                         <div className="flex justify-center py-[40px]">
-                            <img src={props.data.image_url} className="min-w-[200px] max-w-[900px] min-h-[300px] max-h-[500px]" />
+                            <img src={props.data.image_url} className="min-w-[200px] max-w-[900px] min-h-[300px] max-h-[400px]" />
                         </div>
                         <div className="text-[17px] flex justify-center font-light">
                             <div className="w-[80%]">

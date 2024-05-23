@@ -7,6 +7,7 @@ from fastapi import APIRouter
 from sqlalchemy import func
 
 from app.database import SessionLocal
+from app.database import get_db
 from app.models.Company.Company import CompanyTable
 from app.models.Company.NewsCompany.NewsCompany import NewsCompanyTable
 from app.models.News.DateNews import NewsTable
@@ -20,13 +21,6 @@ from app.models.News.Publisher.Publisher import PublisherTable
 from sqlalchemy import *
 
 
-# Dependency to get a database session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 router = APIRouter()
@@ -90,9 +84,8 @@ async def getRelatedNews(data : NewsCompanyDataSetRelated,session: Session = Dep
                                   .filter(
                                         and_(
                                             NewsCompanyTable.company_id == int(companyId['id']),
-                                            NewsCompanyTable.news_id.notin_(idsUsed)
+                                            NewsCompanyTable.news_id.notin_(idsUsed))
                                         )
-                                  )
                                   .limit(chooseNewsPerCompanies))
 
         else:

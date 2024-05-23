@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy import func
+from app.database import get_db
 from app.models.CompanyLogo import StockCode, DataGridPagination
 from app.database import SessionLocal
 from app.models.Stocks.Stocks import StocksTable
@@ -15,13 +16,6 @@ from app.models.Company.Company import CompanyTable as Company
 import time
 
 router = APIRouter()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 @router.post("/get/")

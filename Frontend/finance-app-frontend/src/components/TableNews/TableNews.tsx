@@ -5,16 +5,24 @@ import {
 } from '@mui/base/TablePagination';
 import { TableNewsRoot } from './interfaces';
 import {  useState } from 'react';
+import { useNavigate } from '../../router';
 
 
 
 export default function TableNews(props: TableNewsRoot) {
+    const navigate = useNavigate()
     const [pageNum,setPage] = useState(props.page)
     const pageChange = (event: React.MouseEvent<HTMLButtonElement> | null, page:number) => {
         props.pageChange(props.rowperPage * (page), props.rowperPage * (page + 1))     
         setPage(page)
            
     }
+
+    const clickedNews = (id:string) => {
+      navigate('/news/:id', { params: { id: id }, replace: true });
+      window.scrollTo(0, 0);
+    }
+
 
     return (
         <div className='w-full p-[20px]'>
@@ -25,7 +33,7 @@ export default function TableNews(props: TableNewsRoot) {
                 <table className='w-full'>
                     <tbody className='w-full bg-primary-background text-white bg-secondary-background-color'>
                         {props.dataTable.data.map((row) => (
-                            <tr key={row.id} className='border-b-[2px] h-[50px] cursor-pointer hover:bg-background-color' onClick={()}>
+                            <tr key={row.id} className='border-b-[2px] h-[50px] cursor-pointer hover:bg-background-color' onClick={() => clickedNews(row.id)}>
                                 <td className="w-[100%] px-[10px] py-[4px]">
                                     <div className="flex justify-between">
                                         <div>{row.title}</div>

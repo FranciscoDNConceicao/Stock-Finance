@@ -5,18 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c12bfc8-0e18-470e-b87c-63b95be86938" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/test/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/test/main_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/test/test_routes/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/test/test_routes/test_company.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/routers/Company.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/Company.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/routers/News.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/News.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/routers/Stocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/Stocks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/NewsProfile/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/NewsProfile/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableNews/TableNews.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/components/TableNews/TableNews.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/test/main_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/test/main_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/NewsDataToDatabase.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/NewsDataToDatabase.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,9 +56,10 @@
     "RunOnceActivity.OpenDatabaseViewOnStart": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Shell Script.Test.executor": "Debug",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/francisco_conceicao/Documents/Finance/Stock-Finance/Backend/app",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+    "last_opened_file_path": "C:/Users/francisco_conceicao/Documents/Finance/Stock-Finance/Backend/app/test",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
@@ -221,6 +215,21 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Test" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="pytest test/" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="false" />
+      <option name="SCRIPT_PATH" value="$PROJECT_DIR$/app" />
+      <option name="SCRIPT_OPTIONS" value="pytest test/" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="false" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$/app" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
+      <option name="INTERPRETER_PATH" value="powershell.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="false" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <configuration name="FastAPI - Testing" type="tests" factoryName="py.test">
       <module name="Backend" />
       <option name="ENV_FILES" value="" />
@@ -235,7 +244,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/app/test/main_test.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/app/test&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -247,6 +256,7 @@
       <item itemvalue="Python.Color Picker Company" />
       <item itemvalue="Python.CompanyDataToDatabase" />
       <item itemvalue="Python tests.FastAPI - Testing" />
+      <item itemvalue="Shell Script.Test" />
     </list>
   </component>
   <component name="SharedIndexes">
@@ -266,16 +276,5 @@
       <updated>1710953526359</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/app/api/routers/Company.py</url>
-          <line>20</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

@@ -6,7 +6,7 @@ from app.main import app
 from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
 
-SQL_ALCHEMY_DATABASE_URL: str = "postgresql:///:memory:"
+SQL_ALCHEMY_DATABASE_URL = "postgresql:///:memory:"
 
 engine = create_engine(
     SQL_ALCHEMY_DATABASE_URL,
@@ -24,11 +24,5 @@ def override_get_db():
         yield db
     finally:
         db.close()
-
-
-def test_random_company():
-    response = client.post(url="/company/random", json={"limit": 5})
-    assert response.status_code == 200
-
 
 app.dependency_overrides[get_db()] = override_get_db()

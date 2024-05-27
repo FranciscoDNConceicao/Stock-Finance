@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c12bfc8-0e18-470e-b87c-63b95be86938" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/test/test_routes/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/test/test_routes/test_company.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/test/main_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/test/main_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/NewsDataToDatabase.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/NewsDataToDatabase.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/test/test_routes/test_company.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/test/test_routes/test_company.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/ColorPickerCompany.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/ColorPickerCompany.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +46,7 @@
     "Python tests.FastAPI - Testing.executor": "Debug",
     "Python tests.Python tests for app.test.main_test.test_random_company.executor": "Run",
     "Python tests.pytest in main_test.py.executor": "Run",
-    "Python.Color Picker Company.executor": "Run",
+    "Python.Color Picker Company.executor": "Debug",
     "Python.CompanyDataToDatabase.executor": "Debug",
     "Python.DeleteImagesNotSP500.executor": "Debug",
     "Python.FastAPI-uvicorn.executor": "Debug",
@@ -276,5 +276,21 @@
       <updated>1710953526359</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/test/test_routes/test_company.py</url>
+          <line>48</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/api/routers/Company.py</url>
+          <line>88</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -1,7 +1,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from app.database import get_db
+from app.database import get_db, Base
 from app.main import app
 from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
@@ -22,7 +22,7 @@ client = TestClient(app)
 def session():
     """Creates a new database session for a test."""
     connection = engine.connect()
-    transaction = connection.begin()
+    transaction = connection.begin_nested()
     session = TestingSessionLocal(bind=connection)
 
     yield session

@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8c12bfc8-0e18-470e-b87c-63b95be86938" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/test/main_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/test/main_test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/test/test_routes/test_company.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/test/test_routes/test_company.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/ColorPickerCompany.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/ColorPickerCompany.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/StockToCompany.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/StockToCompany.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +44,7 @@
   "keyToString": {
     "Python tests.FastAPI - Testing.executor": "Debug",
     "Python tests.Python tests for app.test.main_test.test_random_company.executor": "Run",
+    "Python tests.Python tests for test_company.test_get_all_company_values.executor": "Debug",
     "Python tests.pytest in main_test.py.executor": "Run",
     "Python.Color Picker Company.executor": "Debug",
     "Python.CompanyDataToDatabase.executor": "Debug",
@@ -57,6 +57,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Shell Script.Test.executor": "Debug",
+    "deletionFromPopupRequiresConfirmation": "false",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/francisco_conceicao/Documents/Finance/Stock-Finance/Backend/app/test",
     "settings.editor.selected.configurable": "preferences.pluginManager"
@@ -282,13 +283,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app/test/test_routes/test_company.py</url>
-          <line>48</line>
+          <line>50</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app/api/routers/Company.py</url>
           <line>88</line>
           <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/test/test_routes/test_company.py</url>
+          <line>53</line>
+          <option name="timeStamp" value="27" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

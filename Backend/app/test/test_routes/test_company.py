@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.test.main_test import client, session
 from app.models.Company.Company import CompanyTable
 
+
 def test_random_company():
     response = client.post(url="/company/random", json={"limit": 5})
     assert response.status_code == 200
@@ -20,6 +21,7 @@ def test_ticker_company():
     assert 'data' in response.json()
     assert isinstance(response.json()['data'], list)
 
+
 def test_only_random_company():
     response = client.get("/company/get/random")
     assert response.status_code == 200
@@ -30,8 +32,8 @@ def test_only_random_company():
     else:
         assert response.json() == {}
 
-def test_get_all_company_values(session: Session):
 
+def test_get_all_company_values(session: Session):
     new_company = CompanyTable(id=1222,
                                code="AAA",
                                name="Company Example",

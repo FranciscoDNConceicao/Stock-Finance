@@ -3,7 +3,7 @@ import random
 from datetime import datetime, timedelta
 
 import requests
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from sqlalchemy import func
 
 from app.database import SessionLocal
@@ -20,17 +20,14 @@ from app.models.News.Publisher.Publisher import PublisherTable
 
 from sqlalchemy import *
 
-
-
-
 router = APIRouter()
-
 
 @router.post('/perCompany/get')
 async def getNewsPerCompany(data: PaginationNewsCompanyTable, session: Session = Depends(get_db)):
     initPage = data.initPage
     endPage = data.endPage
     id = data.id
+
     result = {'data': [],
               'num_Rows': session.query(func.count(NewsTable.id)).join(NewsCompanyTable,
                                                                        NewsTable.id == NewsCompanyTable.id).filter(

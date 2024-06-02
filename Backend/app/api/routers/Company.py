@@ -86,6 +86,7 @@ async def CompanyRightLeftValues(session: Session = Depends(get_db)):
 
 @router.get("/get/all/{id}")
 async def CompanyAllValues(id: str, session: Session = Depends(get_db)):
+    companyDict = {}
     companysSelect = session.query(Company.code, Company.name, Company.locate, Company.currency_name,
                                    Company.address, Company.description, Company.number_employees, Company.url,
                                    Company.color, Company.high_max, Company.list_date, Company.sic_code).filter(

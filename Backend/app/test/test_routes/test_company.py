@@ -49,6 +49,22 @@ def test_get_all_company_values(session: Session):
                                color="ffffff")
 
     session.add(new_company)
+    session.flush()
+
 
     response = client.get("/company/get/all/1222")
     assert response.status_code == 200
+    assert response.json() == {
+        'code': "AAA",
+        'name': "Company Example",
+        'locate': "portugal",
+        'currency_name': "eur",
+        'address': "Street Example",
+        'description': "Company example for tests",
+        'num_employees': 1,
+        'URL': "google.com",
+        'color': "ffffff",
+        'highMax': 31.32,
+        'dateList': "2024-05-27",
+        'sicCode': "4242"
+    }

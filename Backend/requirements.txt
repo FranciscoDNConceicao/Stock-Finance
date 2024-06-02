@@ -6,3 +6,4 @@ uvicorn~=0.29.0
 openpyxl~=3.1.2
 httpx~=0.27.0
 pytest~=8.2.1
+alpaca-trade-api~=3.2.0

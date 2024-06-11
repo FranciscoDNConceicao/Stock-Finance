@@ -6,10 +6,9 @@ from app.main import app
 from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-SQL_POSTGRES_DATABASE_URL = "postgresql://postgres:1234567@localhost:5432/postgres"
+SQL_POSTGRES_DATABASE_URL = "postgresql://postgres:1234567@localhost:5430/postgres"
 
 
-SQL_POSTGRES_TEST_DATABASE_URL = "postgresql://postgres:1234567@localhost:5432/test_db"
 
 engine = create_engine(
     SQL_POSTGRES_DATABASE_URL,

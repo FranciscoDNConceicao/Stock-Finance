@@ -51,7 +51,6 @@ def test_get_all_company_values(session: Session):
     session.add(new_company)
     session.flush()
 
-
     response = client.get("/company/get/all/1222")
     assert response.status_code == 200
     assert response.json() == {

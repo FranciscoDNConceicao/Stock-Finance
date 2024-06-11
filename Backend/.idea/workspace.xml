@@ -5,19 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c12bfc8-0e18-470e-b87c-63b95be86938" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/test/test_routes/test_news.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/GrepConsole.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/test/test_routes/test_company/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/test/test_routes/test_news/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/test/test_routes/test_news/test_news.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/test/test_routes/test_stocks/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/test/test_routes/test_stocks/test_stocks.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/Backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Backend.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/routers/Company.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/Company.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/routers/News.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/News.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/routers/Stocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/routers/Stocks.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/test/main_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/test/main_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/test/test_routes/test_company.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/test/test_routes/test_company.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/ColorPickerCompany.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/ColorPickerCompany.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/StockToCompany.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/StockToCompany.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/router.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/finance-app-frontend/src/router.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/test/test_routes/test_company.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/test/test_routes/test_company/test_company.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/test/test_routes/test_news.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,34 +52,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python tests.FastAPI - Testing.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.Python tests for app.test.main_test.test_random_company.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests for test_company.test_get_all_company_values.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest in main_test.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Color Picker Company.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.CompanyDataToDatabase.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.DeleteImagesNotSP500.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.FastAPI-uvicorn.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.ListOfNoInfoStock.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.StockToCompany.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.datetimeStocksServices.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenDatabaseViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Shell Script.Test.executor&quot;: &quot;Debug&quot;,
-    &quot;deletionFromPopupRequiresConfirmation&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/franc/Documents/Eu/Projects/Stock-Finance/Backend/app/test&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python tests.FastAPI - Testing.executor": "Debug",
+    "Python tests.Python tests for app.test.main_test.test_random_company.executor": "Run",
+    "Python tests.Python tests for test_company.test_get_all_company_values.executor": "Debug",
+    "Python tests.pytest for test_news.test_get_essential_separated_date_news.executor": "Debug",
+    "Python tests.pytest in main_test.py.executor": "Run",
+    "Python.Color Picker Company.executor": "Debug",
+    "Python.CompanyDataToDatabase.executor": "Debug",
+    "Python.DeleteImagesNotSP500.executor": "Debug",
+    "Python.FastAPI-uvicorn.executor": "Debug",
+    "Python.ListOfNoInfoStock.executor": "Debug",
+    "Python.StockToCompany.executor": "Debug",
+    "Python.datetimeStocksServices.executor": "Debug",
+    "RunOnceActivity.OpenDatabaseViewOnStart": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Shell Script.Test.executor": "Debug",
+    "deletionFromPopupRequiresConfirmation": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/francisco_conceicao/Documents/Finance/Stock-Finance/Backend/app/test",
+    "settings.editor.selected.configurable": "AtomSelectConfig"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend\FinanceServer\api\services" />
@@ -84,14 +89,14 @@
       <recent name="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend\FinanceServer\api" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend\app\test\test_routes\test_news" />
+      <recent name="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend\app\test\test_routes\test_company" />
       <recent name="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend\app" />
       <recent name="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend" />
       <recent name="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend\utils" />
-      <recent name="C:\Users\jorge\OneDrive\Documentos\Eu\Projetos\Stock-Finance\Backend\app\api\services" />
-      <recent name="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend\FinanceServer\api" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.FastAPI-uvicorn">
+  <component name="RunManager" selected="Python tests.FastAPI - Testing">
     <configuration name="Color Picker Company" type="PythonConfigurationType" factoryName="Python">
       <module name="Backend" />
       <option name="ENV_FILES" value="" />
@@ -170,9 +175,8 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.12 (Backend)" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\franc\Documents\Eu\Projects\Stock-Finance\Backend\app" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\francisco_conceicao\Documents\Finance\Stock-Finance\Backend\app" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="uvicorn" />
@@ -256,25 +260,48 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;C:\\Users\\franc\\Documents\\Eu\\Projects\\Stock-Finance\\Backend\\app\\test&quot;" />
+      <option name="_new_target" value="&quot;C:\\Users\\francisco_conceicao\\Documents\\Finance\\Stock-Finance\\Backend\\app\\test&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for app.test.test_routes.test_news.test_news.test_get_essential_separated_date_news" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="Backend" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/app/test/test_routes" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;app.test.test_routes.test_news.test_news.test_get_essential_separated_date_news&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
-      <item itemvalue="Python.FastAPI-uvicorn" />
+      <item itemvalue="Python.Color Picker Company" />
       <item itemvalue="Python.DeleteImagesNotSP500" />
+      <item itemvalue="Python.FastAPI-uvicorn" />
       <item itemvalue="Python.ListOfNoInfoStock" />
       <item itemvalue="Python.StockToCompany" />
-      <item itemvalue="Python.Color Picker Company" />
       <item itemvalue="Python.CompanyDataToDatabase" />
       <item itemvalue="Python tests.FastAPI - Testing" />
+      <item itemvalue="Python tests.pytest for app.test.test_routes.test_news.test_news.test_get_essential_separated_date_news" />
       <item itemvalue="Shell Script.Test" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.pytest for app.test.test_routes.test_news.test_news.test_get_essential_separated_date_news" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-48aec45f0201-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.17011.127" />
+        <option value="bundled-python-sdk-5b207ade9991-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.17890.14" />
       </set>
     </attachedChunks>
   </component>
@@ -288,23 +315,5 @@
       <updated>1710953526359</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/app/test/test_routes/test_news.py</url>
-          <line>43</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
-      <default-breakpoints>
-        <breakpoint type="python-exception">
-          <properties notifyOnTerminate="true" exception="BaseException">
-            <option name="notifyOnTerminate" value="true" />
-          </properties>
-        </breakpoint>
-      </default-breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

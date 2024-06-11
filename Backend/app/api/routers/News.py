@@ -22,6 +22,7 @@ from sqlalchemy import *
 
 router = APIRouter()
 
+
 @router.post('/perCompany/get')
 async def getNewsPerCompany(data: PaginationNewsCompanyTable, session: Session = Depends(get_db)):
     initPage = data.initPage
@@ -52,8 +53,9 @@ async def getNewsPerCompany(data: PaginationNewsCompanyTable, session: Session =
 
     return result
 
+
 @router.post('/get/related/company')
-async def getRelatedNews(data : NewsCompanyDataSetRelated,session: Session = Depends(get_db)):
+async def getRelatedNews(data: NewsCompanyDataSetRelated, session: Session = Depends(get_db)):
     result = {
         data.label: []
     }
@@ -79,10 +81,10 @@ async def getRelatedNews(data : NewsCompanyDataSetRelated,session: Session = Dep
                                                 NewsTable.date_published)
                                   .join(NewsCompanyTable, NewsCompanyTable.news_id == NewsTable.id)
                                   .filter(
-                                        and_(
-                                            NewsCompanyTable.company_id == int(companyId['id']),
-                                            NewsCompanyTable.news_id.notin_(idsUsed))
-                                        )
+                and_(
+                    NewsCompanyTable.company_id == int(companyId['id']),
+                    NewsCompanyTable.news_id.notin_(idsUsed))
+            )
                                   .limit(chooseNewsPerCompanies))
 
         else:
@@ -105,6 +107,7 @@ async def getRelatedNews(data : NewsCompanyDataSetRelated,session: Session = Dep
             })
 
     return result
+
 
 @router.get('/get/all/{id}')
 async def getAllValuesFromNews(id: str, session: Session = Depends(get_db)):

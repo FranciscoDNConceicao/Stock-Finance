@@ -1,3 +1,4 @@
+import pytest
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -6,7 +7,6 @@ from app.models.Company.NewsCompany.NewsCompany import NewsCompanyTable
 from app.models.News.DateNews import NewsTable
 from app.models.News.Publisher.Publisher import PublisherTable
 from app.test.main_test import client, session
-
 
 def test_get_news_per_company(session: Session):
     number_of_news = 10
@@ -42,7 +42,6 @@ def test_get_news_per_company(session: Session):
     response = client.post(url='/news/perCompany/get', json={})
     assert response.status_code == 422
 
-
 def test_get_related_company(session: Session):
     test_codes = (session.query(CompanyTable.id)
                   .order_by(func.random())
@@ -66,7 +65,6 @@ def test_get_related_company(session: Session):
     response = client.post(url="/news/get/related/company", json=result_request_data)
 
     assert response.status_code == 200
-
 
 def test_get_all_values_from_news(session: Session):
     random_publisher_query = (session.query(PublisherTable.id).order_by(func.random()).limit(1).all())
@@ -95,7 +93,6 @@ def test_get_all_values_from_news(session: Session):
     assert 'article_url' in news_response and news_value.article_url == news_response['article_url']
     assert 'image_url' in news_response and news_value.image_url == news_response['image_url']
     assert 'date_published' in news_response and news_value.date_published == news_response['date_published']
-
 
 def test_get_essential_separated_date_news(session : Session):
 

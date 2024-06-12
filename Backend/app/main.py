@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import uvicorn
+from functools import lru_cache
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -8,9 +9,17 @@ import settings
 #Routers
 from app.api.main import api_router
 
+
+
+@lru_cache
+def get_settings():
+    return settings.Settings()
+
 origins = settings.settings.originCORS
 
-app = FastAPI()
+app = FastAPI(
+    title="Stock Finance"
+)
 app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,

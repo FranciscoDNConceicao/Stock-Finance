@@ -22,11 +22,15 @@ jobs:
 
       - name: Install frontend dependencies
         working-directory: ./Frontend
-        run: npm install
-
+        run: |
+          cd ./finance-app-frontend/
+          npm install
+          
       - name: Build frontend
         working-directory: ./Frontend
-        run: npm run build
+        run: |
+          cd ./finance-app-frontend/
+          npm install
 
       - name: Set up Python 
         uses: actions/setup-python@v2

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "../../router";
+import { useNavigate } from "../../router";
 
 
 export default function SeparatorInfo (props:SeparatorInfo) {

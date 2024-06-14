@@ -34,8 +34,8 @@ def test_only_random_company():
         assert response.json() == {}
 
 
-@pytest.mark.asyncio
-async def test_get_all_company_values(session: Session):
+
+def test_get_all_company_values(session: Session):
     new_company = CompanyTable(id=1222,
                                code="AAA",
                                name="Company Example",

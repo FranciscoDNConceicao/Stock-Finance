@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  frontend:
+    build: ./Frontend/
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+  backend:
+    build: ./Backend/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: "admin"
+      POSTGRES_DB: "stockfinance_db"
+      POSTGRES_PASSWORD: "1234567"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./backups:/home/backups

@@ -5,17 +5,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import settings
+from app.settings import settings
 #Routers
 from app.api.main import api_router
 
-
-
-@lru_cache
-def get_settings():
-    return settings.Settings()
-
-origins = settings.settings.originCORS
+origins = settings.originCORS
 
 app = FastAPI(
     title="Stock Finance"
@@ -28,7 +22,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 if __name__ == "__main__":
     uvicorn.run(app)

@@ -43,12 +43,8 @@ def test_get_selected_stock_for_datagrid(session: Session):
     assert response.status_code == 200
     assert len(response.json()) == 5
     for row in response.json():
-        assert ('id' in row and 'icon' in row and 'stockName' in row and 'unit' in row
-                and 'priceLast' in row and 'percentage' in row and 'priceHigh' in row and 'lastUpdate' in row)
+        assert ('id' in row and 'icon' in row and 'stockName' in row and 'unit' in row and 'priceLast' in row and 'percentage' in row and 'priceHigh' in row and 'lastUpdate' in row)
 
-     response = client.post(url="/stock/select/StockForDataGrid", json={
-        'initPage': 10,
-        'endPage': 10
-    })
+    response = client.post(url="/stock/select/StockForDataGrid", json={'initPage': 10,'endPage': 10})
     assert response.status_code == 200
     assert len(response.json()) == 0

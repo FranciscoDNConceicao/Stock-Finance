@@ -7,7 +7,11 @@ class Settings(BaseSettings):
     API_NINJA_KEY : str
     DOMAIN: str
     ENVIRONMENT: Literal["local", "staging", "production"]
-    SQL_ALCHEMY_DATABASE_URL: str
+    DATABASE_NAME : str
+    DATABASE_IP : str
+    DATABASE_USER: str
+    DATABASE_PASSWORD: str
+    DATABASE_PORT: str
     originCORS: list[str]
 
     model_config = SettingsConfigDict(env_file=".env")

@@ -13,6 +13,7 @@ export default function TableNews(props: TableNewsRoot) {
     const navigate = useNavigate()
     const [pageNum,setPage] = useState(props.page)
     const pageChange = (event: React.MouseEvent<HTMLButtonElement> | null, page:number) => {
+        console.log(event)
         props.pageChange(props.rowperPage * (page), props.rowperPage * (page + 1))     
         setPage(page)
            

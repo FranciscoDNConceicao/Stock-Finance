@@ -9,3 +9,4 @@ pytest~=8.2.1
 alpaca-trade-api~=3.2.0
 psycopg2-binary~=2.9.9
 pydantic-settings~=2.0.0
+pytest~=8.2.2

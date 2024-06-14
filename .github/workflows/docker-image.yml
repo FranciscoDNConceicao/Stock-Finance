@@ -11,14 +11,8 @@ jobs:
     services:
       db:
         image: postgres
-        environment:
-          POSTGRES_USER: "admin"
-          POSTGRES_DB: "stockfinance_db"
-          POSTGRES_PASSWORD: "1234567"
         ports:
           - "5432:5432"
-        volumes:
-          - ./backups:/home/backups
 
     steps:
       - uses: actions/checkout@v4

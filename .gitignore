@@ -17,3 +17,6 @@ __pycache__/
 # Frontend: o gestor de pacotes é o npm (package-lock.json)
 pnpm-lock.yaml
 yarn.lock
+
+# Ruff
+.ruff_cache/

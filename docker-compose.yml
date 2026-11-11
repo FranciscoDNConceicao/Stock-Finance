@@ -1,22 +1,64 @@
-version: '3'
+# Variáveis partilhadas pelo backend e pelo scheduler
+x-backend-env: &backend-env
+  APCA_API_KEY_ID: ${APCA_API_KEY_ID:?Define APCA_API_KEY_ID no ficheiro .env na raiz}
+  APCA_API_SECRET_KEY: ${APCA_API_SECRET_KEY:?Define APCA_API_SECRET_KEY no ficheiro .env na raiz}
+  API_NINJA_KEY: ${API_NINJA_KEY:?Define API_NINJA_KEY no ficheiro .env na raiz}
+  POLYGON_API_KEY: ${POLYGON_API_KEY:-}
+  DOMAIN: ${DOMAIN:-localhost}
+  ENVIRONMENT: ${ENVIRONMENT:-local}
+  # Dentro da rede do compose a base de dados chama-se "db"
+  DATABASE_IP: db
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: ${POSTGRES_DB:-stockfinance_db}
+  DATABASE_USER: ${POSTGRES_USER:-admin}
+  DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD no ficheiro .env na raiz}
+  originCORS: ${ORIGIN_CORS:-["http://localhost:5173"]}
+  # Obrigatório fora de ENVIRONMENT=local (sem ele as sessões caem a cada reinício)
+  JWT_SECRET_KEY: ${JWT_SECRET_KEY:-}
 
 services:
   frontend:
-    build: ./Frontend/
+    build: ./Frontend
     ports:
-      - "5173:5173"
+      - "5173:80"
     depends_on:
       - backend
+
   backend:
-    build: ./Backend/
-    env_file:
-      - ./Backend/app/.env
+    build: ./Backend
+    environment: *backend-env
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+
+  # Atualiza preços e notícias periodicamente (Backend/utils/scheduler.py)
+  scheduler:
+    build: ./Backend
+    working_dir: /code/utils
+    command: ["python", "scheduler.py"]
+    environment:
+      <<: *backend-env
+      SCHEDULER_TIMEZONE: ${SCHEDULER_TIMEZONE:-UTC}
+      SCHEDULER_STOCKS_CRON: ${SCHEDULER_STOCKS_CRON:-0 6 * * tue-sat}
+      SCHEDULER_NEWS_CRON: ${SCHEDULER_NEWS_CRON:-0 7 * * *}
+      SCHEDULER_RUN_ON_START: ${SCHEDULER_RUN_ON_START:-false}
+    depends_on:
+      backend:
+        # O backend aplica as migrações (alembic upgrade head) no arranque
+        condition: service_healthy
+    restart: unless-stopped
+
   db:
-    image: postgres
+    image: postgres:16-alpine
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-admin}
       POSTGRES_DB: ${POSTGRES_DB:-stockfinance_db}
@@ -24,4 +66,15 @@ services:
     ports:
       - "5432:5432"
     volumes:
+      - pgdata:/var/lib/postgresql/data
       - ./backups:/home/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  pgdata:

@@ -1,0 +1,3 @@
+-r requirements.txt
+# Lint and formatting (see pyproject.toml)
+ruff~=0.8.4

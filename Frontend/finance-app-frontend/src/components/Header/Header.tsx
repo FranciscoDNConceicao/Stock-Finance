@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import logoImage from '../../assets/images/stock-finance-high-resolution-logo-white-transparent.png'
 import TickerAction from '../Ticker/Ticker'
 import { TickerActionInt } from '../Ticker/Interfaces'
+import CompanySearch from '../Search/CompanySearch'
 
 interface HeaderProps {
   onOpenMenu: () => void
@@ -27,7 +28,10 @@ export default function Header({ onOpenMenu, tickerData, tickerLoading }: Header
           <img src={logoImage} alt="Stock Finance" className="h-4 w-auto" />
         </Link>
       </div>
-      <div className="border-t border-line lg:border-t-0">
+      <div className="px-4 pb-3 lg:flex lg:h-14 lg:items-center lg:px-8 lg:pb-0">
+        <CompanySearch className="w-full lg:max-w-md" />
+      </div>
+      <div className="border-t border-line">
         <TickerAction data={tickerData} isLoading={tickerLoading} />
       </div>
     </header>

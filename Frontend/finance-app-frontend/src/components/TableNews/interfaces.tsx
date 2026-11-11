@@ -1,18 +1,11 @@
-export interface NewsCompany {
-    id: string
-    title: string;
-    author: string;
-    url_image: string
-    date_published: string
-}
+import type { CompanyNewsPage } from '../../api/types'
+
+export type NewsCompanyTable = CompanyNewsPage
+
 export interface TableNewsRoot {
     dataTable: NewsCompanyTable
     page: number
     rowsPerPage: number
     isLoading: boolean
     onPageChange: (page: number) => void
-}
-export interface NewsCompanyTable {
-    data: NewsCompany[]
-    num_Rows: number
 }

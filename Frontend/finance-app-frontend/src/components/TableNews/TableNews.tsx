@@ -26,7 +26,7 @@ export default function TableNews({ dataTable, page, rowsPerPage, isLoading, onP
               <NewsListItem
                 key={row.id}
                 item={{
-                  id: row.id,
+                  id: String(row.id),
                   Image: row.url_image,
                   Description: row.title,
                   Publisher: row.author,

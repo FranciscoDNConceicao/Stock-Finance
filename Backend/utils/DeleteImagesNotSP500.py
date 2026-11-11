@@ -1,6 +1,6 @@
-import openpyxl
 import os
 
+import openpyxl
 
 workbook = openpyxl.load_workbook('C:\\Users\\francisco_conceicao\\Documents\\Finance\\Stock-Finance\\Backend\\utils\\SP500.xlsx')
 

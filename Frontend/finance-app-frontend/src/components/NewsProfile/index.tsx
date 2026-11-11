@@ -31,7 +31,7 @@ function ArticleSkeleton() {
 
 export default function NewsProfile({ data, isLoading, newsRelated, relatedLoading }: NewsMainProps) {
   const [imageFailed, setImageFailed] = useState(false)
-  if (isLoading) return <ArticleSkeleton />
+  if (isLoading || !data) return <ArticleSkeleton />
 
   const articleUrl = safeUrl(data.article_url)
   const publisherUrl = safeUrl(data.publisher?.url)

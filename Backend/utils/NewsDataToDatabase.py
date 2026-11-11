@@ -6,10 +6,10 @@ The Polygon free plan allows 5 requests/minute, so this takes about
 
 Safe to re-run: news that already exist (same Polygon id) are skipped.
 """
+
 import time
 
 import requests
-
 from db import env, get_connection
 
 NEWS_PER_COMPANY = 100
@@ -60,14 +60,22 @@ def main():
                     """INSERT INTO news (publisher_id, title, description, author, article_url,
                                          date_published, image_url, news_api_id)
                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
-                    (publisher_id, item["title"], item.get("description", "No description"),
-                     item.get("author"), item.get("article_url"), item["published_utc"][:10],
-                     item.get("image_url"), item["id"]),
+                    (
+                        publisher_id,
+                        item["title"],
+                        item.get("description", "No description"),
+                        item.get("author"),
+                        item.get("article_url"),
+                        item["published_utc"][:10],
+                        item.get("image_url"),
+                        item["id"],
+                    ),
                 )
                 news_id = cursor.fetchone()[0]
                 for ticker in related:
-                    cursor.execute("INSERT INTO newscompany (news_id, company_id) VALUES (%s, %s)",
-                                   (news_id, companies[ticker]))
+                    cursor.execute(
+                        "INSERT INTO newscompany (news_id, company_id) VALUES (%s, %s)", (news_id, companies[ticker])
+                    )
                 existing_news.add(item["id"])
                 inserted += 1
             connection.commit()

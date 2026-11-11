@@ -12,3 +12,12 @@ pydantic-settings~=2.0.0
 pandas~=2.2.3
 python-dotenv~=1.0
 colorthief~=0.2.1
+# Auth, rate limiting and the scheduled data refresh
+PyJWT~=2.10
+bcrypt~=4.2
+email-validator~=2.2
+slowapi~=0.1.9
+APScheduler~=3.11
+# Schema migrations and in-memory caching of market data
+alembic~=1.13.3
+cachetools~=5.5.0

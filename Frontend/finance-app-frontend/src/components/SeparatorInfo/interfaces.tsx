@@ -1,15 +1,7 @@
-interface NewsItem {
-    id: string
-    Image: string;
-    Description: string;
-    Publisher: string;
-    Date: string;
-}
-interface NewsData {
-    [category: string]: NewsItem[]
-}
-interface SeparatorInfo {
-    Data: NewsData;
+import type { NewsSections } from '../../api/types'
+
+export interface SeparatorInfoProps {
+    Data: NewsSections;
     categorieSelected: string;
     isLoading?: boolean;
     className?: string;

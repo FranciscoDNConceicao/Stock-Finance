@@ -1,9 +1,8 @@
-import requests
 import os
-import csv
 import time
-import psycopg2
 
+import psycopg2
+import requests
 from db import env
 
 file_to_folder = 'C:\\Users\\francisco_conceicao\\Documents\\Finance\\Stock-Finance\\Frontend\\finance-app-frontend\\public\\images\\logos'
@@ -68,13 +67,13 @@ for code in all_codes:
             print(e)
         print(cont_temp)
         cont_temp += 1
-    if cont_temp == 5 and ((time.time() - start_time)) > 60:
+    if cont_temp == 5 and (time.time() - start_time) > 60:
         print("Mais que 1 minuto")
-        print((time.time() - start_time))
+        print(time.time() - start_time)
         interation_time = 0
         start_time = time.time()
         cont_temp = 0
-    elif cont_temp == 5 and ((time.time() - start_time)) <= 60:
+    elif cont_temp == 5 and (time.time() - start_time) <= 60:
         cont_temp = 0
         print("Menos que 1 minuto")
         print(60-(-(start_time - time.time())))

@@ -1,5 +1,5 @@
 import SegmentedControl from '../../ui/SegmentedControl'
-import { TIME_RANGES, TimeRange } from '../interfaces'
+import { TIME_RANGES, TimeRange } from '../../../api/types'
 
 interface TimeChangedGraphProps {
   value: TimeRange

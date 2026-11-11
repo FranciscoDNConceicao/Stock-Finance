@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faBuilding, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { Link, useParams } from '../../../router'
-import { CompanyInfo, LeftOrRightCompany } from '../../../components/CompanyProfile/interfaces'
 import {
   CompanyAbout,
   CompanyHero,
@@ -11,90 +10,35 @@ import {
 } from '../../../components/CompanyProfile/CompanyProfile'
 import PriceCard from '../../../components/LineGraph/PriceCard'
 import { parseSeries } from '../../../components/LineGraph/series'
-import { CompanyData, TimeRange } from '../../../components/LineGraph/interfaces'
+import { TimeRange } from '../../../components/LineGraph/interfaces'
 import TableNews from '../../../components/TableNews/TableNews'
-import { NewsCompanyTable } from '../../../components/TableNews/interfaces'
 import { Card, CardHeader } from '../../../components/ui/Card'
 import CompanyLogo from '../../../components/ui/CompanyLogo'
 import EmptyState from '../../../components/ui/EmptyState'
-import { LeftAndRightValues, getAllValuesFromCompany, getCompanyNews } from '../../../scripts/Company/getCompanyValues'
-import { generateDataStockTime } from '../../../scripts/Stocks/DataStockTime'
+import { useCompany, useCompanyNews, useDiscoverCompanies, usePriceHistory } from '../../../api/queries'
+import TradeCard from '../../../components/Account/TradeCard'
+import WatchlistButton from '../../../components/Account/WatchlistButton'
 
 const NEWS_PER_PAGE = 8
+const NO_NEWS = { data: [], num_Rows: 0 }
 
 export default function CompanyPage() {
   const { id } = useParams('/company/:id')
+  // Remount per company so the news page and chart range start fresh
+  return <CompanyView key={id} id={id} />
+}
 
-  const [company, setCompany] = useState<CompanyInfo | null>(null)
-  const [companyLoading, setCompanyLoading] = useState(true)
-
+function CompanyView({ id }: { id: string }) {
   const [range, setRange] = useState<TimeRange>('1Y')
-  const [chartData, setChartData] = useState<CompanyData | null>(null)
-  const [chartLoading, setChartLoading] = useState(true)
-  const chartRequest = useRef(0)
-
   const [newsPage, setNewsPage] = useState(0)
-  const [news, setNews] = useState<NewsCompanyTable>({ data: [], num_Rows: 0 })
-  const [newsLoading, setNewsLoading] = useState(true)
 
-  const [discover, setDiscover] = useState<LeftOrRightCompany[]>([])
+  const companyQuery = useCompany(id)
+  const company = companyQuery.data
+  const historyQuery = usePriceHistory(company?.code, range)
+  const newsQuery = useCompanyNews(id, newsPage * NEWS_PER_PAGE, NEWS_PER_PAGE, !!company)
+  const discover = useDiscoverCompanies(id).data ?? []
 
-  // Company + suggestions, whenever the route id changes
-  useEffect(() => {
-    let active = true
-    setCompanyLoading(true)
-    setCompany(null)
-    setNewsPage(0)
-    getAllValuesFromCompany(id)
-      .then((res) => active && setCompany(res?.data ?? null))
-      .catch(() => active && setCompany(null))
-      .finally(() => active && setCompanyLoading(false))
-
-    Promise.all([LeftAndRightValues(), LeftAndRightValues(), LeftAndRightValues()])
-      .then((results) => {
-        if (!active) return
-        const seen = new Set<string>([String(id)])
-        const unique: LeftOrRightCompany[] = []
-        for (const result of results) {
-          const c = result?.data
-          if (!c?.code || seen.has(String(c.id))) continue
-          seen.add(String(c.id))
-          unique.push(c)
-        }
-        setDiscover(unique)
-      })
-      .catch(() => active && setDiscover([]))
-    return () => {
-      active = false
-    }
-  }, [id])
-
-  // Price history
-  useEffect(() => {
-    if (!company?.code) return
-    const requestId = ++chartRequest.current
-    setChartLoading(true)
-    generateDataStockTime(company.code, range)
-      .then((res) => requestId === chartRequest.current && setChartData(res?.data ?? null))
-      .catch(() => requestId === chartRequest.current && setChartData(null))
-      .finally(() => requestId === chartRequest.current && setChartLoading(false))
-  }, [company?.code, range])
-
-  // News
-  useEffect(() => {
-    if (!company) return
-    let active = true
-    setNewsLoading(true)
-    getCompanyNews(id, newsPage * NEWS_PER_PAGE, (newsPage + 1) * NEWS_PER_PAGE)
-      .then((res) => active && setNews(res?.data ?? { data: [], num_Rows: 0 }))
-      .catch(() => active && setNews({ data: [], num_Rows: 0 }))
-      .finally(() => active && setNewsLoading(false))
-    return () => {
-      active = false
-    }
-  }, [company, id, newsPage])
-
-  const series = useMemo(() => parseSeries(chartData), [chartData])
+  const series = useMemo(() => parseSeries(historyQuery.data), [historyQuery.data])
 
   const backLink = (
     <Link to="/" className="mb-4 inline-flex cursor-pointer items-center gap-2 text-[13px] font-medium text-muted transition-colors hover:text-fg">
@@ -103,7 +47,7 @@ export default function CompanyPage() {
     </Link>
   )
 
-  if (companyLoading) {
+  if (companyQuery.isPending) {
     return (
       <>
         {backLink}
@@ -127,7 +71,7 @@ export default function CompanyPage() {
     <div>
       {backLink}
       <div className="space-y-4 lg:space-y-6">
-        <CompanyHero company={company} />
+        <CompanyHero company={company} actions={<WatchlistButton companyId={Number(id)} />} />
 
         <div className="grid gap-4 lg:grid-cols-3 lg:gap-6">
           <PriceCard
@@ -136,11 +80,11 @@ export default function CompanyPage() {
             series={series}
             range={range}
             onRangeChange={setRange}
-            isLoading={chartLoading}
-            currency={company.currency_name}
+            isLoading={historyQuery.isPending}
+            currency={company.currency_name ?? undefined}
             height={340}
           />
-          <KeyStats company={company} stats={series.stats} isLoading={chartLoading} />
+          <KeyStats company={company} stats={series.stats} isLoading={historyQuery.isPending} />
         </div>
 
         <CompanyAbout company={company} />
@@ -148,13 +92,16 @@ export default function CompanyPage() {
         <div className="grid gap-4 lg:grid-cols-3 lg:gap-6">
           <div className="lg:col-span-2">
             <TableNews
-              dataTable={news}
+              dataTable={newsQuery.data ?? NO_NEWS}
               page={newsPage}
               rowsPerPage={NEWS_PER_PAGE}
-              isLoading={newsLoading}
+              isLoading={newsQuery.isPending}
               onPageChange={setNewsPage}
             />
           </div>
+
+          <div className="space-y-4 lg:space-y-6">
+          <TradeCard companyId={Number(id)} code={company.code} lastPrice={series.stats?.last} />
 
           {discover.length > 0 && (
             <Card className="h-fit">
@@ -180,6 +127,7 @@ export default function CompanyPage() {
               </ul>
             </Card>
           )}
+          </div>
         </div>
       </div>
     </div>

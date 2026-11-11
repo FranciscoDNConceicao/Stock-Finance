@@ -1,228 +1,151 @@
-import math
 import random
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 
-import requests
-from fastapi import APIRouter, HTTPException
-from sqlalchemy import func
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session
 
-from app.database import SessionLocal
 from app.database import get_db
 from app.models.Company.Company import CompanyTable
 from app.models.Company.NewsCompany.NewsCompany import NewsCompanyTable
 from app.models.News.DateNews import NewsTable
-from app.models.CompanyLogo import LimitRandom, PaginationNewsCompanyTable, NewsCompanyDataSetRelated
-from fastapi import HTTPException, Depends
-from sqlalchemy.orm import Session
-from sqlalchemy import and_
-
 from app.models.News.Publisher.Publisher import PublisherTable
-
-from sqlalchemy import *
+from app.models.Responses import CompanySummary, NewsArticle, NewsItem, NewsSections, Publisher
 
 router = APIRouter()
 
+NOT_FOUND = {404: {"description": "News not found"}}
 
-@router.post('/perCompany/get')
-async def getNewsPerCompany(data: PaginationNewsCompanyTable, session: Session = Depends(get_db)):
-    initPage = data.initPage
-    endPage = data.endPage
-    id = data.id
-
-    result = {'data': [],
-              'num_Rows': session.query(func.count(NewsTable.id)).join(NewsCompanyTable,
-                                                                       NewsTable.id == NewsCompanyTable.news_id).filter(
-                  NewsCompanyTable.company_id == id).scalar()}
-    selectedNewsCompany = (session.query(NewsTable.id,
-                                         NewsTable.title,
-                                         NewsTable.image_url,
-                                         NewsTable.author,
-                                         NewsTable.date_published).join(NewsCompanyTable,
-                                                                        NewsTable.id == NewsCompanyTable.news_id)
-    .filter(NewsCompanyTable.company_id == id).order_by(NewsTable.date_published.desc()).slice(
-        initPage, endPage))
-
-    for selectedNewCompany in selectedNewsCompany:
-        result['data'].append({
-            'id': selectedNewCompany[0],
-            'title': selectedNewCompany[1],
-            'url_image': selectedNewCompany[2],
-            'author': selectedNewCompany[3],
-            'date_published': selectedNewCompany[4]
-        })
-
-    return result
+# Section label -> how far back from the most recent news it reaches
+SECTIONS = {
+    "This day": timedelta(0),
+    "This week": timedelta(weeks=1),
+    "This year": timedelta(weeks=54),
+}
 
 
-@router.post('/get/related/company')
-async def getRelatedNews(data: NewsCompanyDataSetRelated, session: Session = Depends(get_db)):
-    result = {
-        data.label: []
-    }
-    companiesIds = data.companies
-    numIdsCompanies = len(data.companies)
-    if numIdsCompanies > data.limit:
-        companiesIds = random.sample(companiesIds, data.limit)
+def _random_news(session: Session, since: date, until: date, limit: int) -> list[NewsItem]:
+    # The random pick runs on ids only, inside the date window (indexed on date_published);
+    # the full rows are fetched afterwards for the `limit` picked ids.
+    picked = (
+        select(NewsTable.id)
+        .where(NewsTable.date_published.between(since, until), NewsTable.publisher_id.is_not(None))
+        .order_by(func.random())
+        .limit(limit)
+        .subquery()
+    )
+    rows = session.execute(
+        select(
+            NewsTable.id,
+            NewsTable.image_url,
+            NewsTable.title,
+            PublisherTable.name.label("publisher"),
+            NewsTable.date_published,
+        )
+        .join(picked, picked.c.id == NewsTable.id)
+        .join(PublisherTable, PublisherTable.id == NewsTable.publisher_id)
+    ).all()
+    return [
+        NewsItem(
+            id=str(row.id),
+            image_url=row.image_url,
+            title=row.title,
+            publisher=row.publisher,
+            date_published=row.date_published,
+        )
+        for row in rows
+    ]
 
-    if len(companiesIds) == 0:
-        numCompanies = 1
-    else:
-        numCompanies = len(companiesIds)
-    chooseNewsPerCompanies = math.floor(data.limit / numCompanies)
 
-    idsUsed = [str(data.id)]
+@router.get("/highlights", response_model=NewsSections)
+def news_highlights(limit: int = Query(6, ge=1, le=50), session: Session = Depends(get_db)):
+    """Random news from the last day, week and year, each section with up to `limit` items."""
+    # Anchor on the most recent news, so the sections aren't empty just because the data
+    # was loaded a few days ago
+    anchor = session.scalar(select(func.max(NewsTable.date_published))) or date.today()
+    return {label: _random_news(session, anchor - span, anchor, limit) for label, span in SECTIONS.items()}
 
-    for companyId in companiesIds:
-        if 'id' in companyId:
-            queryNewsCompanies = (session.query(NewsTable.id,
-                                                NewsTable.image_url,
-                                                NewsTable.title,
-                                                NewsTable.author,
-                                                NewsTable.date_published)
-                                  .join(NewsCompanyTable, NewsCompanyTable.news_id == NewsTable.id)
-                                  .filter(
-                and_(
-                    NewsCompanyTable.company_id == int(companyId['id']),
-                    NewsCompanyTable.news_id.notin_(idsUsed))
+
+@router.get("/{news_id}", response_model=NewsArticle, responses=NOT_FOUND)
+def news_article(news_id: int, session: Session = Depends(get_db)):
+    row = session.execute(
+        select(NewsTable, PublisherTable)
+        .join(PublisherTable, PublisherTable.id == NewsTable.publisher_id)
+        .where(NewsTable.id == news_id)
+    ).first()
+    if row is None:
+        raise HTTPException(status_code=404, detail="News not found")
+    news, publisher = row
+
+    companies = session.execute(
+        select(CompanyTable.id, CompanyTable.code, CompanyTable.color)
+        .join(NewsCompanyTable, NewsCompanyTable.company_id == CompanyTable.id)
+        .where(NewsCompanyTable.news_id == news_id)
+    ).all()
+    return NewsArticle(
+        title=news.title,
+        description=news.description,
+        author=news.author,
+        article_url=news.article_url,
+        date_published=news.date_published,
+        image_url=news.image_url,
+        publisher=Publisher.model_validate(publisher),
+        companies=[CompanySummary.model_validate(company) for company in companies],
+    )
+
+
+@router.get("/{news_id}/related", response_model=list[NewsItem], responses=NOT_FOUND)
+def related_news(news_id: int, limit: int = Query(10, ge=1, le=50), session: Session = Depends(get_db)):
+    """Recent news about the same companies, split evenly between them (at most `limit` companies)."""
+    if session.get(NewsTable, news_id) is None:
+        raise HTTPException(status_code=404, detail="News not found")
+
+    company_ids = session.scalars(select(NewsCompanyTable.company_id).where(NewsCompanyTable.news_id == news_id)).all()
+    if not company_ids:
+        return []
+    if len(company_ids) > limit:
+        company_ids = random.sample(company_ids, limit)
+    per_company = limit // len(company_ids)
+
+    # Each company's most recent news in one query (ROW_NUMBER), instead of one query per company.
+    # `limit` candidates per company leave room for news already picked for an earlier company.
+    ranked = (
+        select(
+            NewsCompanyTable.company_id,
+            NewsTable.id,
+            NewsTable.image_url,
+            NewsTable.title,
+            NewsTable.author,
+            NewsTable.date_published,
+            func.row_number()
+            .over(
+                partition_by=NewsCompanyTable.company_id,
+                order_by=(NewsTable.date_published.desc(), NewsTable.id.desc()),
             )
-                                  .limit(chooseNewsPerCompanies))
+            .label("rn"),
+        )
+        .join(NewsTable, NewsTable.id == NewsCompanyTable.news_id)
+        .where(NewsCompanyTable.company_id.in_(company_ids), NewsTable.id != news_id)
+        .subquery()
+    )
+    rows = session.execute(select(ranked).where(ranked.c.rn <= limit).order_by(ranked.c.company_id, ranked.c.rn)).all()
 
-        else:
-            queryNewsCompanies = (session.query(NewsTable.id,
-                                                NewsTable.image_url,
-                                                NewsTable.title,
-                                                NewsTable.author,
-                                                NewsTable.date_published)
-                                  .join(NewsCompanyTable, NewsCompanyTable.news_id == NewsTable.id)
-                                  .filter(NewsCompanyTable.news_id.notin_(idsUsed))
-                                  .limit(chooseNewsPerCompanies))
-        for queryNewsCompany in queryNewsCompanies:
-            idsUsed.append(queryNewsCompany[0])
-            result[data.label].append({
-                'id': queryNewsCompany[0],
-                'Image': queryNewsCompany[1],
-                'Description': queryNewsCompany[2],
-                'Publisher': queryNewsCompany[3],
-                'Date': queryNewsCompany[4]
-            })
-
-    return result
-
-
-@router.get('/get/all/{id}')
-async def getAllValuesFromNews(id: str, session: Session = Depends(get_db)):
-    result = {}
-    queryNews = (session.query(NewsTable.title,
-                               NewsTable.description,
-                               NewsTable.author,
-                               NewsTable.article_url,
-                               NewsTable.date_published,
-                               NewsTable.image_url,
-                               PublisherTable.id,
-                               PublisherTable.name,
-                               PublisherTable.url,
-                               PublisherTable.logo_url
-                               ).join(PublisherTable, PublisherTable.id == NewsTable.publisher_id
-                                      ).filter(NewsTable.id == id))
-
-    for queryNewsResult in queryNews:
-        result = {
-            'title': queryNewsResult[0],
-            'description': queryNewsResult[1],
-            'author': queryNewsResult[2],
-            'article_url': queryNewsResult[3],
-            'date_published': queryNewsResult[4],
-            'image_url': queryNewsResult[5],
-            'publisher': {
-                'id': queryNewsResult[6],
-                'name': queryNewsResult[7],
-                'url': queryNewsResult[8],
-                'logo_url': queryNewsResult[9]
-            },
-            'Companies': []
-        }
-    if result:
-        queryNewsCompanies = (session.query(CompanyTable.id,
-                                            CompanyTable.code,
-                                            CompanyTable.color)
-                              .join(NewsCompanyTable, CompanyTable.id == NewsCompanyTable.company_id)
-                              .filter(NewsCompanyTable.news_id == int(id)))
-
-        for queryNewsCompaniesResult in queryNewsCompanies:
-            result['Companies'].append({
-                'id': queryNewsCompaniesResult[0],
-                'code': queryNewsCompaniesResult[1],
-                'color': queryNewsCompaniesResult[2],
-            })
-    return result
-
-
-@router.post('/get/essential/SeparatedDate')
-async def getEssentialSeparatedDateNews(limit: LimitRandom, session: Session = Depends(get_db)):
-    # Anchor on the most recent news in the database so the sections are never empty
-    # just because the data was loaded a few days ago.
-    lastPublished = session.query(func.max(NewsTable.date_published)).scalar()
-    dateNow = datetime.combine(lastPublished, datetime.min.time()) if lastPublished else datetime.now()
-    dateWeekBefore = dateNow - timedelta(weeks=1)
-    dateYearBefore = dateNow - timedelta(weeks=54)
-
-    data = {
-        'This day': [],
-        'This week': [],
-        'This year': []
-    }
-    selectedNewsThisDay = (session.query(NewsTable.title,
-                                         NewsTable.image_url,
-                                         PublisherTable.name,
-                                         NewsTable.date_published,
-                                         NewsTable.id)
-    .join(PublisherTable, PublisherTable.id == NewsTable.publisher_id)
-    .filter(func.date(NewsTable.date_published) == dateNow).order_by(func.random()).limit(
-        limit.limit))
-    for selectedNewThisDay in selectedNewsThisDay:
-        data['This day'].append({
-            'id': str(selectedNewThisDay[4]),
-            'Image': selectedNewThisDay[1],
-            'Description': selectedNewThisDay[0],
-            'Publisher': selectedNewThisDay[2],
-            'Date': selectedNewThisDay[3]
-        })
-
-    selectedNewsThisWeek = (session.query(NewsTable.title,
-                                          NewsTable.image_url,
-                                          PublisherTable.name,
-                                          NewsTable.date_published,
-                                          NewsTable.id)
-                            .join(PublisherTable, NewsTable.publisher_id == PublisherTable.id)
-                            .filter(func.date(NewsTable.date_published) <= dateNow,
-                                    func.date(NewsTable.date_published) >= dateWeekBefore)
-                            .order_by(func.random())
-                            .limit(limit.limit))
-    for selectedNewsThisWeek in selectedNewsThisWeek:
-        data['This week'].append({
-            'id': str(selectedNewsThisWeek[4]),
-            'Image': selectedNewsThisWeek[1],
-            'Description': selectedNewsThisWeek[0],
-            'Publisher': selectedNewsThisWeek[2],
-            'Date': selectedNewsThisWeek[3]
-        })
-    selectedNewsThisYear = (session.query(NewsTable.title,
-                                          NewsTable.image_url,
-                                          PublisherTable.name,
-                                          NewsTable.date_published,
-                                          NewsTable.id)
-                            .join(PublisherTable, NewsTable.publisher_id == PublisherTable.id)
-                            .filter(func.date(NewsTable.date_published) <= dateNow,
-                                    func.date(NewsTable.date_published) >= dateYearBefore)
-                            .order_by(func.random())
-                            .limit(limit.limit))
-    for selectedNewThisYear in selectedNewsThisYear:
-        data['This year'].append({
-            'id': str(selectedNewThisYear[4]),
-            'Image': selectedNewThisYear[1],
-            'Description': selectedNewThisYear[0],
-            'Publisher': selectedNewThisYear[2],
-            'Date': selectedNewThisYear[3]
-        })
-
-    return data
+    picked: list[NewsItem] = []
+    seen: set[int] = set()
+    taken: dict[int, int] = {}
+    for row in rows:
+        if row.id in seen or taken.get(row.company_id, 0) >= per_company:
+            continue
+        seen.add(row.id)
+        taken[row.company_id] = taken.get(row.company_id, 0) + 1
+        picked.append(
+            NewsItem(
+                id=str(row.id),
+                image_url=row.image_url,
+                title=row.title,
+                # Related cards show the author where the dashboard shows the publisher
+                publisher=row.author,
+                date_published=row.date_published,
+            )
+        )
+    return picked

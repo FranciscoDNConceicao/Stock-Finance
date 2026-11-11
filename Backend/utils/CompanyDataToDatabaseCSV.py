@@ -2,6 +2,7 @@
 
 Safe to re-run: companies that already exist are skipped.
 """
+
 import csv
 
 from db import COMPANIES_CSV, get_connection, logo_codes
@@ -32,8 +33,15 @@ def main():
         cursor.execute(
             """INSERT INTO company (code, name, locate, currency_name, description, url, sic_description)
                VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-            (code, row["company name"][:100], "us", "usd", row["description"], row["website"],
-             row["industry"] or row["tag 3"]),
+            (
+                code,
+                row["company name"][:100],
+                "us",
+                "usd",
+                row["description"],
+                row["website"],
+                row["industry"] or row["tag 3"],
+            ),
         )
         inserted += 1
 

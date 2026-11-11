@@ -1,9 +1,6 @@
-import requests
 import os
-import csv
-import time
-import psycopg2
 
+import psycopg2
 from db import env
 
 file_to_folder = 'C:\\Users\\francisco_conceicao\\Documents\\Finance\\Stock-Finance\\Frontend\\finance-app-frontend\\public\\images\\logos'

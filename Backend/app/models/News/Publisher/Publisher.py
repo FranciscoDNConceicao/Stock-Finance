@@ -1,6 +1,7 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String
+
 from app.database import Base
+
 
 class PublisherTable(Base):
     __tablename__ = "publisher"
@@ -10,4 +11,3 @@ class PublisherTable(Base):
     url = Column(String)
     logo_url = Column(String)
     favicon_url = Column(String)
-

@@ -19,7 +19,7 @@ import { formatCompact, formatDate, formatNumber, hexColor, prettyHost, readable
 
 /* ---------- Hero ---------- */
 
-export function CompanyHero({ company }: { company: CompanyInfo }) {
+export function CompanyHero({ company, actions }: { company: CompanyInfo; actions?: ReactNode }) {
   const color = hexColor(company.color)
   const website = safeUrl(company.URL)
   return (
@@ -33,7 +33,7 @@ export function CompanyHero({ company }: { company: CompanyInfo }) {
         <CompanyLogo code={company.code} color={company.color} size="xl" />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-2xl font-semibold tracking-tight text-fg sm:text-[28px]">{company.name}</h1>
+            <h1 className="text-2xl font-semibold tracking-tight text-fg sm:text-[28px]">{company.name ?? company.code}</h1>
             <span
               className="rounded-md px-2 py-0.5 text-xs font-semibold tracking-wide"
               style={{ backgroundColor: color, color: readableOn(color) }}
@@ -62,17 +62,20 @@ export function CompanyHero({ company }: { company: CompanyInfo }) {
             )}
           </div>
         </div>
-        {website && (
-          <a
-            href={website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex cursor-pointer items-center justify-center gap-2 self-start rounded-lg border border-line-strong bg-raised px-3.5 py-2 text-sm font-medium text-fg transition-colors hover:border-muted/40 hover:bg-line sm:self-center"
-          >
-            Website
-            <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs text-muted" aria-hidden="true" />
-          </a>
-        )}
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-center">
+          {actions}
+          {website && (
+            <a
+              href={website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-line-strong bg-raised px-3.5 py-2 text-sm font-medium text-fg transition-colors hover:border-muted/40 hover:bg-line"
+            >
+              Website
+              <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs text-muted" aria-hidden="true" />
+            </a>
+          )}
+        </div>
       </div>
     </Card>
   )
@@ -135,7 +138,7 @@ export function CompanyAbout({ company }: { company: CompanyInfo }) {
 
   return (
     <Card>
-      <CardHeader title={`About ${company.name}`} />
+      <CardHeader title={`About ${company.name ?? company.code}`} />
       <div className="grid gap-6 px-5 pb-5 pt-3 md:grid-cols-5">
         <div className="md:col-span-3">
           {description ? (
@@ -167,10 +170,8 @@ export function CompanyAbout({ company }: { company: CompanyInfo }) {
               </a>
             </DetailItem>
           )}
-          {company.num_employees && (
-            <DetailItem icon={faUsers} label="Employees">
-              {Number.isFinite(toNumber(company.num_employees)) ? formatNumber(toNumber(company.num_employees), 0) : company.num_employees}
-            </DetailItem>
+          {company.num_employees != null && (
+            <DetailItem icon={faUsers} label="Employees">{formatNumber(company.num_employees, 0)}</DetailItem>
           )}
           {company.sicCode && <DetailItem icon={faIndustry} label="Industry (SIC)">{company.sicCode}</DetailItem>}
         </dl>

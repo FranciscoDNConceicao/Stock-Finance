@@ -6,8 +6,10 @@ import noImage from '../../assets/images/noImage.png'
 import SegmentedControl from '../ui/SegmentedControl'
 import Skeleton from '../ui/Skeleton'
 import EmptyState from '../ui/EmptyState'
+import type { NewsItem } from '../../api/types'
+import type { SeparatorInfoProps } from './interfaces'
 
-function NewsThumb({ src }: { src: string }) {
+function NewsThumb({ src }: { src: string | null }) {
   const [failed, setFailed] = useState(false)
   return (
     <img
@@ -25,7 +27,7 @@ export function NewsListItem({ item }: { item: NewsItem }) {
     <li>
       <Link
         to="/news/:id"
-        params={{ id: item.id.toString() }}
+        params={{ id: item.id }}
         className="group -mx-2 flex cursor-pointer gap-3 rounded-xl p-2 transition-colors duration-150 hover:bg-raised"
       >
         <NewsThumb src={item.Image} />
@@ -66,7 +68,7 @@ export function NewsListSkeleton({ rows = 5 }: { rows?: number }) {
 }
 
 /** Tabbed news list. Each key of `Data` is a tab (e.g. "This day", "This week"). */
-export default function SeparatorInfo({ Data, categorieSelected, isLoading, className }: SeparatorInfo) {
+export default function SeparatorInfo({ Data, categorieSelected, isLoading, className }: SeparatorInfoProps) {
   const categories = Object.keys(Data ?? {})
   const [selected, setActive] = useState(categorieSelected)
   const active = categories.includes(selected) ? selected : categories[0] ?? ''

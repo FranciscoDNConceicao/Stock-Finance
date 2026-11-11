@@ -1,5 +1,4 @@
 import { ChartStats, CompanyData } from './interfaces'
-import { toNumber } from '../../scripts/utils'
 
 export interface ParsedSeries {
   x: Date[]
@@ -7,11 +6,11 @@ export interface ParsedSeries {
   stats: ChartStats | null
 }
 
-/** Turns the backend `{timestamp: "price"}` map into sorted, numeric series + summary stats. */
-export function parseSeries(data: CompanyData | null): ParsedSeries {
+/** Turns the backend `{timestamp: price}` map into sorted, numeric series + summary stats. */
+export function parseSeries(data: CompanyData | null | undefined): ParsedSeries {
   if (!data) return { x: [], y: [], stats: null }
   const points = Object.entries(data)
-    .map(([ts, v]) => ({ t: new Date(ts), v: toNumber(v) }))
+    .map(([ts, v]) => ({ t: new Date(ts), v }))
     .filter((p) => !Number.isNaN(p.t.getTime()) && Number.isFinite(p.v))
     .sort((a, b) => a.t.getTime() - b.t.getTime())
 

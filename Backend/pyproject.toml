@@ -1,0 +1,46 @@
+# Lint and formatting for the backend:
+#   ruff check .            lint (add --fix to apply the safe fixes)
+#   ruff format .           format
+# CI runs `ruff check .` and `ruff format --check .`.
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+extend-exclude = [
+    ".venv",
+    "env",
+    # One-off scripts from the initial data load: not used by the scheduler, and they hard-code
+    # paths from another machine. CompanyDataToDatabase.py no longer runs (undefined `result`).
+    "utils/CompanyDataToDatabase.py",
+    "utils/DeleteImagesNotSP500.py",
+    "utils/ListOfNoInfoStock.py",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes: unused imports/variables, undefined names, `import *`
+    "I",   # import sorting
+    "N",   # pep8-naming: snake_case functions and variables, PascalCase classes
+    "B",   # bugbear: likely bugs
+    "UP",  # pyupgrade: modern syntax for the target version
+    "SIM", # simplifications
+]
+ignore = [
+    # FastAPI's dependency style: `session: Session = Depends(get_db)` in defaults is intended
+    "B008",
+    # Module and package names (Company/Company.py, routers/Auth.py) are imported across the
+    # codebase; renaming them to snake_case is a separate change
+    "N999",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Alembic migrations are generated and keep their own layout
+"migrations/versions/*" = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.pytest.ini_options]
+testpaths = ["app/test"]

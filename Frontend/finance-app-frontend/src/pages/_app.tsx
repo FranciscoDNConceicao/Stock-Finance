@@ -2,32 +2,13 @@ import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import Header from '../components/Header/Header'
 import Sidebar from '../components/Sidebar/Sidebar'
-import { TickerActionInt } from '../components/Ticker/Interfaces'
-import { generateDataTicket } from '../scripts/Stocks/TickerDataStock'
+import { useTicker } from '../api/queries'
 import { cn } from '../scripts/utils'
 
 export default function App() {
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
-  const [tickerData, setTickerData] = useState<TickerActionInt[] | null>(null)
-  const [tickerLoading, setTickerLoading] = useState(true)
-
-  useEffect(() => {
-    let active = true
-    generateDataTicket()
-      .then((response) => {
-        if (active) setTickerData(response?.data ?? null)
-      })
-      .catch(() => {
-        if (active) setTickerData(null)
-      })
-      .finally(() => {
-        if (active) setTickerLoading(false)
-      })
-    return () => {
-      active = false
-    }
-  }, [])
+  const ticker = useTicker()
 
   // Close the mobile drawer and reset scroll on navigation
   useEffect(() => {
@@ -83,7 +64,7 @@ export default function App() {
       </div>
 
       <div className="lg:pl-60">
-        <Header onOpenMenu={() => setMenuOpen(true)} tickerData={tickerData} tickerLoading={tickerLoading} />
+        <Header onOpenMenu={() => setMenuOpen(true)} tickerData={ticker.data ?? null} tickerLoading={ticker.isPending} />
         <main id="main" className="mx-auto w-full max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
           <Outlet />
         </main>

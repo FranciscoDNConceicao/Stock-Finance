@@ -50,7 +50,7 @@ function Mover({ row, kind }: { row: StockRow; kind: 'gainer' | 'loser' }) {
       className="group flex min-w-0 cursor-pointer items-center gap-3 rounded-xl border border-line bg-bg/40 p-3 backdrop-blur transition-colors duration-200 hover:border-line-strong hover:bg-raised/60"
     >
       <CompanyLogo code={row.icon} color={color} size="sm" />
-      <div className="min-w-0 flex-1" title={name}>
+      <div className="min-w-0 flex-1" title={name ?? undefined}>
         <p className="truncate text-sm font-semibold leading-tight text-fg group-hover:text-accent-hover">{code}</p>
         <p className="mt-0.5 flex items-center gap-1 whitespace-nowrap text-[11px] text-subtle">
           <FontAwesomeIcon icon={up ? faArrowTrendUp : faArrowTrendDown} className={up ? 'text-up' : 'text-down'} aria-hidden="true" />

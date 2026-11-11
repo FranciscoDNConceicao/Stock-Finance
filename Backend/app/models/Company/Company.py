@@ -1,9 +1,10 @@
-from sqlalchemy import Boolean,Float, Column, ForeignKey, Integer, String, Text, Date
+from sqlalchemy import Column, Date, Float, Integer, String, Text
+
 from app.database import Base
 
 
 class CompanyTable(Base):
-    __tablename__ = 'company'
+    __tablename__ = "company"
 
     id = Column(Integer, primary_key=True)
     code = Column(String(10))

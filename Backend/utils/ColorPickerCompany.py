@@ -2,8 +2,8 @@
 
 Requires: python -m pip install colorthief
 """
-from colorthief import ColorThief
 
+from colorthief import ColorThief
 from db import LOGOS_DIR, get_connection
 
 

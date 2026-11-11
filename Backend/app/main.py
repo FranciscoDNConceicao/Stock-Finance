@@ -1,23 +1,40 @@
-from fastapi import FastAPI
+from contextlib import asynccontextmanager
+
 import uvicorn
-from functools import lru_cache
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from app.settings import settings
-#Routers
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+
 from app.api.main import api_router
+from app.core import market_data
+from app.core.logging import RequestLoggingMiddleware, configure_logging
+from app.core.rate_limit import limiter
+from app.settings import settings
 
-origins = settings.originCORS
+configure_logging(settings.LOG_LEVEL)
 
-app = FastAPI(
-    title="Stock Finance"
-)
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    # The schema is managed by Alembic (`alembic upgrade head`, run by the Docker image on start)
+    yield
+    market_data.close()
+
+
+app = FastAPI(title="Stock Finance", lifespan=lifespan)
 app.include_router(api_router)
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
+# Outside the rate limiter, so 429 responses are logged too
+app.add_middleware(RequestLoggingMiddleware)
+# Added last so it is the outermost middleware: 429 responses also carry CORS headers
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=settings.originCORS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

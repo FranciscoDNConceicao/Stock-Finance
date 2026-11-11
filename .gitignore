@@ -1,0 +1,19 @@
+# Ficheiros de ambiente com segredos
+.env
+.env.*
+!.env.example
+
+# Ambientes virtuais Python
+.venv/
+env/
+
+# Python compilado
+__pycache__/
+*.pyc
+
+# IDE
+.idea/
+
+# Frontend: o gestor de pacotes é o npm (package-lock.json)
+pnpm-lock.yaml
+yarn.lock

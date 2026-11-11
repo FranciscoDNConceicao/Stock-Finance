@@ -4,6 +4,8 @@ import csv
 import time
 import psycopg2
 
+from db import env
+
 file_to_folder = 'C:\\Users\\francisco_conceicao\\Documents\\Finance\\Stock-Finance\\Frontend\\finance-app-frontend\\public\\images\\logos'
 
 def get_files_in_folder(folder_path):
@@ -23,7 +25,7 @@ cont_temp = 1
 connection = psycopg2.connect(
     dbname="postgres",
     user="postgres",
-    password="1234567",
+    password=env["DATABASE_PASSWORD"],
     host="localhost",
     port="5431"
 )
@@ -41,7 +43,7 @@ for code in all_codes:
 
     if cont_init != 0:
         try:
-            url = f"https://api.polygon.io/v3/reference/tickers/{code}?apiKey=p1ZovTNZa6Flx6uSxg0J64a4oDPdTdkS"
+            url = f"https://api.polygon.io/v3/reference/tickers/{code}?apiKey={env['POLYGON_API_KEY']}"
             response = requests.get(url)
             data = response.json()
             if 'status_code' in data and data['status_code'] == 404:

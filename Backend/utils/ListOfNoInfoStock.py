@@ -4,6 +4,8 @@ import csv
 import time
 import psycopg2
 
+from db import env
+
 file_to_folder = 'C:\\Users\\francisco_conceicao\\Documents\\Finance\\Stock-Finance\\Frontend\\finance-app-frontend\\public\\images\\logos'
 
 def get_files_in_folder(folder_path):
@@ -19,7 +21,7 @@ all_codes = get_files_in_folder(file_to_folder)
 connection = psycopg2.connect(
     dbname="postgres",
     user="postgres",
-    password="1234567",
+    password=env["DATABASE_PASSWORD"],
     host="localhost",
     port="5431"
 )

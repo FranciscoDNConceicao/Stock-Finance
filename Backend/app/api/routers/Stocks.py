@@ -1,81 +1,64 @@
-from fastapi import HTTPException
-from sqlalchemy import func
+from datetime import datetime, timedelta, timezone
+
+import requests
+from alpaca_trade_api import REST, TimeFrame, TimeFrameUnit
+from fastapi import APIRouter, HTTPException, Depends
+from sqlalchemy.orm import Session
+
 from app.database import get_db
-from app.models.CompanyLogo import StockCode, DataGridPagination
-from app.database import SessionLocal
+from app.models.CompanyLogo import DataGridPagination
+from app.models.Company.Company import CompanyTable as Company
+from app.models.SearchStocksValueTime import SearchStocksValue
 from app.models.Stocks.Stocks import StocksTable
 from app.settings import settings
-from app.models.SearchStocksValueTime import SearchStocksValue
-from alpaca_trade_api import REST, TimeFrameUnit
-from datetime import datetime, timedelta
-from alpaca_trade_api import TimeFrame
-from sqlalchemy.orm import Session
-from fastapi import APIRouter
-from fastapi import HTTPException, Depends
-from app.models.Company.Company import CompanyTable as Company
-import time
 
 router = APIRouter()
+
+# range -> (Alpaca timeframe, Polygon "multiplier/timespan/", how far back to look)
+TIME_RANGES = {
+    '1D': (TimeFrame.Hour, '1/hour/', timedelta(days=1)),
+    '1W': (TimeFrame(12, TimeFrameUnit.Hour), '12/hour/', timedelta(weeks=1)),
+    '1M': (TimeFrame.Day, '1/day/', timedelta(days=30)),
+    '3M': (TimeFrame.Week, '1/week/', timedelta(days=60)),
+    '1Y': (TimeFrame.Month, '1/month/', timedelta(weeks=54)),
+    '3Y': (TimeFrame.Month, '1/month/', timedelta(weeks=54 * 3)),
+}
+
+
+def getPolygonCloses(code_stock: str, polygon_timeframe: str, start: str, end: str):
+    url = (f'https://api.polygon.io/v2/aggs/ticker/{code_stock}/range/'
+           f'{polygon_timeframe}{start}/{end}')
+    try:
+        response = requests.get(url, params={'apiKey': settings.POLYGON_API_KEY}, timeout=10)
+        response.raise_for_status()
+        results = response.json().get('results') or []
+    except (requests.RequestException, ValueError):
+        return None
+    if not results:
+        return None
+    # Polygon gives each bar's start as epoch milliseconds in 't' and the close in 'c'
+    return {datetime.fromtimestamp(bar['t'] / 1000, tz=timezone.utc).isoformat(): bar['c']
+            for bar in results}
 
 
 @router.post("/get/")
 async def getStocksDataForDay(params: SearchStocksValue):
     api_alpaca = REST(key_id=settings.APCA_API_KEY_ID, secret_key=settings.APCA_API_SECRET_KEY)
 
-    #Stocks Code
     code_stock = params.stockCode
-    timestamp = params.time
-    date_begin = datetime.now() - timedelta(days=3)
+    timeframe, polygon_timeframe, lookback = TIME_RANGES[params.time]
+    end_date = datetime.now() - timedelta(days=3)
+    start_date = end_date - lookback
+    start, end = start_date.strftime('%Y-%m-%d'), end_date.strftime('%Y-%m-%d')
 
-    if timestamp == '1D':
-        timeframe = TimeFrame.Hour
-        alternative_timeframe = '1/hour/'
-        calculate_timeframe = timedelta(hours=1)
-        date_end = date_begin - timedelta(days=1)
-    elif timestamp == '1W':
-        timeframe = TimeFrame(12, TimeFrameUnit.Hour)
-        calculate_timeframe = timedelta(hours=12)
-        alternative_timeframe = '12/hour/'
-        date_end = date_begin - timedelta(weeks=1)
-    elif timestamp == '1M':
-        timeframe = TimeFrame.Day
-        alternative_timeframe = '1/day/'
-        calculate_timeframe = timedelta(days=1)
-        date_end = date_begin - timedelta(days=30)
-    elif timestamp == '3M':
-        timeframe = TimeFrame.Week
-        alternative_timeframe = '1/week/'
-        calculate_timeframe = timedelta(days=7)
-        date_end = date_begin - timedelta(days=60)
-    elif timestamp == '1Y':
-        timeframe = TimeFrame.Month
-        alternative_timeframe = '1/month/'
-        calculate_timeframe = timedelta(weeks=4)
-        date_end = date_begin - timedelta(weeks=54)
-    elif timestamp == '3Y':
-        timeframe = TimeFrame.Month
-        alternative_timeframe = '1/month/'
-        calculate_timeframe = timedelta(weeks=4)
-        date_end = date_begin - timedelta(weeks=(54 * 3))
     try:
-        request = api_alpaca.get_bars(code_stock, timeframe, date_end.strftime('%Y-%m-%d'),
-                                      date_begin.strftime('%Y-%m-%d'), adjustment='raw').df
-        if 'close' not in request:
-            url = f'https://api.polygon.io/v2/aggs/ticker/{code_stock}/range/{alternative_timeframe}{date_end.strftime('%Y-%m-%d')}/{date_begin.strftime('%Y-%m-%d')}?apiKey=p1ZovTNZa6Flx6uSxg0J64a4oDPdTdkS'
-            requestData = request.get(url)
-            if requestData and 'results' in requestData:
-                result_dict = {}
-                date_temp = date_end
-                for dictResults in 'results':
-                    result_dict[date_temp.isoformat()] = dictResults['c']
-                    date_temp += calculate_timeframe
-
-                return result_dict
-            return
-        end_time = time.time()
-        return request['close'].to_dict()
+        request = api_alpaca.get_bars(code_stock, timeframe, start, end, adjustment='raw').df
     except ValueError:
         raise HTTPException(status_code=422, detail="Invalid stock object")
+
+    if 'close' not in request:
+        return getPolygonCloses(code_stock, polygon_timeframe, start, end)
+    return request['close'].to_dict()
 
 
 @router.post("/select/StockForDataGrid")

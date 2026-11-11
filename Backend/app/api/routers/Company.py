@@ -24,19 +24,25 @@ async def getRandomCode(limit: LimitRandom, session: Session = Depends(get_db)):
 
 
 @router.post("/discount")
-async def getDiscount(params: CompanyLogo, session: Session = Depends(get_db)):
+async def getDiscount(params: CompanyLogo):
     apiAlpaca = REST(key_id=settings.APCA_API_KEY_ID, secret_key=settings.APCA_API_SECRET_KEY)
 
-    dateToday = datetime.now() - timedelta(days=1)
-    dateOneDayBefore = dateToday - timedelta(days=2)
-    selectCodes = session.query(Company.code).order_by(func.random()).limit(24)
-    results = apiAlpaca.get_bars(selectCodes[0], TimeFrame(23, TimeFrameUnit.Hour),
-                                 dateOneDayBefore.strftime('%Y-%m-%d'), dateToday.strftime('%Y-%m-%d'), limit=2).df
+    # Look back a week of daily bars so weekends/holidays still leave two closes to compare
+    dateEnd = datetime.now() - timedelta(days=1)
+    dateStart = dateEnd - timedelta(days=7)
+    try:
+        results = apiAlpaca.get_bars(params.stockCode, TimeFrame.Day,
+                                     dateStart.strftime('%Y-%m-%d'), dateEnd.strftime('%Y-%m-%d')).df
+    except ValueError:
+        raise HTTPException(status_code=422, detail="Invalid stock object")
     if 'close' not in results:
         return False
-    results = results['close'].to_list()
+    closes = results['close'].to_list()
+    if len(closes) < 2 or closes[-2] <= 0:
+        return False
 
-    discount = round((results[1] - results[0]) / results[0], 4)
+    previousClose, lastClose = closes[-2], closes[-1]
+    discount = round((lastClose - previousClose) / previousClose, 4)
     return discount
 
 
@@ -57,7 +63,7 @@ async def getCompanyTicker(session: Session = Depends(get_db)):
         stockCode, stockToday = selectCodeStock[0]
         stockYesterday = selectCodeStock[1][1]
 
-        discount = round((stockToday - stockYesterday) / stockToday, 4)
+        discount = round((stockToday - stockYesterday) / stockYesterday, 4)
 
         response["data"].append({
             'code': stockCode,
@@ -110,11 +116,14 @@ async def getCompanyImage(params: CompanyLogo):
     code = params.stockCode
     api_url = f'https://api.api-ninjas.com/v1/logo?ticker={code}'
     try:
-        response = requests.get(api_url, headers={'X-Api-Key': settings.API_NINJA_KEY})
-        if len(response.json()) > 0 and response.json()[0]['image']:
-            return response.json()[0]['image']
-        else:
-            return ' '
-
+        response = requests.get(api_url, headers={'X-Api-Key': settings.API_NINJA_KEY}, timeout=10)
+        logos = response.json()
+    except requests.RequestException:
+        raise HTTPException(status_code=502, detail="Logo service unavailable")
     except ValueError:
         raise HTTPException(status_code=422, detail="Invalid stock object")
+
+    # On errors (bad key, rate limit) API Ninjas returns a dict instead of a list
+    if isinstance(logos, list) and logos and logos[0].get('image'):
+        return logos[0]['image']
+    return ' '

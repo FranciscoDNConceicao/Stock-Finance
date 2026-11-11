@@ -31,14 +31,14 @@ async def getNewsPerCompany(data: PaginationNewsCompanyTable, session: Session =
 
     result = {'data': [],
               'num_Rows': session.query(func.count(NewsTable.id)).join(NewsCompanyTable,
-                                                                       NewsTable.id == NewsCompanyTable.id).filter(
+                                                                       NewsTable.id == NewsCompanyTable.news_id).filter(
                   NewsCompanyTable.company_id == id).scalar()}
     selectedNewsCompany = (session.query(NewsTable.id,
                                          NewsTable.title,
                                          NewsTable.image_url,
                                          NewsTable.author,
                                          NewsTable.date_published).join(NewsCompanyTable,
-                                                                        NewsTable.id == NewsCompanyTable.id)
+                                                                        NewsTable.id == NewsCompanyTable.news_id)
     .filter(NewsCompanyTable.company_id == id).order_by(NewsTable.date_published.desc()).slice(
         initPage, endPage))
 

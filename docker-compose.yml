@@ -9,6 +9,8 @@ services:
       - backend
   backend:
     build: ./Backend/
+    env_file:
+      - ./Backend/app/.env
     ports:
       - "8000:8000"
     depends_on:
@@ -16,9 +18,9 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_USER: "admin"
-      POSTGRES_DB: "stockfinance_db"
-      POSTGRES_PASSWORD: "1234567"
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_DB: ${POSTGRES_DB:-stockfinance_db}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Define POSTGRES_PASSWORD no ficheiro .env na raiz}
     ports:
       - "5432:5432"
     volumes:

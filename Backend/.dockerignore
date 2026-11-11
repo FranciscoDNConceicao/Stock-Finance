@@ -1,0 +1,8 @@
+# Não copiar segredos nem ambientes locais para a imagem
+**/.env
+**/__pycache__
+**/*.pyc
+.venv
+env
+.idea
+.vscode

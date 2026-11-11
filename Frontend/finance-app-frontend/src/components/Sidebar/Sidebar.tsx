@@ -1,49 +1,124 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse, faFire, faWallet, faMoneyBillTransfer, faGear, faRightFromBracket, faStar } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import {
+  faChartPie,
+  faFire,
+  faWallet,
+  faMoneyBillTransfer,
+  faGear,
+  faRightFromBracket,
+  faStar,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons'
+import { NavLink } from 'react-router-dom'
+import logoImage from '../../assets/images/stock-finance-high-resolution-logo-white-transparent.png'
+import { cn } from '../../scripts/utils'
 
-export default function Sidebar(){
+interface NavItem {
+  label: string
+  icon: IconDefinition
+  to?: string
+}
 
-    
+const mainNav: NavItem[] = [
+  { label: 'Dashboard', icon: faChartPie, to: '/' },
+  { label: 'Trending', icon: faFire },
+  { label: 'Wallet', icon: faWallet },
+  { label: 'Movements', icon: faMoneyBillTransfer },
+  { label: 'Watchlist', icon: faStar },
+]
+
+const footerNav: NavItem[] = [
+  { label: 'Settings', icon: faGear },
+  { label: 'Log out', icon: faRightFromBracket },
+]
+
+const itemBase =
+  'group flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150'
+
+function NavEntry({ item, onNavigate }: { item: NavItem; onNavigate?: () => void }) {
+  const icon = <FontAwesomeIcon icon={item.icon} className="w-4 text-[15px]" aria-hidden="true" />
+
+  if (!item.to) {
     return (
-        <div className="h-full w-full bg-secondary-background-color text-primary-color flex flex-col justify-between border-r-[1px] border-[#595959] relative z-[101]">
-            <div className='"h-full flex flex-col mt-[20px]'>
-                <Link to={'/'}>
-                    <div className='w-full font-family flex text-[19px] font-medium pt-4 pb-4 hover:font-bold'>
-                        <div><FontAwesomeIcon className='w-16 ml-3' icon={faHouse} /></div>
-                        <div><span>Dashboard</span></div>
-                    </div>
-                </Link>
-                
-                <div className='w-full font-family flex text-[19px] font-medium pt-4 pb-4 hover:font-bold'>
-                    <div><FontAwesomeIcon className='w-16 ml-3' icon={faFire} /></div>
-                    <div>Trending</div>
-                </div>
-                <div className='w-full font-family flex text-[19px] font-medium pt-4 pb-4 hover:font-bold'>
-                    <div><FontAwesomeIcon className='w-16 ml-3' icon={faWallet} /></div>
-                    <div>Wallet</div>
-                </div>
-                <div className='w-full font-family flex text-[19px] font-medium pt-4 pb-4 hover:font-bold'>
-                    <div><FontAwesomeIcon className='w-16 ml-3' icon={faMoneyBillTransfer} /></div>
-                    <div>Moviments</div>
-                </div>
-                <div className='w-full font-family flex text-[19px] font-medium pt-4 pb-4 hover:font-bold'>
-                    <div><FontAwesomeIcon className='w-16 ml-3' icon={faStar} /></div>
-                    <div>Wishlist</div>
-                </div>
-            </div>
-            
-            <div className='flex flex-col'>
-                <hr className="h-px my-8 bg-[#595959]-200 ml-[30px] mr-[30px]"></hr>
-                <div className='w-full items-center font-family flex text-[19px] font-medium pt-2 pb-4 hover:font-bold'>
-                    <FontAwesomeIcon className='w-16 ml-3' icon={faGear} />
-                    <span>Settings</span>
-                </div>
-                <div className='w-full items-center font-family flex text-[19px] font-medium pt-4 pb-4 pb-[40px] hover:font-bold'>
-                    <FontAwesomeIcon className='w-16 ml-3' icon={faRightFromBracket} />
-                    <span>Log Out</span>
-                </div>
-            </div>
-        </div>
+      <li>
+        <span
+          aria-disabled="true"
+          title="Coming soon"
+          className={cn(itemBase, 'cursor-not-allowed text-subtle')}
+        >
+          {icon}
+          <span className="flex-1">{item.label}</span>
+          <span className="rounded border border-line px-1.5 py-px text-[10px] font-medium uppercase tracking-wide text-subtle">
+            Soon
+          </span>
+        </span>
+      </li>
     )
+  }
+
+  return (
+    <li>
+      <NavLink
+        to={item.to}
+        end
+        onClick={onNavigate}
+        className={({ isActive }) =>
+          cn(
+            itemBase,
+            'cursor-pointer',
+            isActive
+              ? 'bg-accent/10 text-fg ring-1 ring-inset ring-accent/25 [&_svg]:text-accent'
+              : 'text-muted hover:bg-raised hover:text-fg',
+          )
+        }
+      >
+        {icon}
+        <span>{item.label}</span>
+      </NavLink>
+    </li>
+  )
+}
+
+interface SidebarProps {
+  onNavigate?: () => void
+  onClose?: () => void
+}
+
+export default function Sidebar({ onNavigate, onClose }: SidebarProps) {
+  return (
+    <div className="flex h-full flex-col border-r border-line bg-surface">
+      <div className="flex h-14 items-center justify-between px-5">
+        <NavLink to="/" onClick={onNavigate} className="cursor-pointer" aria-label="Stock Finance — home">
+          <img src={logoImage} alt="Stock Finance" className="h-7 w-auto" />
+        </NavLink>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close menu"
+            className="-mr-2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg text-muted hover:bg-raised hover:text-fg"
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+        )}
+      </div>
+
+      <nav aria-label="Main" className="flex flex-1 flex-col justify-between px-3 pb-4 pt-4">
+        <div>
+          <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-subtle">Menu</p>
+          <ul className="space-y-0.5">
+            {mainNav.map((item) => (
+              <NavEntry key={item.label} item={item} onNavigate={onNavigate} />
+            ))}
+          </ul>
+        </div>
+        <ul className="space-y-0.5 border-t border-line pt-4">
+          {footerNav.map((item) => (
+            <NavEntry key={item.label} item={item} onNavigate={onNavigate} />
+          ))}
+        </ul>
+      </nav>
+    </div>
+  )
 }

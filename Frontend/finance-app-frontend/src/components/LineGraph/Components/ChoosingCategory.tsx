@@ -1,35 +1,48 @@
-
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useNavigate } from '../../../router';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { Link } from '../../../router'
+import CompanyLogo from '../../ui/CompanyLogo'
+import { StockImage } from '../interfaces'
 
 interface ChoosingCategoryProps {
-    company:string
-    idCompany:string
-    changeStock: (parameter:string) => void
+  stock: StockImage | null
+  position: number
+  total: number
+  onPrev: () => void
+  onNext: () => void
 }
 
-export default function ChoosingCategory(props:ChoosingCategoryProps) {
-    const navigate = useNavigate()
-    const buttonclicked = (parameterleftright:string) => {
-        props.changeStock(parameterleftright)
-    }
+const arrowClass =
+  'flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-line text-muted transition-colors duration-150 hover:border-line-strong hover:bg-raised hover:text-fg disabled:cursor-not-allowed disabled:opacity-40'
 
-    const companyclicked = () => {
-        navigate('/company/:id', { params: { id: props.idCompany.toString() } });
-    }
-    return (
-        <div className="w-full flex cursor-pointer justify-center text-primary-color py-[20px] px-[40px]">
-            <div className="flex items-center cursor-pointer" onClick={() => buttonclicked('left')}>
-                <FontAwesomeIcon icon={faPlay} className="rotate-180 text-[35px] text-white"/>
-            </div>
-            <div className="flex flex-col w-full mx-[60px] justify-center items-center cursor-pointer" onClick={() => companyclicked()}>
-                <img src={`images/logos/${props.company}.png`} alt="Company" className="mb-[10px] min-w-[30px] max-w-[600px] min-h-[70px] max-h-[70px] bg-[#FFFBF5] p-[10px] rounded-md" />
-                <span className="flex w-full justify-center font-bold text-white">{props.company}</span>
-            </div>
-            <div className=" flex cursor-pointer items-center cursor-pointer text-white" onClick={() => buttonclicked('right')}>
-                <FontAwesomeIcon icon={faPlay} className="text-[35px]"/>
-            </div>
-        </div>
-    )
+/** Stock switcher: previous / current (links to company) / next. */
+export default function ChoosingCategory({ stock, position, total, onPrev, onNext }: ChoosingCategoryProps) {
+  const disabled = total < 2
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1">
+        <button type="button" className={arrowClass} onClick={onPrev} disabled={disabled} aria-label="Previous stock">
+          <FontAwesomeIcon icon={faChevronLeft} className="text-xs" />
+        </button>
+        <button type="button" className={arrowClass} onClick={onNext} disabled={disabled} aria-label="Next stock">
+          <FontAwesomeIcon icon={faChevronRight} className="text-xs" />
+        </button>
+      </div>
+      {stock && (
+        <Link
+          to="/company/:id"
+          params={{ id: stock.id.toString() }}
+          className="group flex min-w-0 cursor-pointer items-center gap-3 rounded-lg pr-2"
+        >
+          <CompanyLogo code={stock.code} size="sm" />
+          <div className="min-w-0">
+            <p className="truncate text-[15px] font-semibold leading-tight text-fg group-hover:text-accent-hover">{stock.code}</p>
+            <p className="text-xs text-subtle tabular">
+              {position + 1} of {total} · View company
+            </p>
+          </div>
+        </Link>
+      )}
+    </div>
+  )
 }

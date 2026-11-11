@@ -4,12 +4,13 @@ interface NewsItem {
     Description: string;
     Publisher: string;
     Date: string;
-
 }
-interface NewsData{
-    [category : string] : NewsItem[]
+interface NewsData {
+    [category: string]: NewsItem[]
 }
-interface SeparatorInfo{
+interface SeparatorInfo {
     Data: NewsData;
     categorieSelected: string;
+    isLoading?: boolean;
+    className?: string;
 }

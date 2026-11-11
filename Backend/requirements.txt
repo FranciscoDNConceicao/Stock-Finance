@@ -9,3 +9,6 @@ pytest~=8.2.1
 alpaca-trade-api~=3.2.0
 psycopg2-binary~=2.9.9
 pydantic-settings~=2.0.0
+pandas~=2.2.3
+python-dotenv~=1.0
+colorthief~=0.2.1

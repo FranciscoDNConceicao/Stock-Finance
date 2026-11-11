@@ -10,10 +10,11 @@ class NewsTable(Base):
     publisher_id = Column(Integer, ForeignKey('publisher.id', ondelete='CASCADE'))
     title = Column(Text)
     description = Column(Text)
-    author = Column(String(70))
-    article_url = Column(String(70))
+    author = Column(Text)
+    article_url = Column(Text)
     date_published = Column(Date)
-    image_url = Column(String(70))
+    image_url = Column(Text)
+    news_api_id = Column(String(100), unique=True, index=True)
 
     publisher = relationship("PublisherTable", backref="news")
 

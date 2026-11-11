@@ -1,153 +1,135 @@
-import Header from "../components/Header/Header"
-import LineGraph from "../components/LineGraph/Linegraph"
-import Sidebar from "../components/Sidebar/Sidebar"
-import "../style/index.css"
-import WalletComponent from "../components/WalletComponent/WalletComponent"
-import SeparatorInfo from "../components/SeparatorInfo/SeparatorInfo"
-import TableStocks from "../components/TableStocks/Tablestocks"
-import { useEffect, useState } from "react"
-import { generateDataStockTime } from "../scripts/Stocks/DataStockTime"
-import { DataGraph, StockImage } from "../components/LineGraph/interfaces"
-import { generateDataTicket } from "../scripts/Stocks/TickerDataStock"
-import { GridRowParams, GridRowsProp } from "@mui/x-data-grid"
-import { useNavigate } from "../router"
-import { TickerActionInt } from "../components/Ticker/Interfaces"
-import TickerAction from "../components/Ticker/Ticker"
-import { POST } from "../scripts/axios"
+import { useEffect, useMemo, useRef, useState } from 'react'
+import WalletComponent from '../components/WalletComponent/WalletComponent'
+import SeparatorInfo from '../components/SeparatorInfo/SeparatorInfo'
+import TableStocks from '../components/TableStocks/Tablestocks'
+import PriceCard from '../components/LineGraph/PriceCard'
+import ChoosingCategory from '../components/LineGraph/Components/ChoosingCategory'
+import { parseSeries } from '../components/LineGraph/series'
+import { CompanyData, StockImage, TimeRange } from '../components/LineGraph/interfaces'
+import { StockRow } from '../components/TableStocks/interfaces'
+import { Card, CardHeader } from '../components/ui/Card'
+import MarketHero from '../components/MarketHero/MarketHero'
+import { generateDataStockTime } from '../scripts/Stocks/DataStockTime'
+import { POST } from '../scripts/axios'
 
+const PAGE_SIZE = 15
+const HEATMAP_SIZE = 30
 
+// Placeholder until the wallet endpoint exists
+const wallet = {
+  balance: 3824.45,
+  wallet_balance: 2694.32,
+  day_balance: 34.42,
+  total_balance: 593.13,
+}
 
+export default function InitPage() {
+  // Chart
+  const [stocks, setStocks] = useState<StockImage[]>([])
+  const [stockIndex, setStockIndex] = useState(0)
+  const [range, setRange] = useState<TimeRange>('1D')
+  const [chartData, setChartData] = useState<CompanyData | null>(null)
+  const [chartLoading, setChartLoading] = useState(true)
+  const chartRequest = useRef(0)
 
-export default function InitPage(){
-    const navigate = useNavigate()
-    
-    const [isFixed, setIsFixed] = useState(false);
-    const [isLoading, setLoading] = useState(true)
-    const [isLoadingTicker, setLoadingTicker] = useState(true)
-    const [dataGraph, setDataGraph] = useState<DataGraph>({'company_data': null});
-    const [newsDataForComponent, setNewsDataForComponent] = useState<NewsData>({'This day': [], 'This Week': [], 'This Year': []}) 
-    const [stocksCode, setStocksCode] = useState<StockImage[] >([])
-    const [dataTicker, setDataTicker] = useState<TickerActionInt[] | null>([])
-    const [rowsGrid, setRowsGrid] = useState<GridRowsProp | null>([])
-      
-    const fetchDatatoGraph = async (timestamp:string, code:string) => {
-      setDataGraph({
-          'company_data': null,
-        });
-      setLoading(true)
-      const Response = await generateDataStockTime(code, timestamp);
-      setLoading(false)
-      setDataGraph({
-          'company_data': Response?.data || null
-      });
-    };
+  // News
+  const [news, setNews] = useState<NewsData>({})
+  const [newsLoading, setNewsLoading] = useState(true)
 
-    const fetchTickerData = async () => {
-      setLoadingTicker(true)
-      const Response = await generateDataTicket();
-      setDataTicker(Response?.data || null);
-      setLoadingTicker(false)
+  // Markets table
+  const [page, setPage] = useState(0)
+  const [rows, setRows] = useState<StockRow[] | null>(null)
+  const [rowsLoading, setRowsLoading] = useState(true)
+
+  // Hero heatmap
+  const [heatRows, setHeatRows] = useState<StockRow[]>([])
+  const [heatLoading, setHeatLoading] = useState(true)
+
+  useEffect(() => {
+    POST('http://127.0.0.1:8000/company/random/', { limit: 20 })
+      .then((data: StockImage[]) => setStocks(data ?? []))
+      .catch(() => {
+        setStocks([])
+        setChartLoading(false)
+      })
+
+    POST('http://127.0.0.1:8000/news/get/essential/SeparatedDate', { limit: 6 })
+      .then((data: NewsData) => setNews(data ?? {}))
+      .catch(() => setNews({}))
+      .finally(() => setNewsLoading(false))
+
+    POST('http://127.0.0.1:8000/stock/select/StockForDataGrid', { initPage: 0, endPage: HEATMAP_SIZE })
+      .then((data: StockRow[]) => setHeatRows(data ?? []))
+      .catch(() => setHeatRows([]))
+      .finally(() => setHeatLoading(false))
+  }, [])
+
+  const stock = stocks[stockIndex] ?? null
+  const stockCode = stock?.code
+
+  useEffect(() => {
+    if (!stockCode) return
+    const requestId = ++chartRequest.current
+    setChartLoading(true)
+    generateDataStockTime(stockCode, range)
+      .then((res) => requestId === chartRequest.current && setChartData(res?.data ?? null))
+      .catch(() => requestId === chartRequest.current && setChartData(null))
+      .finally(() => requestId === chartRequest.current && setChartLoading(false))
+  }, [stockCode, range])
+
+  useEffect(() => {
+    let active = true
+    setRowsLoading(true)
+    POST('http://127.0.0.1:8000/stock/select/StockForDataGrid', {
+      initPage: page * PAGE_SIZE,
+      endPage: page * PAGE_SIZE + PAGE_SIZE,
+    })
+      .then((data: StockRow[]) => active && setRows(data ?? []))
+      .catch(() => active && setRows([]))
+      .finally(() => active && setRowsLoading(false))
+    return () => {
+      active = false
     }
-    
-    const fetchDataGraph = async () => {
-      const StocksCode = await POST('http://127.0.0.1:8000/company/random/',  {"limit": 20}) as StockImage[]
-      setStocksCode(StocksCode)
-    }
-    const newsSeparateInfo = async () => {
-      const newsDataForComponent = await POST('http://127.0.0.1:8000/news/get/essential/SeparatedDate',  {"limit": 6}) as NewsData
+  }, [page])
 
-      setNewsDataForComponent(newsDataForComponent )
-    }
-    const nextPageDataGrid = async (initPage:number, endPage:number) => {
-      const data = await POST('http://127.0.0.1:8000/stock/select/StockForDataGrid',{"initPage": initPage, "endPage": endPage} ) as GridRowsProp
-      
-      setRowsGrid(data)
-    }
+  const series = useMemo(() => parseSeries(chartData), [chartData])
+  const step = (delta: number) =>
+    setStockIndex((i) => (stocks.length ? (i + delta + stocks.length) % stocks.length : 0))
 
-    useEffect(() => {
-      
-      if (stocksCode && stocksCode?.length > 1) {   
-        fetchDatatoGraph('1D', stocksCode[0].code);
-        
-      }else{
-        fetchDataGraph()
-      }
-    }, [stocksCode])
+  return (
+    <div className="space-y-6">
+      <MarketHero rows={heatRows} isLoading={heatLoading} />
 
+      <WalletComponent WalletData={wallet} />
 
-    useEffect(() => {
-      if(dataTicker && dataTicker.length > 0){
-        fetchTickerData()
-      }
-      newsSeparateInfo()
-      
-    }, [])
-    useEffect(() => {
-        const handleScroll = () => {
-          if (window.scrollY > 60 && !isFixed) {
-            setIsFixed(true);
-          } else if (window.scrollY <= 60 && isFixed) {
-            setIsFixed(false);
+      <div className="grid gap-4 lg:grid-cols-3 lg:gap-6">
+        <PriceCard
+          className="lg:col-span-2"
+          heading={
+            <ChoosingCategory
+              stock={stock}
+              position={stockIndex}
+              total={stocks.length}
+              onPrev={() => step(-1)}
+              onNext={() => step(1)}
+            />
           }
-        };
-    
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-          window.removeEventListener('scroll', handleScroll);
-        };
-      }, [isFixed]);
+          series={series}
+          range={range}
+          onRangeChange={setRange}
+          isLoading={chartLoading}
+          height={340}
+        />
 
-    
-  const rowclicked = (params: GridRowParams) => {
-    navigate('/company/:id', { params: { id: params.id.toString() } });
-  }
-    const wallet = {
-        'balance': 3824.45,
-        'wallet_balance': 2694.32,
-        'day_balance': 34.42,
-        'total_balance': 593.13
-    }
-    return (
-        <div className="bg-background-color h-full">
-            <div className="h-16 shadow-[rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;]">
-                <Header />
-                <TickerAction 
-                isFixed={isFixed} 
-                data={dataTicker}
-                isLoading={isLoadingTicker}
-                />
-            </div>
-            <div className="h-full w-full flex">
-                <div className="w-[15%]">
-                    <Sidebar />
-                </div>
-                <div className="w-full">
-                    <div className="grid w-full grid-template-rows-6 grid-cols-6 gap-4 mt-[60px] mb-[60px] px-[10px]">
-                        <div className="h-full w-full row-start-1 col-start-1 row-end-4 col-end-4 bg-secondary-background-color border-[1px] border-[white]">
-                            <LineGraph 
-                                changingTimeCateg={fetchDatatoGraph}
-                                isLoading={isLoading}
-                                data={dataGraph} 
-                                categProp={stocksCode}
-                                hasChoosingCategory={true}
-                                extendedVersion={false}
-                                timeStampInitial={'1D'}
-                            />
-                        </div>
-                        <div className="h-full w-full row-start-1 col-start-4 row-end-2 col-end-7 bg-secondary-background-color">
-                            <WalletComponent WalletData={wallet} />
-                        </div>
-                        <div className="h-full w-full row-start-2 col-start-4 row-end-3 col-end-7 bg-secondary-background-color" >
-                            <SeparatorInfo Data={newsDataForComponent} categorieSelected={Object.keys(newsDataForComponent ? newsDataForComponent : {' ': []})[0]}/>
-                        </div>
-                        <div className="h-full w-full row-start-4 col-start-1 row-end-7 col-end-7 bg-secondary-background-color" >
-                            <TableStocks actionNextPage={nextPageDataGrid} rows={rowsGrid} rowClicked={rowclicked}/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            </div>
+        <Card className="flex flex-col">
+          <CardHeader title="Market news" />
+          <div className="px-5 pb-4 pt-3">
+            <SeparatorInfo Data={news} categorieSelected="This day" isLoading={newsLoading} />
+          </div>
+        </Card>
+      </div>
 
-    )
+      <TableStocks rows={rows} isLoading={rowsLoading} page={page} pageSize={PAGE_SIZE} onPageChange={setPage} />
+    </div>
+  )
 }

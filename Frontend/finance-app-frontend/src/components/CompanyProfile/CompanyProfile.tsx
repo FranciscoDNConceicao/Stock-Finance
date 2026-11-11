@@ -1,104 +1,200 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CompanyProfileProps } from "./interfaces";
-import { faLocationDot, faMapLocationDot, faLink, faCalendarDays, faUsers, faTerminal, faArrowTrendUp } from "@fortawesome/free-solid-svg-icons";
-import LineGraph from "../LineGraph/Linegraph";
-import TableNews from "../TableNews/TableNews";
+import { ReactNode, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import {
+  faArrowUpRightFromSquare,
+  faCalendarDays,
+  faGlobe,
+  faIndustry,
+  faLocationDot,
+  faMapLocationDot,
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons'
+import { CompanyInfo } from './interfaces'
+import { Card, CardHeader } from '../ui/Card'
+import CompanyLogo from '../ui/CompanyLogo'
+import Skeleton from '../ui/Skeleton'
+import { ChartStats } from '../LineGraph/interfaces'
+import { formatCompact, formatDate, formatNumber, hexColor, prettyHost, readableOn, safeUrl, toNumber } from '../../scripts/utils'
 
+/* ---------- Hero ---------- */
 
+export function CompanyHero({ company }: { company: CompanyInfo }) {
+  const color = hexColor(company.color)
+  const website = safeUrl(company.URL)
+  return (
+    <Card className="relative overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[0.12]"
+        style={{ background: `radial-gradient(900px 220px at 0% 0%, ${color}, transparent 70%)` }}
+      />
+      <div className="relative flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:p-6">
+        <CompanyLogo code={company.code} color={company.color} size="xl" />
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-2xl font-semibold tracking-tight text-fg sm:text-[28px]">{company.name}</h1>
+            <span
+              className="rounded-md px-2 py-0.5 text-xs font-semibold tracking-wide"
+              style={{ backgroundColor: color, color: readableOn(color) }}
+            >
+              {company.code}
+            </span>
+          </div>
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-muted">
+            {company.locate && (
+              <span className="inline-flex items-center gap-1.5">
+                <FontAwesomeIcon icon={faLocationDot} className="text-subtle" aria-hidden="true" />
+                {company.locate.toUpperCase()}
+              </span>
+            )}
+            {company.sicCode && (
+              <span className="inline-flex min-w-0 items-center gap-1.5">
+                <FontAwesomeIcon icon={faIndustry} className="text-subtle" aria-hidden="true" />
+                <span className="truncate">{company.sicCode}</span>
+              </span>
+            )}
+            {company.dateList && (
+              <span className="inline-flex items-center gap-1.5">
+                <FontAwesomeIcon icon={faCalendarDays} className="text-subtle" aria-hidden="true" />
+                Listed {formatDate(company.dateList)}
+              </span>
+            )}
+          </div>
+        </div>
+        {website && (
+          <a
+            href={website}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex cursor-pointer items-center justify-center gap-2 self-start rounded-lg border border-line-strong bg-raised px-3.5 py-2 text-sm font-medium text-fg transition-colors hover:border-muted/40 hover:bg-line sm:self-center"
+          >
+            Website
+            <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs text-muted" aria-hidden="true" />
+          </a>
+        )}
+      </div>
+    </Card>
+  )
+}
 
+/* ---------- Key statistics ---------- */
 
-export default function CompanyProfile(props: CompanyProfileProps){
+function StatRow({ label, value }: { label: string; value: ReactNode }) {
+  return (
+    <div className="flex items-center justify-between gap-4 py-2.5">
+      <dt className="text-[13px] text-muted">{label}</dt>
+      <dd className="text-right text-[13px] font-medium text-fg tabular">{value}</dd>
+    </div>
+  )
+}
 
-    if (!props.dataCompany){
-        return(
-            <h1>404 NOT FOUND</h1>
-        )
-    }
-    const ChangePageNewsStock = async (init: number, end:number) => { 
-        await props.changePageNewsStock(init, end, false);
-    }
-        
-    const color = "#" + props.dataCompany.color
-    if(props.isLoading){
-        return(
-            <div className=" w-full h-full flex justify-center py-[465px]">
-                <div className="loader-full text-white relative top-[50%] "></div>
-            </div>
-        )
-    }
-    return (
-        <div className="flex w-full mt-[100px] ml-[50px] mr-[140px]">
-            <div className={`my-[100px] flex flex-col w-full bg-secondary-background-color `} style={{ border: `5px solid ${color}`}}>
-                <div className="flex flex-col w-full justify-center relative mx-[auto] left-0 right-0 top-[-100px] text-center">
-                    <div className="flex flex-col items-center ">
-                        <div className={`rounded-[13px]`} style={{ border: `5px solid ${color}`}}>
-                            <img src={`/images/logos/${props.dataCompany.code}.png`}  alt="Company" className="px-[25px] py-[10px] bg-white rounded-[10px] min-w-[30px] max-w-[1000px] h-[150px] "></img>
-                        </div>
-                        <div className="flex flex-col text-white center text-[40px] font-family bolder justify-center ">
-                            <div>{props.dataCompany.name}</div>
-                            
-                        </div>
-                        <div className={`text-[20px] font-family text-white rounded p-[5px]`} style={{ backgroundColor: `${color}`}}>{props.dataCompany.code}</div>
-                    </div>
-                </div>
-                <div className="mb-[40px]">
-                    <LineGraph 
-                        data={props.dataGraph}
-                        isLoading={false}
-                        hasChoosingCategory={false} 
-                        changingTimeCateg={props.changingTimeCateg} 
-                        categProp={[{"code": props.dataCompany.code, "id": props.dataCompany.id}]}
-                        extendedVersion={true}
-                        timeStampInitial={'3Y'}/>
-                </div>
-                <div className="w-full flex">
-                    <div className="w-[50%] p-[20px] text-white font-family border-r-[2px] border-[grey]">
-                        <div className="text-[20px] font-bold">About {props.dataCompany.name} :</div>
-                        <div className="font-extralight">{props.dataCompany.description}</div>
-                    </div>
-                    <div className="w-[50%] p-[20px] text-white font-family">
-                        <div className="flex">
-                            <div className="text-[18px] pb-[3px] pr-[4px]"><FontAwesomeIcon icon={faLocationDot} className="pr-[2px]"/>Locate:</div>
-                            <div className="text-[18px] font-extralight">{props.dataCompany.locate}</div>
-                        </div>
-                        <div className="flex">
-                            <div className="text-[18px] pb-[3px] pr-[4px]"><FontAwesomeIcon icon={faMapLocationDot} className="pr-[2px]"/>Address:</div>
-                            <div className="text-[18px] font-extralight">{props.dataCompany.address}</div>
-                        </div>
-                        <div className="flex">
-                            <div className="text-[18px] pb-[3px] pr-[4px]"><FontAwesomeIcon icon={faLink} className="pr-[2px]"/>URL: </div>
-                            <div className="text-[18px] font-extralight"><a href={`${props.dataCompany.URL}`} target="blank">{props.dataCompany.URL}</a></div>
-                        </div>
-                        <div className="flex">
-                            <div className="text-[18px] pb-[3px] pr-[4px]"><FontAwesomeIcon icon={faCalendarDays} className="pr-[2px]"/>List Date:</div>
-                            <div className="text-[18px] font-extralight">{props.dataCompany.dateList}</div>
-                        </div>
-                        <div className="flex">
-                            <div className="text-[18px] pb-[3px] pr-[4px]"><FontAwesomeIcon icon={faUsers} className="pr-[2px]"/>Number of Employees:</div>
-                            <div className="text-[18px] font-extralight">{props.dataCompany.num_employees} employees</div>
-                        </div>
-                        <div className="flex">
-                            <div className="text-[18px] pb-[3px] pr-[4px]"><FontAwesomeIcon icon={faTerminal} className="pr-[2px]"/>SIC Code/Description:</div>
-                            <div className="text-[18px] font-extralight">{props.dataCompany.sicCode}</div>
-                        </div>
-                        <div className="flex">
-                            <div className="text-[18px] pb-[3px] pr-[4px]"><FontAwesomeIcon icon={faArrowTrendUp}  className="pr-[2px]"/>Max:</div>
-                            <div className="text-[18px] font-extralight">{props.dataCompany.highMax}</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="w-full"> 
-                    <TableNews 
-                        dataTable={props.dataCompanyNews}
-                        color={props.dataCompany.color}
-                        pageChange={ChangePageNewsStock}
-                        page={props.page}
-                        rowperPage={10}
-                    />
-                </div>
-            </div>       
+export function KeyStats({ company, stats, isLoading }: { company: CompanyInfo; stats: ChartStats | null; isLoading: boolean }) {
+  const employees = toNumber(company.num_employees)
+  const allTimeHigh = toNumber(company.highMax)
+  const currency = company.currency_name?.toUpperCase()
+  const money = (n: number) => (Number.isFinite(n) ? `${formatNumber(n)} ${currency ?? ''}`.trim() : '—')
+  const loading = <Skeleton className="ml-auto h-3.5 w-16" />
 
-        </div>    
-    )  
-        
+  return (
+    <Card className="flex flex-col">
+      <CardHeader title="Key statistics" />
+      <dl className="divide-y divide-line px-5 pb-3 pt-2">
+        <StatRow label="Period open" value={isLoading ? loading : money(stats?.first ?? NaN)} />
+        <StatRow label="Period high" value={isLoading ? loading : money(stats?.high ?? NaN)} />
+        <StatRow label="Period low" value={isLoading ? loading : money(stats?.low ?? NaN)} />
+        <StatRow label="All-time high" value={money(allTimeHigh)} />
+        <StatRow label="Employees" value={Number.isFinite(employees) ? formatCompact(employees) : '—'} />
+        <StatRow label="Currency" value={currency || '—'} />
+      </dl>
+    </Card>
+  )
+}
+
+/* ---------- About ---------- */
+
+function DetailItem({ icon, label, children }: { icon: IconDefinition; label: string; children: ReactNode }) {
+  return (
+    <div className="flex gap-3">
+      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-raised text-[13px] text-subtle">
+        <FontAwesomeIcon icon={icon} aria-hidden="true" />
+      </span>
+      <div className="min-w-0">
+        <dt className="text-xs text-subtle">{label}</dt>
+        <dd className="mt-0.5 break-words text-[13px] text-fg">{children}</dd>
+      </div>
+    </div>
+  )
+}
+
+export function CompanyAbout({ company }: { company: CompanyInfo }) {
+  const [expanded, setExpanded] = useState(false)
+  const description = company.description?.trim()
+  const long = (description?.length ?? 0) > 420
+  const website = safeUrl(company.URL)
+
+  return (
+    <Card>
+      <CardHeader title={`About ${company.name}`} />
+      <div className="grid gap-6 px-5 pb-5 pt-3 md:grid-cols-5">
+        <div className="md:col-span-3">
+          {description ? (
+            <>
+              <p className={`text-sm leading-relaxed text-muted ${!expanded && long ? 'line-clamp-6' : ''}`}>{description}</p>
+              {long && (
+                <button
+                  type="button"
+                  onClick={() => setExpanded((v) => !v)}
+                  className="mt-2 cursor-pointer text-[13px] font-medium text-accent hover:text-accent-hover"
+                  aria-expanded={expanded}
+                >
+                  {expanded ? 'Show less' : 'Read more'}
+                </button>
+              )}
+            </>
+          ) : (
+            <p className="text-sm text-subtle">No description available.</p>
+          )}
+        </div>
+        <dl className="space-y-4 md:col-span-2 md:border-l md:border-line md:pl-6">
+          {company.address && (
+            <DetailItem icon={faMapLocationDot} label="Headquarters">{company.address}</DetailItem>
+          )}
+          {website && (
+            <DetailItem icon={faGlobe} label="Website">
+              <a href={website} target="_blank" rel="noopener noreferrer" className="cursor-pointer text-accent hover:text-accent-hover hover:underline">
+                {prettyHost(company.URL)}
+              </a>
+            </DetailItem>
+          )}
+          {company.num_employees && (
+            <DetailItem icon={faUsers} label="Employees">
+              {Number.isFinite(toNumber(company.num_employees)) ? formatNumber(toNumber(company.num_employees), 0) : company.num_employees}
+            </DetailItem>
+          )}
+          {company.sicCode && <DetailItem icon={faIndustry} label="Industry (SIC)">{company.sicCode}</DetailItem>}
+        </dl>
+      </div>
+    </Card>
+  )
+}
+
+/* ---------- Loading skeleton for the whole page ---------- */
+
+export function CompanyPageSkeleton() {
+  return (
+    <div className="space-y-4" aria-busy="true" aria-label="Loading company">
+      <Card className="flex items-center gap-5 p-6">
+        <Skeleton className="h-20 w-20 rounded-2xl" />
+        <div className="flex-1 space-y-3">
+          <Skeleton className="h-7 w-64" />
+          <Skeleton className="h-4 w-80 max-w-full" />
+        </div>
+      </Card>
+      <div className="grid gap-4 lg:grid-cols-3">
+        <Skeleton className="h-[460px] rounded-2xl lg:col-span-2" />
+        <Skeleton className="h-[460px] rounded-2xl" />
+      </div>
+    </div>
+  )
 }

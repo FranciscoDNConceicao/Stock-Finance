@@ -5,14 +5,14 @@ export interface NewsCompany {
     url_image: string
     date_published: string
 }
-export interface TableNewsRoot{
+export interface TableNewsRoot {
     dataTable: NewsCompanyTable
-    color:string
     page: number
-    rowperPage: number
-    pageChange : (init:number, end:number) => void
+    rowsPerPage: number
+    isLoading: boolean
+    onPageChange: (page: number) => void
 }
-export interface NewsCompanyTable{
+export interface NewsCompanyTable {
     data: NewsCompany[]
     num_Rows: number
 }

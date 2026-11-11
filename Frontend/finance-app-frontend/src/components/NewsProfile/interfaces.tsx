@@ -1,14 +1,14 @@
-export interface DataPublisher{
+export interface DataPublisher {
     name: string;
     url: string;
     logo_url: string;
 }
-export interface CompanyDataNews{
-    code:string;
-    id:string;
-    color:string;
+export interface CompanyDataNews {
+    code: string;
+    id: string;
+    color: string;
 }
-export interface DataNews{
+export interface DataNews {
     title: string;
     description: string;
     author: string;
@@ -22,5 +22,5 @@ export interface NewsMainProps {
     data: DataNews;
     isLoading: boolean;
     newsRelated: NewsData;
-
+    relatedLoading: boolean;
 }

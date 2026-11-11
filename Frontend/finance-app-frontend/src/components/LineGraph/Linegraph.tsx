@@ -1,165 +1,122 @@
-import { LineChart } from "@mui/x-charts";
-import TimeChangedGraph from "./Components/TimeChangedGraph";
-import "../../style/index.css"
-import  { useState, useEffect  } from 'react';
-import ChoosingCategory from "./Components/ChoosingCategory";
-import { CompanyData, LineGraphProps, StockImage } from "./interfaces";
+import { useId, useMemo } from 'react'
+import { LineChart } from '@mui/x-charts'
+import { faChartLine } from '@fortawesome/free-solid-svg-icons'
+import { TimeRange } from './interfaces'
+import { ParsedSeries } from './series'
+import { formatNumber } from '../../scripts/utils'
+import Skeleton from '../ui/Skeleton'
+import EmptyState from '../ui/EmptyState'
 
-function isLastGreaterThanLastFour(numbers: number[]): boolean {
-    if (numbers.length < 5) return false;
+// Hex on purpose: MUI charts parses series colors with d3-color, which rejects space-separated rgb().
+const UP = '#22C55E'
+const DOWN = '#F43F5E'
+const MARGIN = { left: 60, right: 28, top: 16, bottom: 32 }
 
-    return numbers[numbers.length - 1] > numbers[0];
+function tickFormatter(range: TimeRange) {
+  return (date: Date) => {
+    if (range === '1D') return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+    if (range === '1W' || range === '1M') return date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+    return date.toLocaleDateString('en-GB', { month: 'short', year: '2-digit' })
+  }
 }
-const valueFormatter = (date: Date) =>
-  date.getHours() === 0
-    ? date.toLocaleDateString('pt-PT', {
-        year: '2-digit',
-        month: '2-digit',
-        day: '2-digit',
 
-      })
-    : date.toLocaleTimeString('pt-PT', {
-        hour: '2-digit',
-        minute: "2-digit",
-      });
+interface LineGraphProps {
+  series: ParsedSeries
+  range: TimeRange
+  isLoading: boolean
+  height?: number
+}
 
+export default function LineGraph({ series, range, isLoading, height = 320 }: LineGraphProps) {
+  const gradientId = `area-${useId().replace(/:/g, '')}`
+  const isUp = (series.stats?.change ?? 0) >= 0
+  const color = isUp ? UP : DOWN
 
-export default function LineGraph(props:LineGraphProps){
-    const [selectedCateg, setSelectCateg] = useState<StockImage>({'code': '', id: '0' } )
+  const yDomain = useMemo(() => {
+    if (!series.stats) return { min: 0, max: 1 }
+    const pad = Math.max((series.stats.high - series.stats.low) * 0.08, series.stats.last * 0.002)
+    return { min: series.stats.low - pad, max: series.stats.high + pad }
+  }, [series.stats])
 
-    let lenghtData = props.categProp?.length 
-
-    const [index, setIndex] = useState(1)
-    const [width, setWidth] = useState(window.innerWidth);
-    const [height, setHeight] = useState(window.innerHeight);
-    const [timestampSelected, setTimeStamp] = useState(props.timeStampInitial)
-    
-
-    useEffect(() => {
-        if(props.categProp && props.categProp.length > 0 && index === 1){
-            setSelectCateg(props.categProp[0])
-        }
-    }, [props.categProp])
-
-    useEffect(() => {
-        const handleResize = () => {setWidth(window.innerWidth);};
-        const handleResizeHeight = () => {setHeight(window.innerHeight);};
-        window.addEventListener('resize', handleResize);
-        window.addEventListener('resize', handleResizeHeight);
-
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-    
-
-    const changeStockGraph = (side:string) => {
-        if (!lenghtData){
-            lenghtData = 0
-        }
-        if (lenghtData === 0){
-            setIndex(0)
-        }
-        else if (side === 'left') {
-            if (index === 0) {
-              setIndex(lenghtData - 1);
-            } else {
-              setIndex(index - 1);
-            }
-          } else if (side === 'right') {
-            if (index === lenghtData - 1) {
-              setIndex(0);
-            } else {
-              setIndex(index + 1);
-            }
-          }
-        setSelectCateg(props.categProp && props.categProp[index] ? props.categProp[index] : { code: '', id: '0' });
-        props.changingTimeCateg(timestampSelected, selectedCateg.code)
-    };
-
-    const changingTime = (timestamp: string) => {
-        setTimeStamp(timestamp)
-        props.changingTimeCateg(timestamp, selectedCateg.code)
-    }
-    
-    const timestamps = Object.keys((props.data.company_data ?? {}) as CompanyData);
-    const values = Object.values((props.data.company_data ?? {}) as CompanyData);
-
-    const xAxisData = timestamps.map(timestamp => new Date(timestamp));
-    const series = values.map(value => parseFloat(value));
-
-    const minYaxis:number = Math.min(...series) - (Math.min(...series) * 0.01)
-    const maxYaxis:number = Math.max(...series) + (Math.max(...series) * 0.01)
-
-    const isDown:boolean = isLastGreaterThanLastFour(series)
-
+  if (isLoading) {
     return (
-       <div className=" bg-secondary-background-color ">
-            {props.isLoading && <div className="loader"></div>}
-            <TimeChangedGraph 
-            changingTimeCateg={changingTime}
-            initialTimeStamp={props.timeStampInitial}/>
-
-            <LineChart
-                sx={{
-                    "& .MuiChartsAxis-bottom": {
-                        stroke: "white",
-                        fill: "white",
-                        labelStyle: "Roboto",
-                    },
-                    "& .MuiChartsAxis-left": {
-                        stroke: "white",
-                        fill: "white",
-                        fontFamily: "Roboto",
-                    },
-                    "& .MuiChartsAxis-line":{
-                        stroke: "white",
-                    },
-                    "& .MuiChartsAxis-tick":{
-                        stroke: "white",
-                    },
-                    "& .MuiChartsAxis-tickLabel":{
-                        fill: "white !important",
-                    },
-                    "& .MuiAreaElement-root": {
-                        fill: isDown ? "#232d23 !important" : "#4a2323 !important "
-                    },
-                    "& .MuiLineElement-root": {
-                        stroke: isDown ? "green !important" : "red !important "
-                    }
-                }}
-                xAxis={[{
-                    data: xAxisData,
-                    scaleType: 'time',
-                    valueFormatter,
-                    tickMinStep: 3600 * 1000 * 3
-                    
-                }]}
-                yAxis={[{
-                    min: minYaxis,
-                    max: maxYaxis,
-                }]}
-                series={[
-                    { 
-                        data: series,
-                        area: true,
-                        showMark: false,
-
-                    }
-                ]}
-                width={props.extendedVersion? width * 0.75 : (width * 0.42)}
-                height={height * 0.50}
-                
-            >
-               
-            </LineChart>
-            {props.hasChoosingCategory && <ChoosingCategory 
-                changeStock={changeStockGraph}
-                company={selectedCateg.code}
-                idCompany={selectedCateg.id}
-            />}
-            
-       </div> 
+      <div style={{ height }} className="flex flex-col justify-end gap-3 px-5 pb-5" aria-busy="true" aria-label="Loading chart">
+        <Skeleton className="h-full w-full rounded-xl" />
+      </div>
     )
+  }
+
+  if (series.y.length < 2) {
+    return (
+      <div style={{ height }} className="flex items-center justify-center">
+        <EmptyState icon={faChartLine} title="No price data" description="There is no data available for this period." />
+      </div>
+    )
+  }
+
+  const formatX = tickFormatter(range)
+
+  return (
+    <div className="animate-fade-in" style={{ height }}>
+      <LineChart
+        height={height}
+        margin={{ left: MARGIN.left, right: MARGIN.right, top: MARGIN.top, bottom: MARGIN.bottom }}
+        xAxis={[
+          {
+            id: 'time',
+            data: series.x,
+            scaleType: 'time',
+            min: series.x[0],
+            max: series.x[series.x.length - 1],
+            valueFormatter: formatX,
+            tickLabelStyle: { fontSize: 11 },
+            tickNumber: 5,
+          },
+        ]}
+        yAxis={[
+          {
+            id: 'price',
+            min: yDomain.min,
+            max: yDomain.max,
+            tickNumber: 5,
+            valueFormatter: (v: number) => formatNumber(v, v >= 1000 ? 0 : 2),
+            tickLabelStyle: { fontSize: 11 },
+          },
+        ]}
+        bottomAxis={{ axisId: 'time', disableLine: true, disableTicks: true, tickLabelStyle: { fontSize: 11 } }}
+        leftAxis={{ axisId: 'price', disableLine: true, disableTicks: true, tickLabelStyle: { fontSize: 11 } }}
+        series={[
+          {
+            data: series.y,
+            area: true,
+            curve: 'linear',
+            showMark: false,
+            color,
+            label: 'Price',
+            valueFormatter: (v: number) => formatNumber(v),
+          },
+        ]}
+        slotProps={{ legend: { hidden: true } }}
+        axisHighlight={{ x: 'line', y: 'none' }}
+        tooltip={{ trigger: 'axis' }}
+        sx={{
+          '& .MuiChartsAxis-tickLabel': { fill: 'rgb(100 116 139) !important', fontFamily: 'Inter, sans-serif' },
+          '& .MuiChartsAxisHighlight-root': { stroke: 'rgb(148 163 184 / 0.5)', strokeDasharray: '4 4' },
+          '& .MuiAreaElement-root': { fill: `url(#${gradientId}) !important` },
+          '& .MuiLineElement-root': { strokeWidth: 2 },
+        }}
+      >
+        <defs>
+          <linearGradient id={gradientId} gradientUnits="userSpaceOnUse" x1="0" y1={MARGIN.top} x2="0" y2={height - MARGIN.bottom}>
+            <stop offset="0%" stopColor={color} stopOpacity={0.28} />
+            <stop offset="100%" stopColor={color} stopOpacity={0} />
+          </linearGradient>
+        </defs>
+      </LineChart>
+      <span className="sr-only">
+        Price chart. {formatX(series.x[0])} to {formatX(series.x[series.x.length - 1])}. Last price{' '}
+        {series.stats ? formatNumber(series.stats.last) : ''}.
+      </span>
+    </div>
+  )
 }

@@ -98,9 +98,9 @@ async def getSelectedStockForDataGrid(params: DataGridPagination, session: Sessi
     for code in selectCodes:
         discount = 0
         getLastValue = (session.query(StocksTable.value)
-                        .filter(StocksTable.date < code[5])
-                        .order_by(StocksTable.date.desc()).limit(1))[0]
-        if getLastValue and selectCodes:
+                        .filter(StocksTable.company_id == code[0], StocksTable.date < code[5])
+                        .order_by(StocksTable.date.desc()).first())
+        if getLastValue and getLastValue[0] > 0 and code[4] >= 0:
             discount = round((code[4] - getLastValue[0]) / getLastValue[0], 2)
 
         data.append({

@@ -1,38 +1,40 @@
-import psycopg2
+"""Step 3 - store each company's dominant logo colour in company.color.
+
+Requires: python -m pip install colorthief
+"""
 from colorthief import ColorThief
-import os
-def find_dominant_color(file):
-    color_thief = ColorThief(file)
-    dominant_color = color_thief.get_color(quality=1)
-    palette = color_thief.get_palette(color_count=6, quality=1)
-    return palette
-def get_files_in_folder(folder_path):
-    files = []
-    # Iterate through all the files in the folder
-    for file_name in os.listdir(folder_path):
-        # Check if the path is a file (not a sub-directory)
-        if os.path.isfile(os.path.join(folder_path, file_name)):
-            files.append(file_name.replace(".png", ""))
-    return files
-def rgb_to_hex(r, g, b):
-    return '{:02x}{:02x}{:02x}'. format(r, g, b)
 
-file_to_folder = 'C:\\Users\\franc\\Documents\\Eu\\Projects\\Stock-Finance\\Frontend\\finance-app-frontend\\public\\images\\logos'
+from db import LOGOS_DIR, get_connection
 
-all_codes = get_files_in_folder(file_to_folder)
-connection = psycopg2.connect(
-    dbname="postgres",
-    user="postgres",
-    password="1234567",
-    host="localhost",
-    port="5432"
-)
-cursor = connection.cursor()
-for code in all_codes:
-    file_to_folder_temp = file_to_folder
-    file_to_folder_temp += "\\" + code + '.png'
-    dominant_color = find_dominant_color(file_to_folder_temp)
-    query = """UPDATE company set color = '"""+ rgb_to_hex(dominant_color[0][0], dominant_color[0][1], dominant_color[0][2]) + """' where code = '""" + code + """';"""
-    cursor.execute(query)
+
+def dominant_hex(path):
+    r, g, b = ColorThief(str(path)).get_palette(color_count=6, quality=1)[0]
+    return f"{r:02x}{g:02x}{b:02x}"
+
+
+def main():
+    connection = get_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT code FROM company ORDER BY code")
+    codes = [row[0] for row in cursor.fetchall()]
+
+    for code in codes:
+        logo = LOGOS_DIR / f"{code}.png"
+        if not logo.exists():
+            print(f"{code}: sem logo")
+            continue
+        try:
+            color = dominant_hex(logo)
+        except Exception as e:
+            print(f"{code}: erro - {e}")
+            continue
+        cursor.execute("UPDATE company SET color = %s WHERE code = %s", (color, code))
+        print(f"{code}: {color}")
+
     connection.commit()
-    print(f"Foi inserido na bd - {code}- {rgb_to_hex(dominant_color[0][0], dominant_color[0][1], dominant_color[0][2]) }")
+    cursor.close()
+    connection.close()
+
+
+if __name__ == "__main__":
+    main()

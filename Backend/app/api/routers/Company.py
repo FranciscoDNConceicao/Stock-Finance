@@ -50,23 +50,19 @@ async def getCompanyTicker(session: Session = Depends(get_db)):
         selectCodeStock = (session.query(Company.code, StocksTable.value)
                        .join(StocksTable, StocksTable.company_id == Company.id)
                        .filter(Company.id == selectCode[0])
-                       .order_by(Company.list_date.desc()).limit(2))
-        cont = True
-        for selectCode in selectCodeStock:
-            if cont:
-                stockToday = selectCode[1]
-                stockCode = selectCode[0]
-                cont = False
-            else:
-                stockYesterday = selectCode[1]
+                       .order_by(StocksTable.date.desc()).limit(2)).all()
+        # Need today's and the previous close, both valid, to compute the variation
+        if len(selectCodeStock) < 2 or selectCodeStock[0][1] <= 0 or selectCodeStock[1][1] <= 0:
+            continue
+        stockCode, stockToday = selectCodeStock[0]
+        stockYesterday = selectCodeStock[1][1]
 
         discount = round((stockToday - stockYesterday) / stockToday, 4)
 
-        dict_temp = {
+        response["data"].append({
             'code': stockCode,
             'discount': discount,
-        }
-    response["data"].append(dict_temp)
+        })
 
     return response
 

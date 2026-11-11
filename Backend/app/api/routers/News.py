@@ -159,7 +159,10 @@ async def getAllValuesFromNews(id: str, session: Session = Depends(get_db)):
 
 @router.post('/get/essential/SeparatedDate')
 async def getEssentialSeparatedDateNews(limit: LimitRandom, session: Session = Depends(get_db)):
-    dateNow = datetime(2024, 3, 29)
+    # Anchor on the most recent news in the database so the sections are never empty
+    # just because the data was loaded a few days ago.
+    lastPublished = session.query(func.max(NewsTable.date_published)).scalar()
+    dateNow = datetime.combine(lastPublished, datetime.min.time()) if lastPublished else datetime.now()
     dateWeekBefore = dateNow - timedelta(weeks=1)
     dateYearBefore = dateNow - timedelta(weeks=54)
 

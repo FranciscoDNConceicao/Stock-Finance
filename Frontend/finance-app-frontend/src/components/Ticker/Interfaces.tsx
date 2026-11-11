@@ -1,11 +1,9 @@
-
 export interface propsTicker {
-    isFixed:Boolean
-    isLoading:Boolean
+    isLoading: boolean
     data: TickerActionInt[] | null
 }
-export interface TickerActionInt{
-    code:string;
-    discount:number;
+export interface TickerActionInt {
+    code: string;
+    /** Day change as a ratio (0.0123 = +1.23%) */
+    discount: number;
 }
-
